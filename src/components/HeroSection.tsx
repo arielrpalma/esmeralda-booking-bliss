@@ -11,7 +11,12 @@ const HeroSection = () => {
   const [guests, setGuests] = useState("2");
 
   const handleSearch = () => {
-    window.open(BOOKING_URL, "_blank");
+    const params = new URLSearchParams();
+    if (checkIn) params.set("checkin", checkIn);
+    if (checkOut) params.set("checkout", checkOut);
+    if (guests) params.set("guests", guests);
+    const separator = BOOKING_URL.includes("?") ? "&" : "?";
+    window.open(`${BOOKING_URL}${separator}${params.toString()}`, "_blank");
   };
 
   return (
