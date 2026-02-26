@@ -17,7 +17,6 @@ const Navbar = () => {
     { label: "Departamentos", href: "#departamentos" },
     { label: "Servicios", href: "#servicios" },
     { label: "Galería", href: "#galeria" },
-    { label: "Reservar", href: "#reservar" },
   ];
 
   return (
@@ -30,10 +29,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto flex items-center justify-between px-6">
         <a href="#hero" className="flex items-center gap-3">
-          <img src="/images/logo.png" alt="Esmeralda Apart" className="h-10 w-auto" />
-          <span className="font-display text-xl font-semibold text-section-dark-foreground tracking-wide">
-            Esmeralda <span className="font-light">Apart</span>
-          </span>
+          <img src="/images/esmeralda-logo-new.png" alt="Esmeralda Apart" className="h-12 w-auto" />
         </a>
 
         {/* Desktop */}
