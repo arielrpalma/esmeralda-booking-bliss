@@ -56,7 +56,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="w-full max-w-5xl bg-card/90 backdrop-blur-md rounded-sm shadow-2xl border border-border/50 p-4 md:p-6"
+          className="w-full max-w-4xl bg-card/80 backdrop-blur-md rounded-sm shadow-2xl border border-border/50 p-2 md:p-3 overflow-hidden"
         >
           <iframe
             id="hw-booking-frame"
@@ -64,7 +64,7 @@ const HeroSection = () => {
             frameBorder="0"
             allowTransparency={true}
             scrolling="no"
-            style={{ width: "100%", minHeight: "500px" }}
+            style={{ width: "100%", height: "180px", overflow: "hidden" }}
             title="Consultar disponibilidad"
           />
         </motion.div>
