@@ -29,7 +29,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto flex items-center justify-between px-6">
         <a href="#hero" className="flex items-center gap-3">
-          <img src="/images/esmeralda-logo-black.png" alt="Esmeralda Apart" className="h-10 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
+          <img src="/images/esmeralda-logo-new.png" alt="Esmeralda Apart" className="h-10 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
         </a>
 
         {/* Desktop */}
