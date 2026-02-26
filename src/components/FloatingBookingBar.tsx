@@ -82,7 +82,7 @@ const FloatingBookingBar = () => {
               className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-md px-6 py-3 font-body text-sm font-semibold tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl shrink-0"
             >
               <Search size={18} />
-              <span>Buscar</span>
+              <span>Encontrar Estadía</span>
             </button>
           </div>
         </div>
