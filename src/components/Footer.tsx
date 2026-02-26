@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-10">
           <div className="text-center md:text-left">
             <div className="flex items-center gap-3 justify-center md:justify-start mb-4">
-              <img src="/images/esmeralda-logo-new.png" alt="Esmeralda Apart" className="h-40 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
+              <img src="/images/esmeralda-logo-new.png" alt="Esmeralda Apart" className="h-10 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
             </div>
             <p className="font-body text-sm text-section-dark-foreground/60">
               Construimos valor como inversión de vida
