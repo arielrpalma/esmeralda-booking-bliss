@@ -6,6 +6,7 @@ import AmenitiesSection from "@/components/AmenitiesSection";
 import GallerySection from "@/components/GallerySection";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <GallerySection />
       <Footer />
       <FloatingBookingBar />
+      <WhatsAppButton />
     </div>
   );
 };
