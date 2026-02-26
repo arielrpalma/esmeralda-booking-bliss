@@ -56,12 +56,6 @@ const AboutSection = () => {
               Esmeralda Apart ofrece la perfecta combinación entre accesibilidad, 
               comodidad y tranquilidad.
             </p>
-            <a
-              href="#reservar"
-              className="inline-block mt-4 px-8 py-3 border-2 border-primary text-primary font-body text-sm font-semibold tracking-[0.15em] uppercase rounded-sm hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-            >
-              Reservar Ahora
-            </a>
           </motion.div>
         </div>
       </div>
