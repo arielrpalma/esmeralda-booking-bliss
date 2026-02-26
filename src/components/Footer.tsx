@@ -7,10 +7,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-10">
           <div className="text-center md:text-left">
             <div className="flex items-center gap-3 justify-center md:justify-start mb-4">
-              <img src="/images/logo.png" alt="Esmeralda Apart" className="h-8 w-auto" />
-              <span className="font-display text-xl font-semibold text-section-dark-foreground">
-                Esmeralda <span className="font-light">Apart</span>
-              </span>
+              <img src="/images/esmeralda-logo-new.png" alt="Esmeralda Apart" className="h-12 w-auto" />
             </div>
             <p className="font-body text-sm text-section-dark-foreground/60">
               Construimos valor como inversión de vida
