@@ -38,7 +38,7 @@ const FloatingBookingBar = () => {
                   type="date"
                   value={checkIn}
                   onChange={(e) => setCheckIn(e.target.value)}
-                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none"
+                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none [&::-webkit-calendar-picker-indicator]:w-8 [&::-webkit-calendar-picker-indicator]:h-8 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
                 />
               </div>
             </div>
@@ -52,7 +52,7 @@ const FloatingBookingBar = () => {
                   type="date"
                   value={checkOut}
                   onChange={(e) => setCheckOut(e.target.value)}
-                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none"
+                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none [&::-webkit-calendar-picker-indicator]:w-8 [&::-webkit-calendar-picker-indicator]:h-8 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-60"
                 />
               </div>
             </div>
