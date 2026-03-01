@@ -38,7 +38,7 @@ const FloatingBookingBar = () => {
                   type="date"
                   value={checkIn}
                   onChange={(e) => setCheckIn(e.target.value)}
-                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none [&::-webkit-calendar-picker-indicator]:scale-[1.3] [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none [&::-webkit-calendar-picker-indicator]:scale-[1.3] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:brightness-0 [&::-webkit-calendar-picker-indicator]:invert"
                 />
               </div>
             </div>
@@ -52,7 +52,7 @@ const FloatingBookingBar = () => {
                   type="date"
                   value={checkOut}
                   onChange={(e) => setCheckOut(e.target.value)}
-                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none [&::-webkit-calendar-picker-indicator]:scale-[1.3] [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none [&::-webkit-calendar-picker-indicator]:scale-[1.3] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:brightness-0 [&::-webkit-calendar-picker-indicator]:invert"
                 />
               </div>
             </div>
