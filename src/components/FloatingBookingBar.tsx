@@ -31,7 +31,7 @@ const FloatingBookingBar = () => {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-4xl mx-auto">
             {/* Check In */}
             <div className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2">
-              <CalendarDays size={16} className="text-primary shrink-0" />
+              <CalendarDays size={32} className="text-primary shrink-0" />
               <div className="flex-1">
                 <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">Check In</span>
                 <input
@@ -45,7 +45,7 @@ const FloatingBookingBar = () => {
 
             {/* Check Out */}
             <div className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2">
-              <CalendarDays size={16} className="text-primary shrink-0" />
+              <CalendarDays size={32} className="text-primary shrink-0" />
               <div className="flex-1">
                 <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">Check Out</span>
                 <input
