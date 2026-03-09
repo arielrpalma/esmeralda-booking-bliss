@@ -48,6 +48,13 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
+          <a
+            href="/reservar"
+            onClick={handleReservarClick}
+            className="text-sm font-body font-semibold tracking-widest uppercase bg-primary text-primary-foreground px-5 py-2 rounded-sm hover:bg-primary/90 transition-colors duration-300"
+          >
+            Reservar
+          </a>
         </div>
 
         {/* Mobile toggle */}
