@@ -19,6 +19,11 @@ const Navbar = () => {
     { label: "Galería", href: "#galeria" },
   ];
 
+  const handleReservarClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.location.href = "/reservar";
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
