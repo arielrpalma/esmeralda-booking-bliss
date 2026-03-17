@@ -159,7 +159,7 @@ const FloatingBookingBar = () => {
                 sideOffset={8}
               >
                 <div className="p-5">
-                  <h3 className="text-base font-semibold text-foreground mb-4">Habitaciones</h3>
+                  <h3 className="text-base font-semibold text-foreground mb-4">Departamentos</h3>
 
                   {/* Header row */}
                   <div className="grid grid-cols-[1fr_80px_80px_80px_28px] gap-2 mb-2 text-center">
