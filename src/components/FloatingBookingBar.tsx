@@ -40,15 +40,14 @@ const FloatingBookingBar = () => {
     params.set("nAdults", String(adults));
     params.set("nChilds", String(children));
     params.set("nBabies", String(babies));
-    params.set("roomType", String(rooms));
+    params.set("roomType", "1");
 
     if (promoCode.trim()) params.set("rp", promoCode.trim());
 
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
 
-  const totalGuests = adults + children + babies;
-  const summary = `${rooms} dept. · ${totalGuests} huésp.`;
+  const summary = `${totalGuests} huésp.`;
 
   return (
     <motion.div
