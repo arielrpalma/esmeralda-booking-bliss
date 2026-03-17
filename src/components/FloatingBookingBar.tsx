@@ -63,8 +63,8 @@ const FloatingBookingBar = () => {
     const params = new URLSearchParams();
     params.set("currency", "ARS");
     params.set("language", "es-ES");
-    if (checkIn) params.set("checkin", format(checkIn, "yyyy-MM-dd"));
-    if (checkOut) params.set("checkout", format(checkOut, "yyyy-MM-dd"));
+    if (dateRange?.from) params.set("checkin", format(dateRange.from, "yyyy-MM-dd"));
+    if (dateRange?.to) params.set("checkout", format(dateRange.to, "yyyy-MM-dd"));
     params.set("rooms", String(roomsList.length));
     params.set("guests", String(totalGuests));
     params.set("rp", promoCode);
