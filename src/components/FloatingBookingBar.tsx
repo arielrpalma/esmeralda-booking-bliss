@@ -151,7 +151,7 @@ const FloatingBookingBar = () => {
                     sublabel="< 2 años"
                     value={babies}
                     onDecrement={() => babies > 0 && setBabies(babies - 1)}
-                    onIncrement={() => setBabies(babies + 1)}
+                    onIncrement={() => canAddMore && setBabies(babies + 1)}
                     min={0}
                   />
 
