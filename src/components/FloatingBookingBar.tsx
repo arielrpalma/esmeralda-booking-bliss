@@ -6,11 +6,17 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 const BASE_URL =
   "https://frame2.hotelpms.io/BookingFrameClient/hotel/4999DCF40A49BFB3D5A6C22E1174000D/e2d8af9e-82cf-4b24-ba19-fc7b08142f0e/book/rooms";
@@ -21,6 +27,8 @@ const FloatingBookingBar = () => {
   const [children, setChildren] = useState(0);
   const [babies, setBabies] = useState(0);
   const [guestsOpen, setGuestsOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const MAX_GUESTS = 3;
   const totalGuests = adults + children + babies;
@@ -28,24 +36,92 @@ const FloatingBookingBar = () => {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-
     params.set("currency", "ARS");
     params.set("language", "es-ES");
-
-    // El motor de HotelPMS acepta estos nombres de parámetros.
     if (dateRange?.from) params.set("from", format(dateRange.from, "yyyy-MM-dd"));
     if (dateRange?.to) params.set("to", format(dateRange.to, "yyyy-MM-dd"));
-
     params.set("nAdults", String(adults));
     if (children > 0) params.set("nChilds", String(children));
     if (babies > 0) params.set("nBabies", String(babies));
-
     params.set("rp", "");
-
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
 
   const summary = `1 dept. · ${totalGuests} huésp.`;
+
+  const dateLabel = dateRange?.from
+    ? dateRange.to
+      ? `${format(dateRange.from, "dd MMM", { locale: es })} → ${format(dateRange.to, "dd MMM", { locale: es })}`
+      : `${format(dateRange.from, "dd MMM", { locale: es })} → ...`
+    : "Seleccionar fechas";
+
+  const calendarContent = (
+    <Calendar
+      mode="range"
+      selected={dateRange}
+      onSelect={setDateRange}
+      numberOfMonths={isMobile ? 1 : 2}
+      disabled={(date) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return date < today;
+      }}
+      initialFocus
+      className={cn("p-3 pointer-events-auto")}
+    />
+  );
+
+  const guestsContent = (
+    <div className="p-5 space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <span className="text-sm font-medium text-foreground">Departamento</span>
+          <span className="block text-[11px] text-muted-foreground">¿Más deptos? Agregá en el paso siguiente</span>
+        </div>
+        <span className="text-sm font-semibold text-foreground">1</span>
+      </div>
+      <div className="border-t border-border" />
+      <CounterRow label="Adultos" sublabel="+15 años" value={adults} onDecrement={() => adults > 1 && setAdults(adults - 1)} onIncrement={() => canAddMore && setAdults(adults + 1)} min={1} />
+      <CounterRow label="Menores" sublabel="3-14 años" value={children} onDecrement={() => children > 0 && setChildren(children - 1)} onIncrement={() => canAddMore && setChildren(children + 1)} min={0} />
+      <CounterRow label="Bebés" sublabel="< 2 años" value={babies} onDecrement={() => babies > 0 && setBabies(babies - 1)} onIncrement={() => canAddMore && setBabies(babies + 1)} min={0} />
+      <div className="flex justify-end pt-2 border-t border-border">
+        <button
+          onClick={() => setGuestsOpen(false)}
+          className="px-6 py-2 bg-primary text-primary-foreground rounded-md text-sm font-semibold hover:bg-primary/90 transition-colors"
+        >
+          Aplicar
+        </button>
+      </div>
+    </div>
+  );
+
+  const dateTrigger = (
+    <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2 text-left min-w-0">
+      <CalendarDays size={16} className="text-primary shrink-0" />
+      <div className="flex-1 min-w-0">
+        <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
+          Llegada — Salida
+        </span>
+        <span className={cn("text-sm font-body truncate block", dateRange?.from ? "text-section-dark-foreground" : "text-section-dark-foreground/40")}>
+          {dateLabel}
+        </span>
+      </div>
+    </button>
+  );
+
+  const guestsTrigger = (
+    <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2 text-left min-w-0">
+      <Users size={16} className="text-primary shrink-0" />
+      <div className="flex-1 min-w-0">
+        <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
+          Huéspedes
+        </span>
+        <span className="text-sm font-body text-section-dark-foreground truncate block">
+          {summary}
+        </span>
+      </div>
+    </button>
+  );
 
   return (
     <motion.div
@@ -55,128 +131,49 @@ const FloatingBookingBar = () => {
       className="fixed bottom-0 left-0 right-0 z-50"
     >
       <div className="bg-section-dark/95 backdrop-blur-md border-t border-border/20 shadow-[0_-4px_30px_rgba(0,0,0,0.3)]">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-5xl mx-auto">
-            {/* Llegada / Salida */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2 text-left">
-                  <CalendarDays size={16} className="text-primary shrink-0" />
-                  <div className="flex-1">
-                    <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
-                      Llegada — Salida
-                    </span>
-                    <span className={cn("text-sm font-body", dateRange?.from ? "text-section-dark-foreground" : "text-section-dark-foreground/40")}>
-                      {dateRange?.from
-                        ? dateRange.to
-                          ? `${format(dateRange.from, "dd MMM", { locale: es })} → ${format(dateRange.to, "dd MMM", { locale: es })}`
-                          : `${format(dateRange.from, "dd MMM", { locale: es })} → ...`
-                        : "Seleccionar fechas"}
-                    </span>
+        <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3">
+          <div className="flex items-center gap-2 sm:gap-3 max-w-5xl mx-auto">
+            {/* Fechas */}
+            {isMobile ? (
+              <Drawer open={calendarOpen} onOpenChange={setCalendarOpen}>
+                <DrawerTrigger asChild>{dateTrigger}</DrawerTrigger>
+                <DrawerContent>
+                  <div className="p-4 flex justify-center overflow-auto">
+                    {calendarContent}
                   </div>
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={8}>
-                <Calendar
-                  mode="range"
-                  selected={dateRange}
-                  onSelect={setDateRange}
-                  numberOfMonths={2}
-                  disabled={(date) => {
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    return date < today;
-                  }}
-                  initialFocus
-                  className={cn("p-3 pointer-events-auto")}
-                />
-              </PopoverContent>
-            </Popover>
+                </DrawerContent>
+              </Drawer>
+            ) : (
+              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                <PopoverTrigger asChild>{dateTrigger}</PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={8}>
+                  {calendarContent}
+                </PopoverContent>
+              </Popover>
+            )}
 
-            {/* Huéspedes y Departamentos */}
-            <Popover open={guestsOpen} onOpenChange={setGuestsOpen}>
-              <PopoverTrigger asChild>
-                <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2 text-left">
-                  <Users size={16} className="text-primary shrink-0" />
-                  <div className="flex-1">
-                    <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
-                      Huéspedes
-                    </span>
-                    <span className="text-sm font-body text-section-dark-foreground">
-                      {summary}
-                    </span>
-                  </div>
-                </button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-[320px] p-0 pointer-events-auto"
-                align="center"
-                side="top"
-                sideOffset={8}
-              >
-                <div className="p-5 space-y-4">
-                  {/* Departamento fijo */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-sm font-medium text-foreground">Departamento</span>
-                      <span className="block text-[11px] text-muted-foreground">¿Más deptos? Agregá en el paso siguiente</span>
-                    </div>
-                    <span className="text-sm font-semibold text-foreground">1</span>
-                  </div>
-
-                  <div className="border-t border-border" />
-
-                  {/* Adultos */}
-                  <CounterRow
-                    label="Adultos"
-                    sublabel="+15 años"
-                    value={adults}
-                    onDecrement={() => adults > 1 && setAdults(adults - 1)}
-                    onIncrement={() => canAddMore && setAdults(adults + 1)}
-                    min={1}
-                  />
-
-                  {/* Menores */}
-                  <CounterRow
-                    label="Menores"
-                    sublabel="3-14 años"
-                    value={children}
-                    onDecrement={() => children > 0 && setChildren(children - 1)}
-                    onIncrement={() => canAddMore && setChildren(children + 1)}
-                    min={0}
-                  />
-
-                  {/* Bebés */}
-                  <CounterRow
-                    label="Bebés"
-                    sublabel="< 2 años"
-                    value={babies}
-                    onDecrement={() => babies > 0 && setBabies(babies - 1)}
-                    onIncrement={() => canAddMore && setBabies(babies + 1)}
-                    min={0}
-                  />
-
-                  {/* Aplicar */}
-                  <div className="flex justify-end pt-2 border-t border-border">
-                    <button
-                      onClick={() => setGuestsOpen(false)}
-                      className="px-6 py-2 bg-primary text-primary-foreground rounded-md text-sm font-semibold hover:bg-primary/90 transition-colors"
-                    >
-                      Aplicar
-                    </button>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-
+            {/* Huéspedes */}
+            {isMobile ? (
+              <Drawer open={guestsOpen} onOpenChange={setGuestsOpen}>
+                <DrawerTrigger asChild>{guestsTrigger}</DrawerTrigger>
+                <DrawerContent>{guestsContent}</DrawerContent>
+              </Drawer>
+            ) : (
+              <Popover open={guestsOpen} onOpenChange={setGuestsOpen}>
+                <PopoverTrigger asChild>{guestsTrigger}</PopoverTrigger>
+                <PopoverContent className="w-[320px] p-0 pointer-events-auto" align="center" side="top" sideOffset={8}>
+                  {guestsContent}
+                </PopoverContent>
+              </Popover>
+            )}
 
             {/* Buscar */}
             <button
               onClick={handleSearch}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-md px-6 py-3 font-body text-sm font-semibold tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl shrink-0"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-md px-4 sm:px-6 py-3 font-body text-sm font-semibold tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl shrink-0"
             >
               <Search size={18} />
-              <span>Buscar</span>
+              <span className="hidden sm:inline">Buscar</span>
             </button>
           </div>
         </div>
@@ -185,42 +182,22 @@ const FloatingBookingBar = () => {
   );
 };
 
-// Reusable counter row component
 const CounterRow = ({
-  label,
-  sublabel,
-  value,
-  onDecrement,
-  onIncrement,
-  min,
+  label, sublabel, value, onDecrement, onIncrement, min,
 }: {
-  label: string;
-  sublabel?: string;
-  value: number;
-  onDecrement: () => void;
-  onIncrement: () => void;
-  min: number;
+  label: string; sublabel?: string; value: number; onDecrement: () => void; onIncrement: () => void; min: number;
 }) => (
   <div className="flex items-center justify-between">
     <div>
       <span className="text-sm font-medium text-foreground">{label}</span>
-      {sublabel && (
-        <span className="block text-[11px] text-muted-foreground">{sublabel}</span>
-      )}
+      {sublabel && <span className="block text-[11px] text-muted-foreground">{sublabel}</span>}
     </div>
     <div className="flex items-center gap-3">
-      <button
-        onClick={onDecrement}
-        disabled={value <= min}
-        className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-      >
+      <button onClick={onDecrement} disabled={value <= min} className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
         <Minus size={14} />
       </button>
       <span className="text-sm font-semibold text-foreground w-4 text-center">{value}</span>
-      <button
-        onClick={onIncrement}
-        className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors"
-      >
+      <button onClick={onIncrement} className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors">
         <Plus size={14} />
       </button>
     </div>
