@@ -20,9 +20,12 @@ const FloatingBookingBar = () => {
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [babies, setBabies] = useState(0);
-  const [rooms, setRooms] = useState(1);
   const [promoCode, setPromoCode] = useState("");
   const [guestsOpen, setGuestsOpen] = useState(false);
+
+  const MAX_GUESTS = 3;
+  const totalGuests = adults + children + babies;
+  const canAddMore = totalGuests < MAX_GUESTS;
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -37,15 +40,14 @@ const FloatingBookingBar = () => {
     params.set("nAdults", String(adults));
     params.set("nChilds", String(children));
     params.set("nBabies", String(babies));
-    params.set("roomType", String(rooms));
+    params.set("roomType", "1");
 
     if (promoCode.trim()) params.set("rp", promoCode.trim());
 
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
 
-  const totalGuests = adults + children + babies;
-  const summary = `${rooms} dept. · ${totalGuests} huésp.`;
+  const summary = `${totalGuests} huésp.`;
 
   return (
     <motion.div
@@ -115,29 +117,25 @@ const FloatingBookingBar = () => {
                 sideOffset={8}
               >
                 <div className="p-5 space-y-4">
-                  {/* Departamentos */}
-                  <CounterRow
-                    label="Departamentos"
-                    sublabel="(habitaciones)"
-                    value={rooms}
-                    onDecrement={() => rooms > 1 && setRooms(rooms - 1)}
-                    onIncrement={() => rooms < 5 && setRooms(rooms + 1)}
-                    min={1}
-                  />
-
-                  <div className="border-t border-border" />
-
                   {/* Adultos */}
                   <CounterRow
                     label="Adultos"
                     sublabel="+15 años"
                     value={adults}
                     onDecrement={() => adults > 1 && setAdults(adults - 1)}
-                    onIncrement={() => setAdults(adults + 1)}
+                    onIncrement={() => canAddMore && setAdults(adults + 1)}
                     min={1}
                   />
 
                   {/* Menores */}
+                  <CounterRow
+                    label="Menores"
+                    sublabel="3-14 años"
+                    value={children}
+                    onDecrement={() => children > 0 && setChildren(children - 1)}
+                    onIncrement={() => canAddMore && setChildren(children + 1)}
+                    min={0}
+                  />
                   <CounterRow
                     label="Menores"
                     sublabel="3-14 años"
@@ -153,7 +151,7 @@ const FloatingBookingBar = () => {
                     sublabel="< 2 años"
                     value={babies}
                     onDecrement={() => babies > 0 && setBabies(babies - 1)}
-                    onIncrement={() => setBabies(babies + 1)}
+                    onIncrement={() => canAddMore && setBabies(babies + 1)}
                     min={0}
                   />
 
