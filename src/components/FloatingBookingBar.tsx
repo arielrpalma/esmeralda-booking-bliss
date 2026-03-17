@@ -65,7 +65,15 @@ const FloatingBookingBar = () => {
     params.set("language", "es-ES");
     if (dateRange?.from) params.set("checkin", format(dateRange.from, "yyyy-MM-dd"));
     if (dateRange?.to) params.set("checkout", format(dateRange.to, "yyyy-MM-dd"));
+    // Room configuration: adults and children per room
+    roomsList.forEach((room, idx) => {
+      params.set(`rooms[${idx}][adults]`, String(room.adults));
+      params.set(`rooms[${idx}][children]`, String(room.children));
+      params.set(`rooms[${idx}][infants]`, String(room.babies));
+    });
     params.set("rooms", String(roomsList.length));
+    params.set("adults", String(roomsList.reduce((s, r) => s + r.adults, 0)));
+    params.set("children", String(roomsList.reduce((s, r) => s + r.children, 0)));
     params.set("guests", String(totalGuests));
     params.set("rp", promoCode);
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
