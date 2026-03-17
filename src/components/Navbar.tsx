@@ -19,11 +19,6 @@ const Navbar = () => {
     { label: "Galería", href: "#galeria" },
   ];
 
-  const handleReservarClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    window.location.href = "/reservar";
-  };
-
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -48,13 +43,6 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
-          <a
-            href="/reservar"
-            onClick={handleReservarClick}
-            className="text-sm font-body font-semibold tracking-widest uppercase bg-primary text-primary-foreground px-5 py-2 rounded-sm hover:bg-primary/90 transition-colors duration-300"
-          >
-            Reservar
-          </a>
         </div>
 
         {/* Mobile toggle */}
@@ -86,13 +74,6 @@ const Navbar = () => {
                   {l.label}
                 </a>
               ))}
-              <a
-                href="/reservar"
-                className="text-sm font-body font-semibold tracking-widest uppercase bg-primary text-primary-foreground px-6 py-2 rounded-sm hover:bg-primary/90 transition-colors mt-2"
-                onClick={() => setMobileOpen(false)}
-              >
-                Reservar
-              </a>
             </div>
           </motion.div>
         )}
