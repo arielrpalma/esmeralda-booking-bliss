@@ -22,8 +22,7 @@ type Room = {
 };
 
 const FloatingBookingBar = () => {
-  const [checkIn, setCheckIn] = useState<Date>();
-  const [checkOut, setCheckOut] = useState<Date>();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [roomsList, setRoomsList] = useState<Room[]>([{ adults: 2, children: 0, babies: 0 }]);
   const [promoCode, setPromoCode] = useState("");
   const [roomsOpen, setRoomsOpen] = useState(false);
