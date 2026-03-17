@@ -1,5 +1,6 @@
 import { Search, CalendarDays, BedDouble, Tag, Plus, Minus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import type { DateRange } from "react-day-picker";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
