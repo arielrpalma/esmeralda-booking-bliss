@@ -1,4 +1,4 @@
-import { Search, CalendarDays, BedDouble, Tag } from "lucide-react";
+import { Search, CalendarDays, BedDouble, Tag, Users } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
@@ -18,6 +18,7 @@ const FloatingBookingBar = () => {
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
   const [rooms, setRooms] = useState("1");
+  const [guests, setGuests] = useState("2");
   const [promoCode, setPromoCode] = useState("");
 
   const handleSearch = () => {
@@ -27,6 +28,7 @@ const FloatingBookingBar = () => {
     if (checkIn) params.set("checkin", format(checkIn, "yyyy-MM-dd"));
     if (checkOut) params.set("checkout", format(checkOut, "yyyy-MM-dd"));
     if (rooms) params.set("rooms", rooms);
+    if (guests) params.set("guests", guests);
     params.set("rp", promoCode);
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
@@ -110,6 +112,27 @@ const FloatingBookingBar = () => {
                   {[1, 2, 3, 4, 5].map((n) => (
                     <option key={n} value={n} className="text-foreground bg-background">
                       {n} {n === 1 ? "habitación" : "habitaciones"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Huéspedes */}
+            <div className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2">
+              <Users size={16} className="text-primary shrink-0" />
+              <div className="flex-1">
+                <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
+                  Huéspedes
+                </span>
+                <select
+                  value={guests}
+                  onChange={(e) => setGuests(e.target.value)}
+                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none appearance-none cursor-pointer"
+                >
+                  {[1, 2, 3, 4, 5, 6].map((n) => (
+                    <option key={n} value={n} className="text-foreground bg-background">
+                      {n} {n === 1 ? "huésped" : "huéspedes"}
                     </option>
                   ))}
                 </select>
