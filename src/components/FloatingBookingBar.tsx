@@ -1,4 +1,4 @@
-import { Search, CalendarDays, BedDouble, Tag, Plus, Minus, Trash2 } from "lucide-react";
+import { Search, CalendarDays, BedDouble, Tag, Plus, Minus, Users } from "lucide-react";
 import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { motion } from "framer-motion";
@@ -15,49 +15,14 @@ import {
 const BASE_URL =
   "https://frame2.hotelpms.io/BookingFrameClient/hotel/4999DCF40A49BFB3D5A6C22E1174000D/e2d8af9e-82cf-4b24-ba19-fc7b08142f0e/book/rooms";
 
-type Room = {
-  adults: number;
-  children: number;
-  babies: number;
-};
-
 const FloatingBookingBar = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [roomsList, setRoomsList] = useState<Room[]>([{ adults: 2, children: 0, babies: 0 }]);
+  const [adults, setAdults] = useState(2);
+  const [children, setChildren] = useState(0);
+  const [babies, setBabies] = useState(0);
+  const [rooms, setRooms] = useState(1);
   const [promoCode, setPromoCode] = useState("");
-  const [roomsOpen, setRoomsOpen] = useState(false);
-
-  const totalGuests = roomsList.reduce((sum, r) => sum + r.adults + r.children + r.babies, 0);
-
-  const updateRoom = (index: number, field: keyof Room, delta: number) => {
-    setRoomsList((prev) =>
-      prev.map((room, i) => {
-        if (i !== index) return room;
-        const newVal = room[field] + delta;
-        if (field === "adults" && newVal < 1) return room;
-        if (newVal < 0) return room;
-        // Max 3 between adults + children per room (babies don't count)
-        if (field === "adults" || field === "children") {
-          const newAdults = field === "adults" ? newVal : room.adults;
-          const newChildren = field === "children" ? newVal : room.children;
-          if (newAdults + newChildren > 3) return room;
-        }
-        return { ...room, [field]: newVal };
-      })
-    );
-  };
-
-  const addRoom = () => {
-    if (roomsList.length < 5) {
-      setRoomsList((prev) => [...prev, { adults: 2, children: 0, babies: 0 }]);
-    }
-  };
-
-  const removeRoom = (index: number) => {
-    if (roomsList.length > 1) {
-      setRoomsList((prev) => prev.filter((_, i) => i !== index));
-    }
-  };
+  const [guestsOpen, setGuestsOpen] = useState(false);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -65,14 +30,16 @@ const FloatingBookingBar = () => {
     params.set("language", "es-ES");
     if (dateRange?.from) params.set("from", format(dateRange.from, "yyyy-MM-dd"));
     if (dateRange?.to) params.set("to", format(dateRange.to, "yyyy-MM-dd"));
-    params.set("nAdults", String(roomsList.reduce((sum, room) => sum + room.adults, 0)));
-    params.set("nChilds", String(roomsList.reduce((sum, room) => sum + room.children, 0)));
-    params.set("nBabies", String(roomsList.reduce((sum, room) => sum + room.babies, 0)));
+    params.set("nAdults", String(adults));
+    params.set("nChilds", String(children));
+    params.set("nBabies", String(babies));
+    params.set("rooms", String(rooms));
     if (promoCode) params.set("rp", promoCode);
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
 
-  const roomsSummary = `${roomsList.length} depto${roomsList.length > 1 ? "s" : ""}. · ${totalGuests} huésp.`;
+  const totalGuests = adults + children + babies;
+  const summary = `${rooms} dept. · ${totalGuests} huésp.`;
 
   return (
     <motion.div
@@ -120,146 +87,74 @@ const FloatingBookingBar = () => {
               </PopoverContent>
             </Popover>
 
-            {/* Habitaciones */}
-            <Popover open={roomsOpen} onOpenChange={setRoomsOpen}>
+            {/* Huéspedes y Departamentos */}
+            <Popover open={guestsOpen} onOpenChange={setGuestsOpen}>
               <PopoverTrigger asChild>
                 <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2 text-left">
-                  <BedDouble size={16} className="text-primary shrink-0" />
+                  <Users size={16} className="text-primary shrink-0" />
                   <div className="flex-1">
                     <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
-                      Departamentos
+                      Huéspedes
                     </span>
                     <span className="text-sm font-body text-section-dark-foreground">
-                      {roomsSummary}
+                      {summary}
                     </span>
                   </div>
                 </button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-[420px] p-0 pointer-events-auto"
+                className="w-[320px] p-0 pointer-events-auto"
                 align="center"
                 side="top"
                 sideOffset={8}
               >
-                <div className="p-5">
-                  <h3 className="text-base font-semibold text-foreground mb-4">Departamentos</h3>
-
-                  {/* Header row */}
-                  <div className="grid grid-cols-[1fr_80px_80px_80px_28px] gap-2 mb-2 text-center">
-                    <div />
-                    <span className="text-xs font-semibold text-foreground">Adultos</span>
-                    <span className="text-xs font-semibold text-foreground leading-tight">
-                      Menores
-                      <span className="block text-[10px] font-normal text-muted-foreground">3-14 años</span>
-                    </span>
-                    <span className="text-xs font-semibold text-foreground leading-tight">
-                      Bebés
-                      <span className="block text-[10px] font-normal text-muted-foreground">&lt; 2 años</span>
-                    </span>
-                    <div />
-                  </div>
+                <div className="p-5 space-y-4">
+                  {/* Departamentos */}
+                  <CounterRow
+                    label="Departamentos"
+                    sublabel="(habitaciones)"
+                    value={rooms}
+                    onDecrement={() => rooms > 1 && setRooms(rooms - 1)}
+                    onIncrement={() => rooms < 5 && setRooms(rooms + 1)}
+                    min={1}
+                  />
 
                   <div className="border-t border-border" />
 
-                  {/* Room rows */}
-                  {roomsList.map((room, idx) => (
-                    <div
-                      key={idx}
-                      className="grid grid-cols-[1fr_80px_80px_80px_28px] gap-2 items-center py-3 border-b border-border/50"
-                    >
-                      <span className="text-sm font-medium text-foreground">
-                        Departamento {idx + 1}
-                      </span>
+                  {/* Adultos */}
+                  <CounterRow
+                    label="Adultos"
+                    sublabel="+15 años"
+                    value={adults}
+                    onDecrement={() => adults > 1 && setAdults(adults - 1)}
+                    onIncrement={() => setAdults(adults + 1)}
+                    min={1}
+                  />
 
-                      {/* Adults */}
-                      <div className="flex items-center justify-center gap-1">
-                        <button
-                          onClick={() => updateRoom(idx, "adults", -1)}
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors disabled:opacity-30"
-                          disabled={room.adults <= 1}
-                        >
-                          <Minus size={14} />
-                        </button>
-                        <span className="text-sm font-medium text-foreground w-4 text-center">{room.adults}</span>
-                        <button
-                          onClick={() => updateRoom(idx, "adults", 1)}
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors"
-                        >
-                          <Plus size={14} />
-                        </button>
-                      </div>
+                  {/* Menores */}
+                  <CounterRow
+                    label="Menores"
+                    sublabel="3-14 años"
+                    value={children}
+                    onDecrement={() => children > 0 && setChildren(children - 1)}
+                    onIncrement={() => setChildren(children + 1)}
+                    min={0}
+                  />
 
-                      {/* Children */}
-                      <div className="flex items-center justify-center gap-1">
-                        <button
-                          onClick={() => updateRoom(idx, "children", -1)}
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors disabled:opacity-30"
-                          disabled={room.children <= 0}
-                        >
-                          <Minus size={14} />
-                        </button>
-                        <span className="text-sm font-medium text-foreground w-4 text-center">{room.children}</span>
-                        <button
-                          onClick={() => updateRoom(idx, "children", 1)}
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors"
-                        >
-                          <Plus size={14} />
-                        </button>
-                      </div>
+                  {/* Bebés */}
+                  <CounterRow
+                    label="Bebés"
+                    sublabel="< 2 años"
+                    value={babies}
+                    onDecrement={() => babies > 0 && setBabies(babies - 1)}
+                    onIncrement={() => setBabies(babies + 1)}
+                    min={0}
+                  />
 
-                      {/* Babies */}
-                      <div className="flex items-center justify-center gap-1">
-                        <button
-                          onClick={() => updateRoom(idx, "babies", -1)}
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors disabled:opacity-30"
-                          disabled={room.babies <= 0}
-                        >
-                          <Minus size={14} />
-                        </button>
-                        <span className="text-sm font-medium text-foreground w-4 text-center">{room.babies}</span>
-                        <button
-                          onClick={() => updateRoom(idx, "babies", 1)}
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors"
-                        >
-                          <Plus size={14} />
-                        </button>
-                      </div>
-
-                      {/* Remove */}
-                      {roomsList.length > 1 ? (
-                        <button
-                          onClick={() => removeRoom(idx)}
-                          className="w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      ) : (
-                        <div className="w-6" />
-                      )}
-                    </div>
-                  ))}
-
-                  {/* Add room */}
-                  {roomsList.length < 5 && (
+                  {/* Aplicar */}
+                  <div className="flex justify-end pt-2 border-t border-border">
                     <button
-                      onClick={addRoom}
-                      className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors mt-3"
-                    >
-                      <Plus size={16} />
-                      Agregar Departamento
-                    </button>
-                  )}
-
-                  {/* Actions */}
-                  <div className="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-border">
-                    <button
-                      onClick={() => setRoomsOpen(false)}
-                      className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      onClick={() => setRoomsOpen(false)}
+                      onClick={() => setGuestsOpen(false)}
                       className="px-6 py-2 bg-primary text-primary-foreground rounded-md text-sm font-semibold hover:bg-primary/90 transition-colors"
                     >
                       Aplicar
@@ -300,5 +195,47 @@ const FloatingBookingBar = () => {
     </motion.div>
   );
 };
+
+// Reusable counter row component
+const CounterRow = ({
+  label,
+  sublabel,
+  value,
+  onDecrement,
+  onIncrement,
+  min,
+}: {
+  label: string;
+  sublabel?: string;
+  value: number;
+  onDecrement: () => void;
+  onIncrement: () => void;
+  min: number;
+}) => (
+  <div className="flex items-center justify-between">
+    <div>
+      <span className="text-sm font-medium text-foreground">{label}</span>
+      {sublabel && (
+        <span className="block text-[11px] text-muted-foreground">{sublabel}</span>
+      )}
+    </div>
+    <div className="flex items-center gap-3">
+      <button
+        onClick={onDecrement}
+        disabled={value <= min}
+        className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        <Minus size={14} />
+      </button>
+      <span className="text-sm font-semibold text-foreground w-4 text-center">{value}</span>
+      <button
+        onClick={onIncrement}
+        className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors"
+      >
+        <Plus size={14} />
+      </button>
+    </div>
+  </div>
+);
 
 export default FloatingBookingBar;
