@@ -28,12 +28,30 @@ const FloatingBookingBar = () => {
     const params = new URLSearchParams();
     params.set("currency", "ARS");
     params.set("language", "es-ES");
-    if (dateRange?.from) params.set("from", format(dateRange.from, "yyyy-MM-dd"));
-    if (dateRange?.to) params.set("to", format(dateRange.to, "yyyy-MM-dd"));
-    params.set("nAdults", String(adults));
-    params.set("nChilds", String(children));
-    params.set("nBabies", String(babies));
+    if (dateRange?.from) params.set("checkin", format(dateRange.from, "yyyy-MM-dd"));
+    if (dateRange?.to) params.set("checkout", format(dateRange.to, "yyyy-MM-dd"));
+
+    // Distribuir huéspedes por habitación (formato indexado que espera HotelPMS)
+    const adultsPerRoom = Math.floor(adults / rooms);
+    const extraAdults = adults % rooms;
+    const childrenPerRoom = Math.floor(children / rooms);
+    const extraChildren = children % rooms;
+    const babiesPerRoom = Math.floor(babies / rooms);
+    const extraBabies = babies % rooms;
+
+    for (let i = 0; i < rooms; i++) {
+      const rAdults = adultsPerRoom + (i < extraAdults ? 1 : 0);
+      const rChildren = childrenPerRoom + (i < extraChildren ? 1 : 0);
+      const rBabies = babiesPerRoom + (i < extraBabies ? 1 : 0);
+      params.set(`rooms[${i}][adults]`, String(rAdults));
+      params.set(`rooms[${i}][children]`, String(rChildren));
+      params.set(`rooms[${i}][infants]`, String(rBabies));
+    }
+
     params.set("rooms", String(rooms));
+    params.set("adults", String(adults));
+    params.set("children", String(children));
+    params.set("guests", String(adults + children));
     if (promoCode) params.set("rp", promoCode);
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
