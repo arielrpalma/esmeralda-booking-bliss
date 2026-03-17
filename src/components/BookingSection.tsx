@@ -1,18 +1,12 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect } from "react";
 
-const DEFAULT_URL =
-  "https://frame2.hotelpms.io/BookingFrameClient/hotel/4999DCF40A49BFB3D5A6C22E1174000D/e2d8af9e-82cf-4b24-ba19-fc7b08142f0e/book/rooms?currency=ARS&language=es-ES&rp=";
-
-interface BookingSectionProps {
-  iframeUrl?: string;
-}
-
-const BookingSection = ({ iframeUrl }: BookingSectionProps) => {
+const BookingSection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   useEffect(() => {
+    // Load booking iframe scripts
     const script1 = document.createElement("script");
     script1.src = "https://frame2.hotelpms.io/BookingFrameClient/public/assets/booking-frame/js/iframe-resizer.min.js";
     script1.async = true;
@@ -28,8 +22,6 @@ const BookingSection = ({ iframeUrl }: BookingSectionProps) => {
       document.body.removeChild(script2);
     };
   }, []);
-
-  const src = iframeUrl || DEFAULT_URL;
 
   return (
     <section id="reservar" className="py-24 md:py-32 bg-background">
@@ -57,7 +49,7 @@ const BookingSection = ({ iframeUrl }: BookingSectionProps) => {
         >
           <iframe
             id="hw-booking-frame"
-            src={src}
+            src="https://frame2.hotelpms.io/BookingFrameClient/hotel/4999DCF40A49BFB3D5A6C22E1174000D/e2d8af9e-82cf-4b24-ba19-fc7b08142f0e/book/rooms?currency=ARS&language=es-ES&rp="
             frameBorder="0"
             allowTransparency={true}
             scrolling="no"
