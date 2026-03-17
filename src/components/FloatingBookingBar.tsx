@@ -144,7 +144,7 @@ const FloatingBookingBar = () => {
                   <BedDouble size={16} className="text-primary shrink-0" />
                   <div className="flex-1">
                     <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
-                      Habitaciones
+                      Departamentos
                     </span>
                     <span className="text-sm font-body text-section-dark-foreground">
                       {roomsSummary}
