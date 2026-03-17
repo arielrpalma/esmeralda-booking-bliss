@@ -117,29 +117,25 @@ const FloatingBookingBar = () => {
                 sideOffset={8}
               >
                 <div className="p-5 space-y-4">
-                  {/* Departamentos */}
-                  <CounterRow
-                    label="Departamentos"
-                    sublabel="(habitaciones)"
-                    value={rooms}
-                    onDecrement={() => rooms > 1 && setRooms(rooms - 1)}
-                    onIncrement={() => rooms < 5 && setRooms(rooms + 1)}
-                    min={1}
-                  />
-
-                  <div className="border-t border-border" />
-
                   {/* Adultos */}
                   <CounterRow
                     label="Adultos"
                     sublabel="+15 años"
                     value={adults}
                     onDecrement={() => adults > 1 && setAdults(adults - 1)}
-                    onIncrement={() => setAdults(adults + 1)}
+                    onIncrement={() => canAddMore && setAdults(adults + 1)}
                     min={1}
                   />
 
                   {/* Menores */}
+                  <CounterRow
+                    label="Menores"
+                    sublabel="3-14 años"
+                    value={children}
+                    onDecrement={() => children > 0 && setChildren(children - 1)}
+                    onIncrement={() => canAddMore && setChildren(children + 1)}
+                    min={0}
+                  />
                   <CounterRow
                     label="Menores"
                     sublabel="3-14 años"
