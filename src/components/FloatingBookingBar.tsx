@@ -120,6 +120,7 @@ const FloatingBookingBar = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-sm font-medium text-foreground">Departamento</span>
+                      <span className="block text-[11px] text-muted-foreground">¿Más deptos? Agregá en el paso siguiente</span>
                     </div>
                     <span className="text-sm font-semibold text-foreground">1</span>
                   </div>
