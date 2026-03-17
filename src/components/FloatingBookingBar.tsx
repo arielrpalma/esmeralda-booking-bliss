@@ -28,6 +28,7 @@ const FloatingBookingBar = () => {
     if (checkIn) params.set("checkin", format(checkIn, "yyyy-MM-dd"));
     if (checkOut) params.set("checkout", format(checkOut, "yyyy-MM-dd"));
     if (rooms) params.set("rooms", rooms);
+    if (guests) params.set("guests", guests);
     params.set("rp", promoCode);
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
