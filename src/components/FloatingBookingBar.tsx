@@ -36,6 +36,12 @@ const FloatingBookingBar = () => {
         const newVal = room[field] + delta;
         if (field === "adults" && newVal < 1) return room;
         if (newVal < 0) return room;
+        // Max 3 between adults + children per room (babies don't count)
+        if (field === "adults" || field === "children") {
+          const newAdults = field === "adults" ? newVal : room.adults;
+          const newChildren = field === "children" ? newVal : room.children;
+          if (newAdults + newChildren > 3) return room;
+        }
         return { ...room, [field]: newVal };
       })
     );
