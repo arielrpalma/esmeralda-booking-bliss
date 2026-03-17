@@ -169,22 +169,6 @@ const FloatingBookingBar = () => {
               </PopoverContent>
             </Popover>
 
-            {/* Código Promocional */}
-            <div className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2">
-              <Tag size={16} className="text-primary shrink-0" />
-              <div className="flex-1">
-                <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
-                  Código Promo
-                </span>
-                <input
-                  type="text"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)}
-                  placeholder="Opcional"
-                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground placeholder:text-section-dark-foreground/40 focus:outline-none"
-                />
-              </div>
-            </div>
 
             {/* Buscar */}
             <button
