@@ -185,7 +185,7 @@ const FloatingBookingBar = () => {
                       className="grid grid-cols-[1fr_80px_80px_80px_28px] gap-2 items-center py-3 border-b border-border/50"
                     >
                       <span className="text-sm font-medium text-foreground">
-                        Habitación {idx + 1}
+                        Departamento {idx + 1}
                       </span>
 
                       {/* Adults */}
