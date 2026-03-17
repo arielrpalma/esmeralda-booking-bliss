@@ -118,6 +118,27 @@ const FloatingBookingBar = () => {
               </div>
             </div>
 
+            {/* Huéspedes */}
+            <div className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2">
+              <Users size={16} className="text-primary shrink-0" />
+              <div className="flex-1">
+                <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
+                  Huéspedes
+                </span>
+                <select
+                  value={guests}
+                  onChange={(e) => setGuests(e.target.value)}
+                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none appearance-none cursor-pointer"
+                >
+                  {[1, 2, 3, 4, 5, 6].map((n) => (
+                    <option key={n} value={n} className="text-foreground bg-background">
+                      {n} {n === 1 ? "huésped" : "huéspedes"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             {/* Código Promocional */}
             <div className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2">
               <Tag size={16} className="text-primary shrink-0" />
