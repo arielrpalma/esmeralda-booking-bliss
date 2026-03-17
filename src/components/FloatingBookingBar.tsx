@@ -1,4 +1,4 @@
-import { Search, CalendarDays, BedDouble, Tag } from "lucide-react";
+import { Search, CalendarDays, BedDouble, Tag, Users } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
