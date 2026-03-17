@@ -263,7 +263,7 @@ const FloatingBookingBar = () => {
                       className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors mt-3"
                     >
                       <Plus size={16} />
-                      Agregar Habitación
+                      Agregar Departamento
                     </button>
                   )}
 
