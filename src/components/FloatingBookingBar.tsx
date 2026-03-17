@@ -48,10 +48,8 @@ const FloatingBookingBar = () => {
       params.set(`rooms[${i}][infants]`, String(rBabies));
     }
 
-    params.set("rooms", String(rooms));
-    params.set("adults", String(adults));
-    params.set("children", String(children));
-    params.set("guests", String(adults + children));
+    // No enviamos claves escalares que puedan colisionar con la estructura rooms[index][...]
+    // porque el motor interpreta las habitaciones desde ese array indexado.
     if (promoCode) params.set("rp", promoCode);
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
