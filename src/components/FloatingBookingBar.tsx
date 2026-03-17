@@ -117,6 +117,16 @@ const FloatingBookingBar = () => {
                 sideOffset={8}
               >
                 <div className="p-5 space-y-4">
+                  {/* Departamento fijo */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-sm font-medium text-foreground">Departamento</span>
+                    </div>
+                    <span className="text-sm font-semibold text-foreground">1</span>
+                  </div>
+
+                  <div className="border-t border-border" />
+
                   {/* Adultos */}
                   <CounterRow
                     label="Adultos"
@@ -134,14 +144,6 @@ const FloatingBookingBar = () => {
                     value={children}
                     onDecrement={() => children > 0 && setChildren(children - 1)}
                     onIncrement={() => canAddMore && setChildren(children + 1)}
-                    min={0}
-                  />
-                  <CounterRow
-                    label="Menores"
-                    sublabel="3-14 años"
-                    value={children}
-                    onDecrement={() => children > 0 && setChildren(children - 1)}
-                    onIncrement={() => setChildren(children + 1)}
                     min={0}
                   />
 
