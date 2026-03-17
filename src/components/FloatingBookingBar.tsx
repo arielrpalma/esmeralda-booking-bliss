@@ -1,4 +1,4 @@
-import { Search, CalendarDays, BedDouble, Tag, Plus, Minus, Users } from "lucide-react";
+import { Search, CalendarDays, Plus, Minus, Users } from "lucide-react";
 import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { motion } from "framer-motion";
@@ -20,7 +20,6 @@ const FloatingBookingBar = () => {
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [babies, setBabies] = useState(0);
-  const [promoCode, setPromoCode] = useState("");
   const [guestsOpen, setGuestsOpen] = useState(false);
 
   const MAX_GUESTS = 3;
@@ -41,7 +40,7 @@ const FloatingBookingBar = () => {
     if (children > 0) params.set("nChilds", String(children));
     if (babies > 0) params.set("nBabies", String(babies));
 
-    params.set("rp", promoCode.trim());
+    params.set("rp", "");
 
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
@@ -170,22 +169,6 @@ const FloatingBookingBar = () => {
               </PopoverContent>
             </Popover>
 
-            {/* Código Promocional */}
-            <div className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2">
-              <Tag size={16} className="text-primary shrink-0" />
-              <div className="flex-1">
-                <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
-                  Código Promo
-                </span>
-                <input
-                  type="text"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)}
-                  placeholder="Opcional"
-                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground placeholder:text-section-dark-foreground/40 focus:outline-none"
-                />
-              </div>
-            </div>
 
             {/* Buscar */}
             <button
