@@ -18,6 +18,7 @@ const FloatingBookingBar = () => {
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
   const [rooms, setRooms] = useState("1");
+  const [guests, setGuests] = useState("2");
   const [promoCode, setPromoCode] = useState("");
 
   const handleSearch = () => {
