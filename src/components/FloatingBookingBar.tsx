@@ -1,4 +1,4 @@
-import { Search, CalendarDays, BedDouble, Tag, Users } from "lucide-react";
+import { Search, CalendarDays, BedDouble, Tag, Plus, Minus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
@@ -14,12 +14,44 @@ import {
 const BASE_URL =
   "https://frame2.hotelpms.io/BookingFrameClient/hotel/4999DCF40A49BFB3D5A6C22E1174000D/e2d8af9e-82cf-4b24-ba19-fc7b08142f0e/book/rooms";
 
+type Room = {
+  adults: number;
+  children: number;
+  babies: number;
+};
+
 const FloatingBookingBar = () => {
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
-  const [rooms, setRooms] = useState("1");
-  const [guests, setGuests] = useState("2");
+  const [roomsList, setRoomsList] = useState<Room[]>([{ adults: 2, children: 0, babies: 0 }]);
   const [promoCode, setPromoCode] = useState("");
+  const [roomsOpen, setRoomsOpen] = useState(false);
+
+  const totalGuests = roomsList.reduce((sum, r) => sum + r.adults + r.children + r.babies, 0);
+
+  const updateRoom = (index: number, field: keyof Room, delta: number) => {
+    setRoomsList((prev) =>
+      prev.map((room, i) => {
+        if (i !== index) return room;
+        const newVal = room[field] + delta;
+        if (field === "adults" && newVal < 1) return room;
+        if (newVal < 0) return room;
+        return { ...room, [field]: newVal };
+      })
+    );
+  };
+
+  const addRoom = () => {
+    if (roomsList.length < 5) {
+      setRoomsList((prev) => [...prev, { adults: 2, children: 0, babies: 0 }]);
+    }
+  };
+
+  const removeRoom = (index: number) => {
+    if (roomsList.length > 1) {
+      setRoomsList((prev) => prev.filter((_, i) => i !== index));
+    }
+  };
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -27,11 +59,13 @@ const FloatingBookingBar = () => {
     params.set("language", "es-ES");
     if (checkIn) params.set("checkin", format(checkIn, "yyyy-MM-dd"));
     if (checkOut) params.set("checkout", format(checkOut, "yyyy-MM-dd"));
-    if (rooms) params.set("rooms", rooms);
-    if (guests) params.set("guests", guests);
+    params.set("rooms", String(roomsList.length));
+    params.set("guests", String(totalGuests));
     params.set("rp", promoCode);
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
+
+  const roomsSummary = `${roomsList.length} hab. · ${totalGuests} huésp.`;
 
   return (
     <motion.div
@@ -98,46 +132,153 @@ const FloatingBookingBar = () => {
             </Popover>
 
             {/* Habitaciones */}
-            <div className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2">
-              <BedDouble size={16} className="text-primary shrink-0" />
-              <div className="flex-1">
-                <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
-                  Habitaciones
-                </span>
-                <select
-                  value={rooms}
-                  onChange={(e) => setRooms(e.target.value)}
-                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none appearance-none cursor-pointer"
-                >
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <option key={n} value={n} className="text-foreground bg-background">
-                      {n} {n === 1 ? "habitación" : "habitaciones"}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            <Popover open={roomsOpen} onOpenChange={setRoomsOpen}>
+              <PopoverTrigger asChild>
+                <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2 text-left">
+                  <BedDouble size={16} className="text-primary shrink-0" />
+                  <div className="flex-1">
+                    <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
+                      Habitaciones
+                    </span>
+                    <span className="text-sm font-body text-section-dark-foreground">
+                      {roomsSummary}
+                    </span>
+                  </div>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-[420px] p-0 pointer-events-auto"
+                align="center"
+                side="top"
+                sideOffset={8}
+              >
+                <div className="p-5">
+                  <h3 className="text-base font-semibold text-foreground mb-4">Habitaciones</h3>
 
-            {/* Huéspedes */}
-            <div className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2">
-              <Users size={16} className="text-primary shrink-0" />
-              <div className="flex-1">
-                <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
-                  Huéspedes
-                </span>
-                <select
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                  className="w-full bg-transparent text-sm font-body text-section-dark-foreground focus:outline-none appearance-none cursor-pointer"
-                >
-                  {[1, 2, 3, 4, 5, 6].map((n) => (
-                    <option key={n} value={n} className="text-foreground bg-background">
-                      {n} {n === 1 ? "huésped" : "huéspedes"}
-                    </option>
+                  {/* Header row */}
+                  <div className="grid grid-cols-[1fr_80px_80px_80px_28px] gap-2 mb-2 text-center">
+                    <div />
+                    <span className="text-xs font-semibold text-foreground">Adultos</span>
+                    <span className="text-xs font-semibold text-foreground leading-tight">
+                      Menores
+                      <span className="block text-[10px] font-normal text-muted-foreground">3-14 años</span>
+                    </span>
+                    <span className="text-xs font-semibold text-foreground leading-tight">
+                      Bebés
+                      <span className="block text-[10px] font-normal text-muted-foreground">&lt; 2 años</span>
+                    </span>
+                    <div />
+                  </div>
+
+                  <div className="border-t border-border" />
+
+                  {/* Room rows */}
+                  {roomsList.map((room, idx) => (
+                    <div
+                      key={idx}
+                      className="grid grid-cols-[1fr_80px_80px_80px_28px] gap-2 items-center py-3 border-b border-border/50"
+                    >
+                      <span className="text-sm font-medium text-foreground">
+                        Habitación {idx + 1}
+                      </span>
+
+                      {/* Adults */}
+                      <div className="flex items-center justify-center gap-1">
+                        <button
+                          onClick={() => updateRoom(idx, "adults", -1)}
+                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors disabled:opacity-30"
+                          disabled={room.adults <= 1}
+                        >
+                          <Minus size={14} />
+                        </button>
+                        <span className="text-sm font-medium text-foreground w-4 text-center">{room.adults}</span>
+                        <button
+                          onClick={() => updateRoom(idx, "adults", 1)}
+                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors"
+                        >
+                          <Plus size={14} />
+                        </button>
+                      </div>
+
+                      {/* Children */}
+                      <div className="flex items-center justify-center gap-1">
+                        <button
+                          onClick={() => updateRoom(idx, "children", -1)}
+                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors disabled:opacity-30"
+                          disabled={room.children <= 0}
+                        >
+                          <Minus size={14} />
+                        </button>
+                        <span className="text-sm font-medium text-foreground w-4 text-center">{room.children}</span>
+                        <button
+                          onClick={() => updateRoom(idx, "children", 1)}
+                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors"
+                        >
+                          <Plus size={14} />
+                        </button>
+                      </div>
+
+                      {/* Babies */}
+                      <div className="flex items-center justify-center gap-1">
+                        <button
+                          onClick={() => updateRoom(idx, "babies", -1)}
+                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors disabled:opacity-30"
+                          disabled={room.babies <= 0}
+                        >
+                          <Minus size={14} />
+                        </button>
+                        <span className="text-sm font-medium text-foreground w-4 text-center">{room.babies}</span>
+                        <button
+                          onClick={() => updateRoom(idx, "babies", 1)}
+                          className="w-6 h-6 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors"
+                        >
+                          <Plus size={14} />
+                        </button>
+                      </div>
+
+                      {/* Remove */}
+                      {roomsList.length > 1 ? (
+                        <button
+                          onClick={() => removeRoom(idx)}
+                          className="w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      ) : (
+                        <div className="w-6" />
+                      )}
+                    </div>
                   ))}
-                </select>
-              </div>
-            </div>
+
+                  {/* Add room */}
+                  {roomsList.length < 5 && (
+                    <button
+                      onClick={addRoom}
+                      className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors mt-3"
+                    >
+                      <Plus size={16} />
+                      Agregar Habitación
+                    </button>
+                  )}
+
+                  {/* Actions */}
+                  <div className="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-border">
+                    <button
+                      onClick={() => setRoomsOpen(false)}
+                      className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      onClick={() => setRoomsOpen(false)}
+                      className="px-6 py-2 bg-primary text-primary-foreground rounded-md text-sm font-semibold hover:bg-primary/90 transition-colors"
+                    >
+                      Aplicar
+                    </button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
 
             {/* Código Promocional */}
             <div className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2">
