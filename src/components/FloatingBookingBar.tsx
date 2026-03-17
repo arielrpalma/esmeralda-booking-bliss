@@ -1,4 +1,4 @@
-import { Search, CalendarDays, BedDouble, Tag, Plus, Minus, Users } from "lucide-react";
+import { Search, CalendarDays, Tag, Plus, Minus, Users } from "lucide-react";
 import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { motion } from "framer-motion";
@@ -15,7 +15,11 @@ import {
 const BASE_URL =
   "https://frame2.hotelpms.io/BookingFrameClient/hotel/4999DCF40A49BFB3D5A6C22E1174000D/e2d8af9e-82cf-4b24-ba19-fc7b08142f0e/book/rooms";
 
-const FloatingBookingBar = () => {
+interface FloatingBookingBarProps {
+  onSearch?: (iframeUrl: string) => void;
+}
+
+const FloatingBookingBar = ({ onSearch }: FloatingBookingBarProps) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
@@ -24,14 +28,13 @@ const FloatingBookingBar = () => {
   const [promoCode, setPromoCode] = useState("");
   const [guestsOpen, setGuestsOpen] = useState(false);
 
-  const handleSearch = () => {
+  const buildIframeUrl = () => {
     const params = new URLSearchParams();
     params.set("currency", "ARS");
     params.set("language", "es-ES");
     if (dateRange?.from) params.set("checkin", format(dateRange.from, "yyyy-MM-dd"));
     if (dateRange?.to) params.set("checkout", format(dateRange.to, "yyyy-MM-dd"));
 
-    // Distribuir huéspedes por habitación (formato indexado que espera HotelPMS)
     const adultsPerRoom = Math.floor(adults / rooms);
     const extraAdults = adults % rooms;
     const childrenPerRoom = Math.floor(children / rooms);
@@ -40,12 +43,9 @@ const FloatingBookingBar = () => {
     const extraBabies = babies % rooms;
 
     for (let i = 0; i < rooms; i++) {
-      const rAdults = adultsPerRoom + (i < extraAdults ? 1 : 0);
-      const rChildren = childrenPerRoom + (i < extraChildren ? 1 : 0);
-      const rBabies = babiesPerRoom + (i < extraBabies ? 1 : 0);
-      params.set(`rooms[${i}][adults]`, String(rAdults));
-      params.set(`rooms[${i}][children]`, String(rChildren));
-      params.set(`rooms[${i}][infants]`, String(rBabies));
+      params.set(`rooms[${i}][adults]`, String(adultsPerRoom + (i < extraAdults ? 1 : 0)));
+      params.set(`rooms[${i}][children]`, String(childrenPerRoom + (i < extraChildren ? 1 : 0)));
+      params.set(`rooms[${i}][infants]`, String(babiesPerRoom + (i < extraBabies ? 1 : 0)));
     }
 
     params.set("rooms", String(rooms));
@@ -53,7 +53,21 @@ const FloatingBookingBar = () => {
     params.set("children", String(children));
     params.set("guests", String(adults + children));
     if (promoCode) params.set("rp", promoCode);
-    window.open(`${BASE_URL}?${params.toString()}`, "_blank");
+    return `${BASE_URL}?${params.toString()}`;
+  };
+
+  const handleSearch = () => {
+    const url = buildIframeUrl();
+    if (onSearch) {
+      onSearch(url);
+      // Scroll to booking section
+      const el = document.getElementById("reservar");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      window.open(url, "_blank");
+    }
   };
 
   const totalGuests = adults + children + babies;
@@ -127,54 +141,13 @@ const FloatingBookingBar = () => {
                 sideOffset={8}
               >
                 <div className="p-5 space-y-4">
-                  {/* Departamentos */}
-                  <CounterRow
-                    label="Departamentos"
-                    sublabel="(habitaciones)"
-                    value={rooms}
-                    onDecrement={() => rooms > 1 && setRooms(rooms - 1)}
-                    onIncrement={() => rooms < 5 && setRooms(rooms + 1)}
-                    min={1}
-                  />
-
+                  <CounterRow label="Departamentos" sublabel="(habitaciones)" value={rooms} onDecrement={() => rooms > 1 && setRooms(rooms - 1)} onIncrement={() => rooms < 5 && setRooms(rooms + 1)} min={1} />
                   <div className="border-t border-border" />
-
-                  {/* Adultos */}
-                  <CounterRow
-                    label="Adultos"
-                    sublabel="+15 años"
-                    value={adults}
-                    onDecrement={() => adults > 1 && setAdults(adults - 1)}
-                    onIncrement={() => setAdults(adults + 1)}
-                    min={1}
-                  />
-
-                  {/* Menores */}
-                  <CounterRow
-                    label="Menores"
-                    sublabel="3-14 años"
-                    value={children}
-                    onDecrement={() => children > 0 && setChildren(children - 1)}
-                    onIncrement={() => setChildren(children + 1)}
-                    min={0}
-                  />
-
-                  {/* Bebés */}
-                  <CounterRow
-                    label="Bebés"
-                    sublabel="< 2 años"
-                    value={babies}
-                    onDecrement={() => babies > 0 && setBabies(babies - 1)}
-                    onIncrement={() => setBabies(babies + 1)}
-                    min={0}
-                  />
-
-                  {/* Aplicar */}
+                  <CounterRow label="Adultos" sublabel="+15 años" value={adults} onDecrement={() => adults > 1 && setAdults(adults - 1)} onIncrement={() => setAdults(adults + 1)} min={1} />
+                  <CounterRow label="Menores" sublabel="3-14 años" value={children} onDecrement={() => children > 0 && setChildren(children - 1)} onIncrement={() => setChildren(children + 1)} min={0} />
+                  <CounterRow label="Bebés" sublabel="< 2 años" value={babies} onDecrement={() => babies > 0 && setBabies(babies - 1)} onIncrement={() => setBabies(babies + 1)} min={0} />
                   <div className="flex justify-end pt-2 border-t border-border">
-                    <button
-                      onClick={() => setGuestsOpen(false)}
-                      className="px-6 py-2 bg-primary text-primary-foreground rounded-md text-sm font-semibold hover:bg-primary/90 transition-colors"
-                    >
+                    <button onClick={() => setGuestsOpen(false)} className="px-6 py-2 bg-primary text-primary-foreground rounded-md text-sm font-semibold hover:bg-primary/90 transition-colors">
                       Aplicar
                     </button>
                   </div>
@@ -214,42 +187,20 @@ const FloatingBookingBar = () => {
   );
 };
 
-// Reusable counter row component
-const CounterRow = ({
-  label,
-  sublabel,
-  value,
-  onDecrement,
-  onIncrement,
-  min,
-}: {
-  label: string;
-  sublabel?: string;
-  value: number;
-  onDecrement: () => void;
-  onIncrement: () => void;
-  min: number;
+const CounterRow = ({ label, sublabel, value, onDecrement, onIncrement, min }: {
+  label: string; sublabel?: string; value: number; onDecrement: () => void; onIncrement: () => void; min: number;
 }) => (
   <div className="flex items-center justify-between">
     <div>
       <span className="text-sm font-medium text-foreground">{label}</span>
-      {sublabel && (
-        <span className="block text-[11px] text-muted-foreground">{sublabel}</span>
-      )}
+      {sublabel && <span className="block text-[11px] text-muted-foreground">{sublabel}</span>}
     </div>
     <div className="flex items-center gap-3">
-      <button
-        onClick={onDecrement}
-        disabled={value <= min}
-        className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-      >
+      <button onClick={onDecrement} disabled={value <= min} className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
         <Minus size={14} />
       </button>
       <span className="text-sm font-semibold text-foreground w-4 text-center">{value}</span>
-      <button
-        onClick={onIncrement}
-        className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors"
-      >
+      <button onClick={onIncrement} className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors">
         <Plus size={14} />
       </button>
     </div>
