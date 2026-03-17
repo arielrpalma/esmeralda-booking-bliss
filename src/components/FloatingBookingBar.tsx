@@ -40,7 +40,7 @@ const FloatingBookingBar = () => {
     if (children > 0) params.set("nChilds", String(children));
     if (babies > 0) params.set("nBabies", String(babies));
 
-    params.set("rp", promoCode.trim());
+    params.set("rp", "");
 
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
