@@ -1,4 +1,4 @@
-import { Search, CalendarDays, BedDouble, Tag, Plus, Minus, Users } from "lucide-react";
+import { Search, CalendarDays, Plus, Minus, Users } from "lucide-react";
 import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { motion } from "framer-motion";
