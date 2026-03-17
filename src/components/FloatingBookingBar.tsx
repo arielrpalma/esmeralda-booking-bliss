@@ -20,9 +20,12 @@ const FloatingBookingBar = () => {
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [babies, setBabies] = useState(0);
-  const [rooms, setRooms] = useState(1);
   const [promoCode, setPromoCode] = useState("");
   const [guestsOpen, setGuestsOpen] = useState(false);
+
+  const MAX_GUESTS = 3;
+  const totalGuests = adults + children + babies;
+  const canAddMore = totalGuests < MAX_GUESTS;
 
   const handleSearch = () => {
     const params = new URLSearchParams();
