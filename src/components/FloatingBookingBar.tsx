@@ -83,54 +83,32 @@ const FloatingBookingBar = () => {
       <div className="bg-section-dark/95 backdrop-blur-md border-t border-border/20 shadow-[0_-4px_30px_rgba(0,0,0,0.3)]">
         <div className="container mx-auto px-4 py-3">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-5xl mx-auto">
-            {/* Llegada */}
+            {/* Llegada / Salida */}
             <Popover>
               <PopoverTrigger asChild>
                 <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2 text-left">
                   <CalendarDays size={16} className="text-primary shrink-0" />
                   <div className="flex-1">
                     <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
-                      Llegada
+                      Llegada — Salida
                     </span>
-                    <span className={cn("text-sm font-body", checkIn ? "text-section-dark-foreground" : "text-section-dark-foreground/40")}>
-                      {checkIn ? format(checkIn, "dd MMM yyyy", { locale: es }) : "Seleccionar"}
+                    <span className={cn("text-sm font-body", dateRange?.from ? "text-section-dark-foreground" : "text-section-dark-foreground/40")}>
+                      {dateRange?.from
+                        ? dateRange.to
+                          ? `${format(dateRange.from, "dd MMM", { locale: es })} → ${format(dateRange.to, "dd MMM", { locale: es })}`
+                          : `${format(dateRange.from, "dd MMM", { locale: es })} → ...`
+                        : "Seleccionar fechas"}
                     </span>
                   </div>
                 </button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={8}>
                 <Calendar
-                  mode="single"
-                  selected={checkIn}
-                  onSelect={setCheckIn}
+                  mode="range"
+                  selected={dateRange}
+                  onSelect={setDateRange}
+                  numberOfMonths={2}
                   disabled={(date) => date < new Date()}
-                  initialFocus
-                  className={cn("p-3 pointer-events-auto")}
-                />
-              </PopoverContent>
-            </Popover>
-
-            {/* Salida */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-md px-3 py-2 text-left">
-                  <CalendarDays size={16} className="text-primary shrink-0" />
-                  <div className="flex-1">
-                    <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
-                      Salida
-                    </span>
-                    <span className={cn("text-sm font-body", checkOut ? "text-section-dark-foreground" : "text-section-dark-foreground/40")}>
-                      {checkOut ? format(checkOut, "dd MMM yyyy", { locale: es }) : "Seleccionar"}
-                    </span>
-                  </div>
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={8}>
-                <Calendar
-                  mode="single"
-                  selected={checkOut}
-                  onSelect={setCheckOut}
-                  disabled={(date) => date < (checkIn || new Date())}
                   initialFocus
                   className={cn("p-3 pointer-events-auto")}
                 />
