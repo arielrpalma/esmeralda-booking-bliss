@@ -38,11 +38,10 @@ const FloatingBookingBar = () => {
     if (dateRange?.to) params.set("to", format(dateRange.to, "yyyy-MM-dd"));
 
     params.set("nAdults", String(adults));
-    params.set("nChilds", String(children));
-    params.set("nBabies", String(babies));
-    params.set("roomType", "1");
+    if (children > 0) params.set("nChilds", String(children));
+    if (babies > 0) params.set("nBabies", String(babies));
 
-    if (promoCode.trim()) params.set("rp", promoCode.trim());
+    params.set("rp", promoCode.trim());
 
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
