@@ -47,7 +47,7 @@ const FloatingBookingBar = () => {
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
 
-  const summary = `${totalGuests} huésp.`;
+  const summary = `1 dept. · ${totalGuests} huésp.`;
 
   return (
     <motion.div
