@@ -71,7 +71,7 @@ const FloatingBookingBar = () => {
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
 
-  const roomsSummary = `${roomsList.length} hab. · ${totalGuests} huésp.`;
+  const roomsSummary = `${roomsList.length} depto${roomsList.length > 1 ? "s" : ""}. · ${totalGuests} huésp.`;
 
   return (
     <motion.div
@@ -144,7 +144,7 @@ const FloatingBookingBar = () => {
                   <BedDouble size={16} className="text-primary shrink-0" />
                   <div className="flex-1">
                     <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
-                      Habitaciones
+                      Departamentos
                     </span>
                     <span className="text-sm font-body text-section-dark-foreground">
                       {roomsSummary}
@@ -159,7 +159,7 @@ const FloatingBookingBar = () => {
                 sideOffset={8}
               >
                 <div className="p-5">
-                  <h3 className="text-base font-semibold text-foreground mb-4">Habitaciones</h3>
+                  <h3 className="text-base font-semibold text-foreground mb-4">Departamentos</h3>
 
                   {/* Header row */}
                   <div className="grid grid-cols-[1fr_80px_80px_80px_28px] gap-2 mb-2 text-center">
@@ -185,7 +185,7 @@ const FloatingBookingBar = () => {
                       className="grid grid-cols-[1fr_80px_80px_80px_28px] gap-2 items-center py-3 border-b border-border/50"
                     >
                       <span className="text-sm font-medium text-foreground">
-                        Habitación {idx + 1}
+                        Departamento {idx + 1}
                       </span>
 
                       {/* Adults */}
@@ -263,7 +263,7 @@ const FloatingBookingBar = () => {
                       className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors mt-3"
                     >
                       <Plus size={16} />
-                      Agregar Habitación
+                      Agregar Departamento
                     </button>
                   )}
 
