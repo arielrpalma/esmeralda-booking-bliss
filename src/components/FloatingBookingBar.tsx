@@ -67,16 +67,26 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Measure total height of the floating bar (bar + banner) and report it
   useEffect(() => {
-    if (!containerRef.current || !onHeightChange) return;
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        onHeightChange(entry.contentRect.height);
+    if (!onHeightChange) return;
+
+    const measure = () => {
+      if (containerRef.current) {
+        onHeightChange(containerRef.current.getBoundingClientRect().height);
       }
-    });
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, [onHeightChange]);
+    };
+
+    // Measure immediately and after animations settle
+    measure();
+    const timers = [
+      setTimeout(measure, 50),
+      setTimeout(measure, 350),
+      setTimeout(measure, 600),
+    ];
+
+    return () => timers.forEach(clearTimeout);
+  }, [result, loading, onHeightChange]);
 
   const setCalendarOpen = (open: boolean) => {
     if (open) { setDateRange(undefined); setResult(null); }
