@@ -164,7 +164,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     <Calendar mode="range" selected={retryDateRange} onSelect={handleRetryDateSelect}
       numberOfMonths={isMobile ? 1 : 2} locale={es}
       defaultMonth={retryDefaultMonth}
-      disabled={(date) => { const t = new Date(); t.setHours(0,0,0,0); return date < t; }}
+      disabled={(date) => { const now = new Date(); const arHour = new Date(now.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' })).getHours(); const t = new Date(); t.setHours(0,0,0,0); if (arHour >= 22) t.setDate(t.getDate() + 1); return date < t; }}
       initialFocus className={cn("p-3 pointer-events-auto")} />
   );
   const summary = `1 dept. · ${totalGuests} huésp.`;
@@ -209,7 +209,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const calendarContent = (
     <Calendar mode="range" selected={dateRange} onSelect={handleDateSelect}
       numberOfMonths={isMobile ? 1 : 2} locale={es}
-      disabled={(date) => { const t = new Date(); t.setHours(0,0,0,0); return date < t; }}
+      disabled={(date) => { const now = new Date(); const arHour = new Date(now.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' })).getHours(); const t = new Date(); t.setHours(0,0,0,0); if (arHour >= 22) t.setDate(t.getDate() + 1); return date < t; }}
       initialFocus className={cn("p-3 pointer-events-auto")} />
   );
 
