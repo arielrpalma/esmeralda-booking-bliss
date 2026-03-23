@@ -70,6 +70,7 @@ const FloatingBookingBar = ({ onBannerVisible }: { onBannerVisible?: (visible: b
     onBannerVisible?.(!!result || loading);
   }, [result, loading, onBannerVisible]);
 
+  const setCalendarOpen = (open: boolean) => {
     if (open) { setDateRange(undefined); setResult(null); }
     setCalendarOpenRaw(open);
   };
