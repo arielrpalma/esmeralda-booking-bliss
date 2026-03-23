@@ -295,8 +295,8 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
         {showResults && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3 }}
-            className={cn("bg-card/95 backdrop-blur-xl border-t border-border/30 shadow-[0_-8px_30px_rgba(0,0,0,0.15)]", isMobile && "pb-[env(safe-area-inset-bottom,0px)]")}>
-            <div className={cn("container mx-auto max-w-5xl", isMobile ? "px-3 py-2.5" : "px-4 py-3")}>
+            className="bg-card/95 backdrop-blur-xl border-t border-border/30 shadow-[0_-8px_30px_rgba(0,0,0,0.15)]">
+            <div className={cn("container mx-auto max-w-5xl", isMobile ? "px-3 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom,0px))]" : "px-4 py-3")}>
 
               {loading ? (
                 <div className="flex items-center justify-center gap-3 py-2">
