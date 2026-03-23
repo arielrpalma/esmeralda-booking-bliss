@@ -1,4 +1,4 @@
-import { Search, CalendarDays, Plus, Minus, Users, Check, X, Loader2 } from "lucide-react";
+import { Search, CalendarDays, Plus, Minus, Users, Check, X, Loader2, ArrowRight, Clock } from "lucide-react";
 import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { motion, AnimatePresence } from "framer-motion";
@@ -22,16 +22,22 @@ import {
 const BASE_URL =
   "https://frame2.hotelpms.io/BookingFrameClient/hotel/4999DCF40A49BFB3D5A6C22E1174000D/e2d8af9e-82cf-4b24-ba19-fc7b08142f0e/book/rooms";
 
-interface Alternative {
+interface Suggestion {
   checkin: string;
   checkout: string;
   nights: number;
+  type: "same" | "longer" | "extension";
+  proximity: number;
 }
 
 interface AvailabilityResult {
   available: boolean;
-  alternatives?: Alternative[];
-  extensions?: Alternative[];
+  nights: number;
+  checkin: string;
+  checkout: string;
+  extensions?: Suggestion[];
+  sameNights?: Suggestion[];
+  longerStays?: Suggestion[];
 }
 
 const FloatingBookingBar = () => {
@@ -41,6 +47,9 @@ const FloatingBookingBar = () => {
   const [babies, setBabies] = useState(0);
   const [guestsOpen, setGuestsOpen] = useState(false);
   const [calendarOpen, setCalendarOpenRaw] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<AvailabilityResult | null>(null);
+  const isMobile = useIsMobile();
 
   const setCalendarOpen = (open: boolean) => {
     if (open) {
@@ -49,9 +58,6 @@ const FloatingBookingBar = () => {
     }
     setCalendarOpenRaw(open);
   };
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<AvailabilityResult | null>(null);
-  const isMobile = useIsMobile();
 
   const MAX_GUESTS = 3;
   const totalGuests = adults + children + babies;
@@ -76,51 +82,110 @@ const FloatingBookingBar = () => {
 
   const handleSearch = () => {
     if (!dateRange?.from || !dateRange?.to) return;
-    const checkin = format(dateRange.from, "yyyy-MM-dd");
-    const checkout = format(dateRange.to, "yyyy-MM-dd");
-    checkAvailability(checkin, checkout);
+    checkAvailability(
+      format(dateRange.from, "yyyy-MM-dd"),
+      format(dateRange.to, "yyyy-MM-dd")
+    );
+  };
+
+  const openBookingEngine = (checkin: string, checkout: string) => {
+    const params = new URLSearchParams();
+    params.set("currency", "ARS");
+    params.set("language", "es-ES");
+    params.set("from", checkin);
+    params.set("to", checkout);
+    params.set("nAdults", String(adults));
+    if (children > 0) params.set("nChilds", String(children));
+    if (babies > 0) params.set("nBabies", String(babies));
+    params.set("rp", "");
+    window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
 
   const handleBookNow = () => {
     if (!dateRange?.from || !dateRange?.to) return;
-    const params = new URLSearchParams();
-    params.set("currency", "ARS");
-    params.set("language", "es-ES");
-    params.set("from", format(dateRange.from, "yyyy-MM-dd"));
-    params.set("to", format(dateRange.to, "yyyy-MM-dd"));
-    params.set("nAdults", String(adults));
-    if (children > 0) params.set("nChilds", String(children));
-    if (babies > 0) params.set("nBabies", String(babies));
-    params.set("rp", "");
-    window.open(`${BASE_URL}?${params.toString()}`, "_blank");
+    openBookingEngine(
+      format(dateRange.from, "yyyy-MM-dd"),
+      format(dateRange.to, "yyyy-MM-dd")
+    );
   };
 
-  const handleSelectAlternative = (alt: Alternative) => {
-    const from = new Date(alt.checkin + "T00:00:00");
-    const to = new Date(alt.checkout + "T00:00:00");
-    setDateRange({ from, to });
-    // Redirect directly to booking engine
-    const params = new URLSearchParams();
-    params.set("currency", "ARS");
-    params.set("language", "es-ES");
-    params.set("from", alt.checkin);
-    params.set("to", alt.checkout);
-    params.set("nAdults", String(adults));
-    if (children > 0) params.set("nChilds", String(children));
-    if (babies > 0) params.set("nBabies", String(babies));
-    params.set("rp", "");
-    window.open(`${BASE_URL}?${params.toString()}`, "_blank");
+  const handleSelectSuggestion = (s: Suggestion) => {
+    setDateRange({
+      from: new Date(s.checkin + "T00:00:00"),
+      to: new Date(s.checkout + "T00:00:00"),
+    });
+    openBookingEngine(s.checkin, s.checkout);
   };
 
   const dismissResult = () => setResult(null);
 
   const summary = `1 dept. · ${totalGuests} huésp.`;
-
   const dateLabel = dateRange?.from
     ? dateRange.to
       ? `${format(dateRange.from, "dd MMM", { locale: es })} → ${format(dateRange.to, "dd MMM", { locale: es })}`
       : `${format(dateRange.from, "dd MMM", { locale: es })} → ...`
     : "Seleccionar fechas";
+
+  const formatSuggestionDate = (dateStr: string) =>
+    format(new Date(dateStr + "T00:00:00"), "d 'de' MMM", { locale: es });
+
+  // --- Sub-components ---
+
+  const SuggestionPill = ({ s, variant = "default" }: { s: Suggestion; variant?: "default" | "primary" }) => (
+    <button
+      onClick={() => handleSelectSuggestion(s)}
+      className={cn(
+        "flex-shrink-0 rounded-lg transition-all text-left group flex items-center gap-2",
+        isMobile ? "px-2.5 py-1.5" : "px-3 py-2",
+        variant === "primary"
+          ? "bg-primary/8 hover:bg-primary/15 border border-primary/25"
+          : "bg-muted/60 hover:bg-primary/10 border border-border/50"
+      )}
+    >
+      <div className="flex-1 min-w-0">
+        <span className={cn(
+          "font-body font-semibold text-foreground block whitespace-nowrap",
+          isMobile ? "text-[10px]" : "text-xs"
+        )}>
+          {formatSuggestionDate(s.checkin)} → {formatSuggestionDate(s.checkout)}
+        </span>
+        <span className={cn(
+          "text-muted-foreground group-hover:text-primary transition-colors",
+          isMobile ? "text-[9px]" : "text-[10px]"
+        )}>
+          {s.nights} {s.nights === 1 ? "noche" : "noches"}
+        </span>
+      </div>
+      <ArrowRight size={12} className="text-muted-foreground/50 group-hover:text-primary transition-colors shrink-0" />
+    </button>
+  );
+
+  const SuggestionSection = ({
+    title,
+    suggestions,
+    variant = "default",
+  }: {
+    title: string;
+    suggestions: Suggestion[];
+    variant?: "default" | "primary";
+  }) => {
+    if (!suggestions || suggestions.length === 0) return null;
+    return (
+      <div>
+        <span className={cn(
+          "font-body font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 block",
+          isMobile ? "text-[9px]" : "text-[10px]"
+        )}>
+          {title}
+        </span>
+        <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          {suggestions.map((s, i) => (
+            <SuggestionPill key={i} s={s} variant={variant} />
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   const calendarContent = (
     <Calendar
@@ -210,6 +275,10 @@ const FloatingBookingBar = () => {
     </button>
   );
 
+  const hasNoAlternatives = result && !result.available &&
+    (!result.sameNights || result.sameNights.length === 0) &&
+    (!result.longerStays || result.longerStays.length === 0);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -227,28 +296,37 @@ const FloatingBookingBar = () => {
             transition={{ duration: 0.3 }}
             className="bg-card/95 backdrop-blur-xl border-t border-border/30 shadow-[0_-8px_30px_rgba(0,0,0,0.15)]"
           >
-            <div className="container mx-auto px-3 sm:px-4 py-3 max-w-5xl">
+            <div className={cn(
+              "container mx-auto max-w-5xl",
+              isMobile ? "px-3 py-2.5" : "px-4 py-3"
+            )}>
               {loading ? (
                 <div className="flex items-center justify-center gap-3 py-2">
                   <Loader2 size={20} className="text-primary animate-spin" />
                   <span className="text-sm font-body text-muted-foreground">Consultando disponibilidad…</span>
                 </div>
               ) : result?.available ? (
-                <div className="space-y-2 sm:space-y-3">
-                  <div className={cn("flex items-center justify-between gap-2 sm:gap-3", isMobile && "flex-wrap")}>
+                /* ===== AVAILABLE ===== */
+                <div className="space-y-2.5 sm:space-y-3">
+                  <div className={cn("flex items-center justify-between gap-2 sm:gap-3")}>
                     <div className="flex items-center gap-2">
                       <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
                         <Check size={14} className="text-primary" />
                       </div>
                       <div>
                         <span className="text-xs sm:text-sm font-body font-semibold text-foreground">¡Disponible!</span>
-                        <span className="block text-[10px] sm:text-xs text-muted-foreground">Fechas libres</span>
+                        <span className="block text-[10px] sm:text-xs text-muted-foreground">
+                          {formatSuggestionDate(result.checkin)} al {formatSuggestionDate(result.checkout)} — {result.nights} {result.nights === 1 ? "noche" : "noches"}
+                        </span>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={handleBookNow}
-                        className="px-3 sm:px-5 py-1.5 sm:py-2 bg-primary text-primary-foreground rounded-lg text-xs sm:text-sm font-body font-semibold hover:bg-primary/90 transition-all shadow-md"
+                        className={cn(
+                          "bg-primary text-primary-foreground rounded-lg font-body font-semibold hover:bg-primary/90 transition-all shadow-md hover:shadow-lg",
+                          isMobile ? "px-3 py-1.5 text-xs" : "px-5 py-2 text-sm"
+                        )}
                       >
                         Reservar ahora
                       </button>
@@ -257,62 +335,58 @@ const FloatingBookingBar = () => {
                       </button>
                     </div>
                   </div>
-                  {result.extensions && result.extensions.length > 0 && (
-                    <div>
-                      <span className="text-[10px] sm:text-[11px] font-body font-semibold uppercase tracking-wider text-muted-foreground mb-1 block">
-                        ¿Querés alargar tu estadía?
-                      </span>
-                      <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 scrollbar-hide">
-                        {result.extensions.map((ext, i) => (
-                          <button
-                            key={i}
-                            onClick={() => handleSelectAlternative(ext)}
-                            className="flex-shrink-0 px-2 sm:px-3 py-1.5 sm:py-2 bg-primary/5 hover:bg-primary/15 border border-primary/20 rounded-lg transition-all text-left group"
-                          >
-                            <span className="text-[10px] sm:text-xs font-body font-semibold text-foreground block whitespace-nowrap">
-                              {format(new Date(ext.checkin + "T00:00:00"), "dd MMM", { locale: es })} → {format(new Date(ext.checkout + "T00:00:00"), "dd MMM", { locale: es })}
-                            </span>
-                            <span className="text-[9px] sm:text-[10px] text-muted-foreground group-hover:text-primary transition-colors">
-                              {ext.nights} {ext.nights === 1 ? "noche" : "noches"}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <SuggestionSection
+                    title="¿Querés alargar tu estadía?"
+                    suggestions={result.extensions || []}
+                    variant="primary"
+                  />
                 </div>
               ) : result && !result.available ? (
-                <div className="space-y-2 sm:space-y-3">
+                /* ===== NOT AVAILABLE ===== */
+                <div className={cn(
+                  "space-y-2.5 sm:space-y-3",
+                  isMobile && "max-h-[45vh] overflow-y-auto scrollbar-hide"
+                )}>
+                  {/* Header */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-destructive/15 flex items-center justify-center shrink-0">
                         <X size={14} className="text-destructive" />
                       </div>
                       <div>
-                        <span className="text-xs sm:text-sm font-body font-semibold text-foreground">No disponible</span>
-                        <span className="block text-[10px] sm:text-xs text-muted-foreground">Probá estas fechas</span>
+                        <span className="text-xs sm:text-sm font-body font-semibold text-foreground">
+                          No disponible del {formatSuggestionDate(result.checkin)} al {formatSuggestionDate(result.checkout)}
+                        </span>
+                        <span className="block text-[10px] sm:text-xs text-muted-foreground">
+                          Te podemos ofrecer estas alternativas:
+                        </span>
                       </div>
                     </div>
-                    <button onClick={dismissResult} className="p-1 sm:p-1.5 rounded-full hover:bg-muted transition-colors">
+                    <button onClick={dismissResult} className="p-1 sm:p-1.5 rounded-full hover:bg-muted transition-colors shrink-0">
                       <X size={14} className="text-muted-foreground" />
                     </button>
                   </div>
-                  {result.alternatives && result.alternatives.length > 0 && (
-                    <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 scrollbar-hide max-h-20 sm:max-h-none">
-                      {result.alternatives.map((alt, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleSelectAlternative(alt)}
-                          className="flex-shrink-0 px-2 sm:px-3 py-1.5 sm:py-2 bg-muted/80 hover:bg-primary/10 border border-border/50 rounded-lg transition-all text-left group"
-                        >
-                          <span className="text-[10px] sm:text-xs font-body font-semibold text-foreground block whitespace-nowrap">
-                            {format(new Date(alt.checkin + "T00:00:00"), "dd MMM", { locale: es })} → {format(new Date(alt.checkout + "T00:00:00"), "dd MMM", { locale: es })}
-                          </span>
-                          <span className="text-[9px] sm:text-[10px] text-muted-foreground group-hover:text-primary transition-colors">
-                            {alt.nights} {alt.nights === 1 ? "noche" : "noches"}
-                          </span>
-                        </button>
-                      ))}
+
+                  {/* Same nights section */}
+                  <SuggestionSection
+                    title={`📅 Fechas cercanas · ${result.nights} ${result.nights === 1 ? "noche" : "noches"}`}
+                    suggestions={result.sameNights || []}
+                  />
+
+                  {/* Longer stays section */}
+                  <SuggestionSection
+                    title="🕐 Estadía más larga"
+                    suggestions={result.longerStays || []}
+                    variant="primary"
+                  />
+
+                  {/* No alternatives message */}
+                  {hasNoAlternatives && (
+                    <div className="flex items-center gap-2 py-2 px-3 bg-muted/50 rounded-lg">
+                      <Clock size={14} className="text-muted-foreground shrink-0" />
+                      <span className="text-xs font-body text-muted-foreground">
+                        No encontramos opciones cercanas. Probá con otras fechas.
+                      </span>
                     </div>
                   )}
                 </div>
@@ -329,16 +403,12 @@ const FloatingBookingBar = () => {
             "flex items-center gap-2 sm:gap-3 max-w-5xl mx-auto",
             isMobile && "flex-col gap-1.5"
           )}>
-            {/* Row 1 on mobile: dates + guests */}
             <div className={cn("flex items-center gap-2 w-full", !isMobile && "flex-1")}>
-              {/* Fechas */}
               {isMobile ? (
                 <Drawer open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <DrawerTrigger asChild>{dateTrigger}</DrawerTrigger>
                   <DrawerContent>
-                    <div className="p-4 flex justify-center overflow-auto">
-                      {calendarContent}
-                    </div>
+                    <div className="p-4 flex justify-center overflow-auto">{calendarContent}</div>
                   </DrawerContent>
                 </Drawer>
               ) : (
@@ -350,7 +420,6 @@ const FloatingBookingBar = () => {
                 </Popover>
               )}
 
-              {/* Huéspedes */}
               {isMobile ? (
                 <Drawer open={guestsOpen} onOpenChange={setGuestsOpen}>
                   <DrawerTrigger asChild>{guestsTrigger}</DrawerTrigger>
@@ -366,7 +435,6 @@ const FloatingBookingBar = () => {
               )}
             </div>
 
-            {/* Search button */}
             <button
               onClick={handleSearch}
               disabled={!dateRange?.from || !dateRange?.to || loading}
@@ -380,7 +448,7 @@ const FloatingBookingBar = () => {
               ) : (
                 <Search size={isMobile ? 16 : 18} />
               )}
-              <span>{isMobile ? "Consultar" : "Consultar"}</span>
+              <span>Consultar</span>
             </button>
           </div>
         </div>
