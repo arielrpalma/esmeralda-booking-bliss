@@ -237,16 +237,65 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const hasAfter = result?.after && result.after.length > 0;
   const hasNoAlternatives = result && !result.available && !hasBefore && !hasAfter;
 
+  const showResults = !!(result || loading);
+
   return (
     <motion.div ref={containerRef} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 1 }} className="fixed bottom-0 left-0 right-0 z-50">
 
-      {/* Results banner */}
+      {/* Main bar (always rendered, but hidden behind results when active) */}
       <AnimatePresence>
-        {(result || loading) && (
+        {!showResults && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+            className="bg-section-dark/90 backdrop-blur-xl border-t border-border/20 shadow-[0_-4px_30px_rgba(0,0,0,0.3)]"
+          >
+            <div className={cn("container mx-auto", isMobile ? "px-2.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))]" : "px-4 py-3")}>
+              <div className={cn("flex items-center gap-2 sm:gap-3 max-w-5xl mx-auto", isMobile && "flex-col gap-1.5")}>
+                <div className={cn("flex items-center gap-2 w-full", !isMobile && "flex-1")}>
+                  {isMobile ? (
+                    <Drawer open={calendarOpen} onOpenChange={setCalendarOpen}>
+                      <DrawerTrigger asChild>{dateTrigger}</DrawerTrigger>
+                      <DrawerContent><div className="p-4 flex justify-center overflow-auto">{calendarContent}</div></DrawerContent>
+                    </Drawer>
+                  ) : (
+                    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                      <PopoverTrigger asChild>{dateTrigger}</PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={8}>{calendarContent}</PopoverContent>
+                    </Popover>
+                  )}
+                  {isMobile ? (
+                    <Drawer open={guestsOpen} onOpenChange={setGuestsOpen}>
+                      <DrawerTrigger asChild>{guestsTrigger}</DrawerTrigger>
+                      <DrawerContent>{guestsContent}</DrawerContent>
+                    </Drawer>
+                  ) : (
+                    <Popover open={guestsOpen} onOpenChange={setGuestsOpen}>
+                      <PopoverTrigger asChild>{guestsTrigger}</PopoverTrigger>
+                      <PopoverContent className="w-[320px] p-0 pointer-events-auto" align="center" side="top" sideOffset={8}>{guestsContent}</PopoverContent>
+                    </Popover>
+                  )}
+                </div>
+                <button onClick={handleSearch} disabled={!dateRange?.from || !dateRange?.to || loading}
+                  className={cn("bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-body font-semibold tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl shrink-0 disabled:opacity-50 disabled:cursor-not-allowed", isMobile ? "w-full px-3 py-2.5 text-xs" : "px-6 py-3 text-sm")}>
+                  {loading ? <Loader2 size={isMobile ? 16 : 18} className="animate-spin" /> : <Search size={isMobile ? 16 : 18} />}
+                  <span>Consultar</span>
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Results banner — replaces the bar when visible */}
+      <AnimatePresence>
+        {showResults && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3 }}
-            className="bg-card/95 backdrop-blur-xl border-t border-border/30 shadow-[0_-8px_30px_rgba(0,0,0,0.15)]">
+            className={cn("bg-card/95 backdrop-blur-xl border-t border-border/30 shadow-[0_-8px_30px_rgba(0,0,0,0.15)]", isMobile && "pb-[env(safe-area-inset-bottom,0px)]")}>
             <div className={cn("container mx-auto max-w-5xl", isMobile ? "px-3 py-2.5" : "px-4 py-3")}>
 
               {loading ? (
@@ -319,15 +368,10 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                   {/* Single row: BEFORE ← | → AFTER */}
                   {(hasBefore || hasAfter) && (
                     <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 scrollbar-hide items-center">
-                      {/* Before pills */}
                       {hasBefore && result.before!.map((s, i) => <Pill key={`b-${i}`} s={s} />)}
-
-                      {/* Divider */}
                       {hasBefore && hasAfter && (
                         <div className="shrink-0 w-px h-8 bg-border/60 mx-1" />
                       )}
-
-                      {/* After pills */}
                       {hasAfter && result.after!.map((s, i) => <Pill key={`a-${i}`} s={s} variant="primary" />)}
                     </div>
                   )}
@@ -347,43 +391,6 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Main bar */}
-      <div className="bg-section-dark/90 backdrop-blur-xl border-t border-border/20 shadow-[0_-4px_30px_rgba(0,0,0,0.3)]">
-        <div className={cn("container mx-auto", isMobile ? "px-2.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))]" : "px-4 py-3")}>
-          <div className={cn("flex items-center gap-2 sm:gap-3 max-w-5xl mx-auto", isMobile && "flex-col gap-1.5")}>
-            <div className={cn("flex items-center gap-2 w-full", !isMobile && "flex-1")}>
-              {isMobile ? (
-                <Drawer open={calendarOpen} onOpenChange={setCalendarOpen}>
-                  <DrawerTrigger asChild>{dateTrigger}</DrawerTrigger>
-                  <DrawerContent><div className="p-4 flex justify-center overflow-auto">{calendarContent}</div></DrawerContent>
-                </Drawer>
-              ) : (
-                <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-                  <PopoverTrigger asChild>{dateTrigger}</PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={8}>{calendarContent}</PopoverContent>
-                </Popover>
-              )}
-              {isMobile ? (
-                <Drawer open={guestsOpen} onOpenChange={setGuestsOpen}>
-                  <DrawerTrigger asChild>{guestsTrigger}</DrawerTrigger>
-                  <DrawerContent>{guestsContent}</DrawerContent>
-                </Drawer>
-              ) : (
-                <Popover open={guestsOpen} onOpenChange={setGuestsOpen}>
-                  <PopoverTrigger asChild>{guestsTrigger}</PopoverTrigger>
-                  <PopoverContent className="w-[320px] p-0 pointer-events-auto" align="center" side="top" sideOffset={8}>{guestsContent}</PopoverContent>
-                </Popover>
-              )}
-            </div>
-            <button onClick={handleSearch} disabled={!dateRange?.from || !dateRange?.to || loading}
-              className={cn("bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-body font-semibold tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl shrink-0 disabled:opacity-50 disabled:cursor-not-allowed", isMobile ? "w-full px-3 py-2.5 text-xs" : "px-6 py-3 text-sm")}>
-              {loading ? <Loader2 size={isMobile ? 16 : 18} className="animate-spin" /> : <Search size={isMobile ? 16 : 18} />}
-              <span>Consultar</span>
-            </button>
-          </div>
-        </div>
-      </div>
     </motion.div>
   );
 };
