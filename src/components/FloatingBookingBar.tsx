@@ -91,7 +91,17 @@ const FloatingBookingBar = () => {
     const from = new Date(alt.checkin + "T00:00:00");
     const to = new Date(alt.checkout + "T00:00:00");
     setDateRange({ from, to });
-    checkAvailability(alt.checkin, alt.checkout);
+    // Redirect directly to booking engine
+    const params = new URLSearchParams();
+    params.set("currency", "ARS");
+    params.set("language", "es-ES");
+    params.set("from", alt.checkin);
+    params.set("to", alt.checkout);
+    params.set("nAdults", String(adults));
+    if (children > 0) params.set("nChilds", String(children));
+    if (babies > 0) params.set("nBabies", String(babies));
+    params.set("rp", "");
+    window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
 
   const dismissResult = () => setResult(null);
