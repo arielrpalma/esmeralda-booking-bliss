@@ -62,25 +62,21 @@ function findAlternatives(
   const minNights = Math.round(
     (checkout.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24)
   );
-  const alternatives: { checkin: string; checkout: string; nights: number }[] =
-    [];
+  const alternatives: { checkin: string; checkout: string; nights: number }[] = [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Try same nights first, then +1, +2 extra nights
   for (let extra = 0; extra <= 3 && alternatives.length < count; extra++) {
     const nights = minNights + extra;
     for (let offset = -7; offset <= 90 && alternatives.length < count; offset++) {
       if (offset === 0 && extra === 0) continue;
       const candidate = new Date(checkin);
       candidate.setDate(candidate.getDate() + offset);
-
       if (candidate < today) continue;
 
       const candidateEnd = new Date(candidate);
       candidateEnd.setDate(candidateEnd.getDate() + nights);
 
-      // Avoid duplicates
       const key = `${candidate.toISOString().slice(0, 10)}-${candidateEnd.toISOString().slice(0, 10)}`;
       if (alternatives.some(a => `${a.checkin}-${a.checkout}` === key)) continue;
 
@@ -94,6 +90,33 @@ function findAlternatives(
     }
   }
   return alternatives;
+}
+
+function findExtensions(
+  checkin: Date,
+  checkout: Date,
+  blocked: BlockedRange[],
+  count = 4
+): { checkin: string; checkout: string; nights: number }[] {
+  const baseNights = Math.round(
+    (checkout.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  const extensions: { checkin: string; checkout: string; nights: number }[] = [];
+
+  for (let extra = 1; extra <= 7 && extensions.length < count; extra++) {
+    const nights = baseNights + extra;
+    const extEnd = new Date(checkin);
+    extEnd.setDate(extEnd.getDate() + nights);
+
+    if (!isRangeBlocked(checkin, extEnd, blocked)) {
+      extensions.push({
+        checkin: checkin.toISOString().slice(0, 10),
+        checkout: extEnd.toISOString().slice(0, 10),
+        nights,
+      });
+    }
+  }
+  return extensions;
 }
 
 serve(async (req) => {
