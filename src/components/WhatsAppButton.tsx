@@ -1,22 +1,24 @@
 import { motion } from "framer-motion";
 
 interface WhatsAppButtonProps {
-  extraBottom?: number;
+  barHeight?: number;
 }
 
-const WhatsAppButton = ({ extraBottom = 0 }: WhatsAppButtonProps) => {
+const WhatsAppButton = ({ barHeight = 0 }: WhatsAppButtonProps) => {
+  // Position 16px above the floating bar
+  const bottomPx = barHeight + 16;
+
   return (
     <motion.a
       href="https://wa.me/5493472433334"
       target="_blank"
       rel="noopener noreferrer"
       initial={{ opacity: 0, scale: 0 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, delay: 1.5 }}
+      animate={{ opacity: 1, scale: 1, bottom: bottomPx }}
+      transition={{ duration: 0.3 }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      style={{ bottom: `${6 + extraBottom}rem` }}
-      className="fixed right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300"
+      className="fixed right-6 z-40 w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg hover:shadow-xl"
       aria-label="Contactar por WhatsApp"
     >
       <svg viewBox="0 0 24 24" className="w-7 h-7 text-white fill-current">
