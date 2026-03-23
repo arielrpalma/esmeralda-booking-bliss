@@ -147,10 +147,13 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
 
   const dismissResult = () => { setResult(null); setRetryCalendarOpen(false); };
 
+  const [retryDateRange, setRetryDateRange] = useState<DateRange | undefined>();
+
   const handleRetryDateSelect = (range: DateRange | undefined) => {
-    setDateRange(range);
+    setRetryDateRange(range);
     if (range?.from && range?.to) {
       setRetryCalendarOpen(false);
+      setDateRange(range);
       checkAvailability(format(range.from, "yyyy-MM-dd"), format(range.to, "yyyy-MM-dd"));
     }
   };
