@@ -149,12 +149,11 @@ serve(async (req) => {
 
     const result: Record<string, unknown> = { available };
 
+    // Always suggest extensions (longer stays from same checkin)
+    result.extensions = findExtensions(checkinDate, checkoutDate, blocked);
+
     if (!available) {
-      result.alternatives = findAlternatives(
-        checkinDate,
-        checkoutDate,
-        blocked
-      );
+      result.alternatives = findAlternatives(checkinDate, checkoutDate, blocked);
     }
 
     return new Response(JSON.stringify(result), {
