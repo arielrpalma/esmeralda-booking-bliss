@@ -363,16 +363,16 @@ const FloatingBookingBar = () => {
               onClick={handleSearch}
               disabled={!dateRange?.from || !dateRange?.to || loading}
               className={cn(
-                "bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-4 sm:px-6 py-3 font-body text-sm font-semibold tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl shrink-0 disabled:opacity-50 disabled:cursor-not-allowed",
-                isMobile && "w-full"
+                "bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-body font-semibold tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl shrink-0 disabled:opacity-50 disabled:cursor-not-allowed",
+                isMobile ? "w-full px-3 py-2.5 text-xs" : "px-6 py-3 text-sm"
               )}
             >
               {loading ? (
-                <Loader2 size={18} className="animate-spin" />
+                <Loader2 size={isMobile ? 16 : 18} className="animate-spin" />
               ) : (
-                <Search size={18} />
+                <Search size={isMobile ? 16 : 18} />
               )}
-              <span>{isMobile ? "Consultar disponibilidad" : "Consultar"}</span>
+              <span>{isMobile ? "Consultar" : "Consultar"}</span>
             </button>
           </div>
         </div>
