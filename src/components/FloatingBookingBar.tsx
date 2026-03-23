@@ -31,6 +31,7 @@ interface Alternative {
 interface AvailabilityResult {
   available: boolean;
   alternatives?: Alternative[];
+  extensions?: Alternative[];
 }
 
 const FloatingBookingBar = () => {
