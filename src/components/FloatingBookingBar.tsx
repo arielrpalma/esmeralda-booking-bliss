@@ -1,5 +1,5 @@
 import { Search, CalendarDays, Plus, Minus, Users, Check, X, Loader2, ArrowRight, Clock } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { DateRange } from "react-day-picker";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -55,7 +55,7 @@ const nightsLabel = (n: number) => `${n} ${n === 1 ? "noche" : "noches"}`;
 
 // --- Main Component ---
 
-const FloatingBookingBar = () => {
+const FloatingBookingBar = ({ onBannerVisible }: { onBannerVisible?: (visible: boolean) => void }) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
@@ -65,6 +65,10 @@ const FloatingBookingBar = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AvailabilityResult | null>(null);
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    onBannerVisible?.(!!result || loading);
+  }, [result, loading, onBannerVisible]);
 
   const setCalendarOpen = (open: boolean) => {
     if (open) { setDateRange(undefined); setResult(null); }
