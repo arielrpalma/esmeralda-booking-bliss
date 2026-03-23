@@ -1,4 +1,4 @@
-import { Search, CalendarDays, Plus, Minus, Users, Check, X, Loader2, ArrowRight, Clock } from "lucide-react";
+import { Search, CalendarDays, Plus, Minus, Users, Check, X, Loader2, ArrowRight, Clock, CalendarPlus } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { DateRange } from "react-day-picker";
 import { motion, AnimatePresence } from "framer-motion";
