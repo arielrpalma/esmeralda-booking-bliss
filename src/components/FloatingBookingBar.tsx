@@ -145,7 +145,22 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     openBookingEngine(s.checkin, s.checkout);
   };
 
-  const dismissResult = () => setResult(null);
+  const dismissResult = () => { setResult(null); setRetryCalendarOpen(false); };
+
+  const handleRetryDateSelect = (range: DateRange | undefined) => {
+    setDateRange(range);
+    if (range?.from && range?.to) {
+      setRetryCalendarOpen(false);
+      checkAvailability(format(range.from, "yyyy-MM-dd"), format(range.to, "yyyy-MM-dd"));
+    }
+  };
+
+  const retryCalendarContent = (
+    <Calendar mode="range" selected={dateRange} onSelect={handleRetryDateSelect}
+      numberOfMonths={isMobile ? 1 : 2} locale={es}
+      disabled={(date) => { const t = new Date(); t.setHours(0,0,0,0); return date < t; }}
+      initialFocus className={cn("p-3 pointer-events-auto")} />
+  );
   const summary = `1 dept. · ${totalGuests} huésp.`;
   const dateLabel = dateRange?.from
     ? dateRange.to
