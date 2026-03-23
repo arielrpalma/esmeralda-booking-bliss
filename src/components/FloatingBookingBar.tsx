@@ -55,7 +55,7 @@ const nightsLabel = (n: number) => `${n} ${n === 1 ? "noche" : "noches"}`;
 
 // --- Main Component ---
 
-const FloatingBookingBar = ({ onBannerVisible }: { onBannerVisible?: (visible: boolean) => void }) => {
+const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: number) => void }) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
@@ -65,10 +65,18 @@ const FloatingBookingBar = ({ onBannerVisible }: { onBannerVisible?: (visible: b
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AvailabilityResult | null>(null);
   const isMobile = useIsMobile();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    onBannerVisible?.(!!result || loading);
-  }, [result, loading, onBannerVisible]);
+    if (!containerRef.current || !onHeightChange) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        onHeightChange(entry.contentRect.height);
+      }
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [onHeightChange]);
 
   const setCalendarOpen = (open: boolean) => {
     if (open) { setDateRange(undefined); setResult(null); }
