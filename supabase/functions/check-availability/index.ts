@@ -9,185 +9,117 @@ const corsHeaders = {
 const ICAL_URL =
   "https://www.airbnb.com.ar/calendar/ical/1435846364750091867.ics?t=01ab22fb325849718df0a66428c21f86";
 
-// Configuration
-const SEARCH_DAYS_BEFORE = 30;
-const SEARCH_DAYS_AFTER = 30;
-const MAX_EXTRA_NIGHTS = 5; // suggest up to +5 nights longer
-const MAX_SAME_NIGHTS = 4;  // max same-length alternatives
-const MAX_LONGER_STAYS = 4; // max longer-stay suggestions
-
-interface BlockedRange {
-  start: Date;
-  end: Date;
-}
-
-interface Suggestion {
-  checkin: string;
-  checkout: string;
-  nights: number;
-  type: "same" | "longer" | "extension";
-  proximity: number; // days from original checkin
-}
+interface BlockedRange { start: Date; end: Date; }
+interface Suggestion { checkin: string; checkout: string; nights: number; }
 
 function parseIcal(text: string): BlockedRange[] {
   const ranges: BlockedRange[] = [];
   const events = text.split("BEGIN:VEVENT");
-
   for (let i = 1; i < events.length; i++) {
-    const event = events[i];
-    const dtstart = event.match(/DTSTART(?:;VALUE=DATE)?:(\d{8})/);
-    const dtend = event.match(/DTEND(?:;VALUE=DATE)?:(\d{8})/);
-
-    if (dtstart && dtend) {
-      const s = dtstart[1];
-      const e = dtend[1];
+    const ev = events[i];
+    const ds = ev.match(/DTSTART(?:;VALUE=DATE)?:(\d{8})/);
+    const de = ev.match(/DTEND(?:;VALUE=DATE)?:(\d{8})/);
+    if (ds && de) {
+      const s = ds[1], e = de[1];
       ranges.push({
-        start: new Date(`${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`),
-        end: new Date(`${e.slice(0, 4)}-${e.slice(4, 6)}-${e.slice(6, 8)}`),
+        start: new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`),
+        end: new Date(`${e.slice(0,4)}-${e.slice(4,6)}-${e.slice(6,8)}`),
       });
     }
   }
   return ranges;
 }
 
-function isRangeAvailable(checkin: Date, checkout: Date, blocked: BlockedRange[]): boolean {
+function isAvailable(ci: Date, co: Date, blocked: BlockedRange[]): boolean {
   for (const b of blocked) {
-    if (checkin < b.end && checkout > b.start) return false;
+    if (ci < b.end && co > b.start) return false;
   }
   return true;
 }
 
-function dateStr(d: Date): string {
-  return d.toISOString().slice(0, 10);
-}
-
 function addDays(d: Date, n: number): Date {
-  const r = new Date(d);
-  r.setDate(r.getDate() + n);
-  return r;
+  const r = new Date(d); r.setDate(r.getDate() + n); return r;
 }
-
+function fmt(d: Date): string { return d.toISOString().slice(0, 10); }
 function diffDays(a: Date, b: Date): number {
   return Math.round((b.getTime() - a.getTime()) / (1000 * 60 * 60 * 24));
 }
 
 /**
- * Find same-length alternatives, searching outward from original date.
- * Alternates between forward and backward for proximity ordering.
+ * Find up to `count` available options AFTER the original checkin.
+ * First tries same nights (+1 day, +2 days...), then same nights +1, +2...
+ * So for 4-night stay: 4 noches después, 5 noches después, 6 noches después
  */
-function findSameNightsAlternatives(
-  checkin: Date,
-  nights: number,
-  blocked: BlockedRange[],
-  today: Date,
-  max: number
+function findAfter(
+  checkin: Date, baseNights: number, blocked: BlockedRange[], today: Date, count = 3
 ): Suggestion[] {
   const results: Suggestion[] = [];
   const seen = new Set<string>();
 
-  // Interleave forward and backward offsets: +1, -1, +2, -2, ...
-  for (let dist = 1; dist <= Math.max(SEARCH_DAYS_AFTER, SEARCH_DAYS_BEFORE) && results.length < max; dist++) {
-    for (const dir of [1, -1]) {
-      if (results.length >= max) break;
-      const offset = dist * dir;
-      if (dir === 1 && dist > SEARCH_DAYS_AFTER) continue;
-      if (dir === -1 && dist > SEARCH_DAYS_BEFORE) continue;
-
-      const candidate = addDays(checkin, offset);
-      if (candidate < today) continue;
-
-      const candidateEnd = addDays(candidate, nights);
-      const key = `${dateStr(candidate)}-${dateStr(candidateEnd)}`;
+  // For each extra night tier (0 = same, 1 = +1 night, 2 = +2 nights...)
+  for (let extra = 0; extra <= 7 && results.length < count; extra++) {
+    const nights = baseNights + extra;
+    // Search forward from day after original checkin
+    for (let offset = 1; offset <= 60 && results.length < count; offset++) {
+      const ci = addDays(checkin, offset);
+      if (ci < today) continue;
+      const co = addDays(ci, nights);
+      const key = `${fmt(ci)}-${fmt(co)}`;
       if (seen.has(key)) continue;
       seen.add(key);
 
-      if (isRangeAvailable(candidate, candidateEnd, blocked)) {
-        results.push({
-          checkin: dateStr(candidate),
-          checkout: dateStr(candidateEnd),
-          nights,
-          type: "same",
-          proximity: Math.abs(offset),
-        });
+      if (isAvailable(ci, co, blocked)) {
+        results.push({ checkin: fmt(ci), checkout: fmt(co), nights });
+        break; // one per tier, closest first
       }
     }
   }
-
   return results;
 }
 
 /**
- * Find longer-stay alternatives from nearby dates.
- * Searches +1 to +MAX_EXTRA_NIGHTS additional nights.
+ * Find up to `count` available options BEFORE the original checkin.
+ * Same logic but searching backwards.
  */
-function findLongerStayAlternatives(
-  checkin: Date,
-  baseNights: number,
-  blocked: BlockedRange[],
-  today: Date,
-  max: number
+function findBefore(
+  checkin: Date, baseNights: number, blocked: BlockedRange[], today: Date, count = 3
 ): Suggestion[] {
   const results: Suggestion[] = [];
   const seen = new Set<string>();
 
-  for (let extra = 1; extra <= MAX_EXTRA_NIGHTS && results.length < max; extra++) {
+  for (let extra = 0; extra <= 7 && results.length < count; extra++) {
     const nights = baseNights + extra;
-    // Try from the original checkin first, then nearby dates
-    for (let dist = 0; dist <= SEARCH_DAYS_AFTER && results.length < max; dist++) {
-      for (const dir of dist === 0 ? [0] : [1, -1]) {
-        if (results.length >= max) break;
-        const offset = dist * (dir || 1);
-        const candidate = addDays(checkin, offset);
-        if (candidate < today) continue;
+    for (let offset = 1; offset <= 60 && results.length < count; offset++) {
+      const ci = addDays(checkin, -offset);
+      if (ci < today) continue;
+      const co = addDays(ci, nights);
+      const key = `${fmt(ci)}-${fmt(co)}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
 
-        const candidateEnd = addDays(candidate, nights);
-        const key = `${dateStr(candidate)}-${dateStr(candidateEnd)}`;
-        if (seen.has(key)) continue;
-        seen.add(key);
-
-        if (isRangeAvailable(candidate, candidateEnd, blocked)) {
-          results.push({
-            checkin: dateStr(candidate),
-            checkout: dateStr(candidateEnd),
-            nights,
-            type: "longer",
-            proximity: Math.abs(offset),
-          });
-          break; // one per extra-night tier, from closest date
-        }
+      if (isAvailable(ci, co, blocked)) {
+        results.push({ checkin: fmt(ci), checkout: fmt(co), nights });
+        break;
       }
     }
   }
-
-  return results;
+  return results.reverse(); // chronological order
 }
 
 /**
- * Find extensions: same checkin, more nights (only when available).
+ * Extensions: same checkin, more nights (when original IS available).
  */
 function findExtensions(
-  checkin: Date,
-  baseNights: number,
-  blocked: BlockedRange[],
-  max = 4
+  checkin: Date, baseNights: number, blocked: BlockedRange[], count = 4
 ): Suggestion[] {
   const results: Suggestion[] = [];
-
-  for (let extra = 1; extra <= MAX_EXTRA_NIGHTS + 2 && results.length < max; extra++) {
+  for (let extra = 1; extra <= 7 && results.length < count; extra++) {
     const nights = baseNights + extra;
-    const end = addDays(checkin, nights);
-
-    if (isRangeAvailable(checkin, end, blocked)) {
-      results.push({
-        checkin: dateStr(checkin),
-        checkout: dateStr(end),
-        nights,
-        type: "extension",
-        proximity: 0,
-      });
+    const co = addDays(checkin, nights);
+    if (isAvailable(checkin, co, blocked)) {
+      results.push({ checkin: fmt(checkin), checkout: fmt(co), nights });
     }
   }
-
   return results;
 }
 
@@ -198,7 +130,6 @@ serve(async (req) => {
 
   try {
     const { checkin, checkout } = await req.json();
-
     if (!checkin || !checkout) {
       return new Response(
         JSON.stringify({ error: "checkin and checkout are required" }),
@@ -206,40 +137,24 @@ serve(async (req) => {
       );
     }
 
-    const checkinDate = new Date(checkin);
-    const checkoutDate = new Date(checkout);
-    const nights = diffDays(checkinDate, checkoutDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const ciDate = new Date(checkin);
+    const coDate = new Date(checkout);
+    const nights = diffDays(ciDate, coDate);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
 
-    // Fetch iCal
-    const icalResponse = await fetch(ICAL_URL);
-    if (!icalResponse.ok) {
-      throw new Error(`Failed to fetch iCal: ${icalResponse.status}`);
-    }
-    const icalText = await icalResponse.text();
-    const blocked = parseIcal(icalText);
+    const icalResp = await fetch(ICAL_URL);
+    if (!icalResp.ok) throw new Error(`iCal fetch failed: ${icalResp.status}`);
+    const blocked = parseIcal(await icalResp.text());
 
-    const available = isRangeAvailable(checkinDate, checkoutDate, blocked);
+    const available = isAvailable(ciDate, coDate, blocked);
 
-    const result: Record<string, unknown> = {
-      available,
-      nights,
-      checkin,
-      checkout,
-    };
+    const result: Record<string, unknown> = { available, nights, checkin, checkout };
 
     if (available) {
-      // Offer extensions (longer stays from same checkin)
-      result.extensions = findExtensions(checkinDate, nights, blocked);
+      result.extensions = findExtensions(ciDate, nights, blocked);
     } else {
-      // Offer categorized alternatives
-      result.sameNights = findSameNightsAlternatives(
-        checkinDate, nights, blocked, today, MAX_SAME_NIGHTS
-      );
-      result.longerStays = findLongerStayAlternatives(
-        checkinDate, nights, blocked, today, MAX_LONGER_STAYS
-      );
+      result.before = findBefore(ciDate, nights, blocked, today, 3);
+      result.after = findAfter(ciDate, nights, blocked, today, 3);
     }
 
     return new Response(JSON.stringify(result), {
@@ -249,8 +164,7 @@ serve(async (req) => {
     const msg = error instanceof Error ? error.message : "Unknown error";
     console.error("check-availability error:", msg);
     return new Response(JSON.stringify({ error: msg }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
