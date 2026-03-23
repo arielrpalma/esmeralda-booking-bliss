@@ -126,8 +126,16 @@ const FloatingBookingBar = () => {
       : `${format(dateRange.from, "dd MMM", { locale: es })} → ...`
     : "Seleccionar fechas";
 
-  const formatSuggestionDate = (dateStr: string) =>
-    format(new Date(dateStr + "T00:00:00"), "d 'de' MMM", { locale: es });
+  const formatSuggestionDate = (dateStr: string) => {
+    if (!dateStr || typeof dateStr !== "string") return "—";
+    try {
+      const d = new Date(dateStr + "T00:00:00");
+      if (isNaN(d.getTime())) return "—";
+      return format(d, "d 'de' MMM", { locale: es });
+    } catch {
+      return "—";
+    }
+  };
 
   // --- Sub-components ---
 
