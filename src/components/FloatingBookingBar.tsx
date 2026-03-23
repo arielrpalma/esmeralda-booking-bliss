@@ -274,33 +274,33 @@ const FloatingBookingBar = () => {
                   )}
                 </div>
               ) : result && !result.available ? (
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-destructive/15 flex items-center justify-center">
-                        <X size={16} className="text-destructive" />
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-destructive/15 flex items-center justify-center shrink-0">
+                        <X size={14} className="text-destructive" />
                       </div>
                       <div>
-                        <span className="text-sm font-body font-semibold text-foreground">No disponible</span>
-                        <span className="block text-xs text-muted-foreground">Probá con estas fechas alternativas</span>
+                        <span className="text-xs sm:text-sm font-body font-semibold text-foreground">No disponible</span>
+                        <span className="block text-[10px] sm:text-xs text-muted-foreground">Probá estas fechas</span>
                       </div>
                     </div>
-                    <button onClick={dismissResult} className="p-1.5 rounded-full hover:bg-muted transition-colors">
+                    <button onClick={dismissResult} className="p-1 sm:p-1.5 rounded-full hover:bg-muted transition-colors">
                       <X size={14} className="text-muted-foreground" />
                     </button>
                   </div>
                   {result.alternatives && result.alternatives.length > 0 && (
-                    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide max-h-24 sm:max-h-none">
+                    <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 scrollbar-hide max-h-20 sm:max-h-none">
                       {result.alternatives.map((alt, i) => (
                         <button
                           key={i}
                           onClick={() => handleSelectAlternative(alt)}
-                          className="flex-shrink-0 px-3 py-2 bg-muted/80 hover:bg-primary/10 border border-border/50 rounded-lg transition-all text-left group"
+                          className="flex-shrink-0 px-2 sm:px-3 py-1.5 sm:py-2 bg-muted/80 hover:bg-primary/10 border border-border/50 rounded-lg transition-all text-left group"
                         >
-                          <span className="text-xs font-body font-semibold text-foreground block whitespace-nowrap">
+                          <span className="text-[10px] sm:text-xs font-body font-semibold text-foreground block whitespace-nowrap">
                             {format(new Date(alt.checkin + "T00:00:00"), "dd MMM", { locale: es })} → {format(new Date(alt.checkout + "T00:00:00"), "dd MMM", { locale: es })}
                           </span>
-                          <span className="text-[10px] text-muted-foreground group-hover:text-primary transition-colors">
+                          <span className="text-[9px] sm:text-[10px] text-muted-foreground group-hover:text-primary transition-colors">
                             {alt.nights} {alt.nights === 1 ? "noche" : "noches"}
                           </span>
                         </button>
