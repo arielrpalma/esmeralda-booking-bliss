@@ -66,7 +66,10 @@ const FloatingBookingBar = ({ onBannerVisible }: { onBannerVisible?: (visible: b
   const [result, setResult] = useState<AvailabilityResult | null>(null);
   const isMobile = useIsMobile();
 
-  const setCalendarOpen = (open: boolean) => {
+  useEffect(() => {
+    onBannerVisible?.(!!result || loading);
+  }, [result, loading, onBannerVisible]);
+
     if (open) { setDateRange(undefined); setResult(null); }
     setCalendarOpenRaw(open);
   };
