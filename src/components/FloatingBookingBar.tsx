@@ -40,7 +40,15 @@ const FloatingBookingBar = () => {
   const [children, setChildren] = useState(0);
   const [babies, setBabies] = useState(0);
   const [guestsOpen, setGuestsOpen] = useState(false);
-  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [calendarOpen, setCalendarOpenRaw] = useState(false);
+
+  const setCalendarOpen = (open: boolean) => {
+    if (open) {
+      setDateRange(undefined);
+      setResult(null);
+    }
+    setCalendarOpenRaw(open);
+  };
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AvailabilityResult | null>(null);
   const isMobile = useIsMobile();
