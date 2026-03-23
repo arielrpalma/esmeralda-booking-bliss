@@ -61,6 +61,7 @@ const FloatingBookingBar = () => {
       selected={dateRange}
       onSelect={setDateRange}
       numberOfMonths={isMobile ? 1 : 2}
+      locale={es}
       disabled={(date) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
