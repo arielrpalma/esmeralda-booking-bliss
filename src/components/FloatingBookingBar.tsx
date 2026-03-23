@@ -161,7 +161,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const retryDefaultMonth = dateRange?.from ?? (result?.checkin ? new Date(result.checkin + "T00:00:00") : undefined);
 
   const retryCalendarContent = (
-    <Calendar mode="range" selected={dateRange} onSelect={handleRetryDateSelect}
+    <Calendar mode="range" selected={retryDateRange} onSelect={handleRetryDateSelect}
       numberOfMonths={isMobile ? 1 : 2} locale={es}
       defaultMonth={retryDefaultMonth}
       disabled={(date) => { const t = new Date(); t.setHours(0,0,0,0); return date < t; }}
