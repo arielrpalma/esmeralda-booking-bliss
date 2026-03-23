@@ -197,27 +197,52 @@ const FloatingBookingBar = () => {
                   <span className="text-sm font-body text-muted-foreground">Consultando disponibilidad…</span>
                 </div>
               ) : result?.available ? (
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center">
-                      <Check size={16} className="text-primary" />
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center">
+                        <Check size={16} className="text-primary" />
+                      </div>
+                      <div>
+                        <span className="text-sm font-body font-semibold text-foreground">¡Disponible!</span>
+                        <span className="block text-xs text-muted-foreground">Las fechas seleccionadas están libres</span>
+                      </div>
                     </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleBookNow}
+                        className="px-5 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-body font-semibold hover:bg-primary/90 transition-all shadow-md hover:shadow-lg"
+                      >
+                        Reservar ahora
+                      </button>
+                      <button onClick={dismissResult} className="p-1.5 rounded-full hover:bg-muted transition-colors">
+                        <X size={14} className="text-muted-foreground" />
+                      </button>
+                    </div>
+                  </div>
+                  {result.extensions && result.extensions.length > 0 && (
                     <div>
-                      <span className="text-sm font-body font-semibold text-foreground">¡Disponible!</span>
-                      <span className="block text-xs text-muted-foreground">Las fechas seleccionadas están libres</span>
+                      <span className="text-[11px] font-body font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 block">
+                        ¿Querés alargar tu estadía?
+                      </span>
+                      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                        {result.extensions.map((ext, i) => (
+                          <button
+                            key={i}
+                            onClick={() => handleSelectAlternative(ext)}
+                            className="flex-shrink-0 px-3 py-2 bg-primary/5 hover:bg-primary/15 border border-primary/20 rounded-lg transition-all text-left group"
+                          >
+                            <span className="text-xs font-body font-semibold text-foreground block whitespace-nowrap">
+                              {format(new Date(ext.checkin + "T00:00:00"), "dd MMM", { locale: es })} → {format(new Date(ext.checkout + "T00:00:00"), "dd MMM", { locale: es })}
+                            </span>
+                            <span className="text-[10px] text-muted-foreground group-hover:text-primary transition-colors">
+                              {ext.nights} {ext.nights === 1 ? "noche" : "noches"}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={handleBookNow}
-                      className="px-5 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-body font-semibold hover:bg-primary/90 transition-all shadow-md hover:shadow-lg"
-                    >
-                      Reservar ahora
-                    </button>
-                    <button onClick={dismissResult} className="p-1.5 rounded-full hover:bg-muted transition-colors">
-                      <X size={14} className="text-muted-foreground" />
-                    </button>
-                  </div>
+                  )}
                 </div>
               ) : result && !result.available ? (
                 <div className="space-y-3">
