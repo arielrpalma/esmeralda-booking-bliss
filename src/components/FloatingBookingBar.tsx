@@ -155,8 +155,15 @@ const FloatingBookingBar = () => {
   );
 
   // --- Calendar & guests (unchanged) ---
+  const handleDateSelect = (range: DateRange | undefined) => {
+    setDateRange(range);
+    if (range?.from && range?.to) {
+      setCalendarOpenRaw(false);
+    }
+  };
+
   const calendarContent = (
-    <Calendar mode="range" selected={dateRange} onSelect={setDateRange}
+    <Calendar mode="range" selected={dateRange} onSelect={handleDateSelect}
       numberOfMonths={isMobile ? 1 : 2} locale={es}
       disabled={(date) => { const t = new Date(); t.setHours(0,0,0,0); return date < t; }}
       initialFocus className={cn("p-3 pointer-events-auto")} />
