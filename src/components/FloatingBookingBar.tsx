@@ -55,7 +55,7 @@ const nightsLabel = (n: number) => `${n} ${n === 1 ? "noche" : "noches"}`;
 
 // --- Main Component ---
 
-const FloatingBookingBar = () => {
+const FloatingBookingBar = ({ onBannerVisible }: { onBannerVisible?: (visible: boolean) => void }) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
