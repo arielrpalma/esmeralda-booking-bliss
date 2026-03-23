@@ -419,7 +419,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                         <DrawerContent><div className="p-4 flex justify-center overflow-auto">{retryCalendarContent}</div></DrawerContent>
                       </Drawer>
                     ) : (
-                      <Popover open={retryCalendarOpen} onOpenChange={setRetryCalendarOpen}>
+                      <Popover open={retryCalendarOpen} onOpenChange={(open) => { if (open) setRetryDateRange(undefined); setRetryCalendarOpen(open); }}>
                         <PopoverTrigger asChild>
                           <button className="flex items-center gap-1.5 bg-[hsl(142,71%,45%)] hover:bg-[hsl(142,71%,40%)] text-white rounded-lg font-body font-semibold transition-all shadow-md whitespace-nowrap px-4 py-2 text-sm">
                             <CalendarPlus size={14} />
