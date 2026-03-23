@@ -409,7 +409,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                       </div>
                     )}
                     {isMobile ? (
-                      <Drawer open={retryCalendarOpen} onOpenChange={setRetryCalendarOpen}>
+                      <Drawer open={retryCalendarOpen} onOpenChange={(open) => { if (open) setRetryDateRange(undefined); setRetryCalendarOpen(open); }}>
                         <DrawerTrigger asChild>
                           <button className={cn("flex items-center gap-1.5 bg-[hsl(142,71%,45%)] hover:bg-[hsl(142,71%,40%)] text-white rounded-lg font-body font-semibold transition-all shadow-md whitespace-nowrap", isMobile ? "px-3 py-2 text-xs" : "px-4 py-2 text-sm")}>
                             <CalendarPlus size={14} />
