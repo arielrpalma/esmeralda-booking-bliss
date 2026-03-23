@@ -136,21 +136,21 @@ const FloatingBookingBar = () => {
       onClick={() => handleSelectSuggestion(s)}
       className={cn(
         "flex-shrink-0 rounded-lg transition-all text-left group flex items-center gap-1.5",
-        isMobile ? "px-2 py-1.5" : "px-3 py-2",
+        isMobile ? "px-2.5 py-2" : "px-3 py-2",
         variant === "primary"
           ? "bg-primary/8 hover:bg-primary/15 border border-primary/25"
           : "bg-muted/60 hover:bg-primary/10 border border-border/50"
       )}
     >
       <div className="min-w-0">
-        <span className={cn("font-body font-semibold text-foreground block whitespace-nowrap", isMobile ? "text-[10px]" : "text-xs")}>
+        <span className={cn("font-body font-bold text-foreground block whitespace-nowrap", isMobile ? "text-xs" : "text-xs")}>
           {safeDateFormat(s.checkin, "d MMM")} → {safeDateFormat(s.checkout, "d MMM")}
         </span>
-        <span className={cn("text-muted-foreground group-hover:text-primary transition-colors", isMobile ? "text-[9px]" : "text-[10px]")}>
+        <span className={cn("font-semibold text-muted-foreground group-hover:text-primary transition-colors", isMobile ? "text-[10px]" : "text-[10px]")}>
           {nightsLabel(s.nights)}
         </span>
       </div>
-      <ArrowRight size={10} className="text-muted-foreground/40 group-hover:text-primary transition-colors shrink-0" />
+      <ArrowRight size={12} className="text-muted-foreground/40 group-hover:text-primary transition-colors shrink-0" />
     </button>
   );
 
