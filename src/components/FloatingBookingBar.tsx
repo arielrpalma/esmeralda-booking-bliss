@@ -156,13 +156,23 @@ const FloatingBookingBar = () => {
   );
 
   const dateTrigger = (
-    <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-lg px-3 py-2 text-left min-w-0">
-      <CalendarDays size={16} className="text-primary shrink-0" />
+    <button className={cn(
+      "flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-lg text-left min-w-0",
+      isMobile ? "px-2.5 py-1.5" : "px-3 py-2"
+    )}>
+      <CalendarDays size={isMobile ? 14 : 16} className="text-primary shrink-0" />
       <div className="flex-1 min-w-0">
-        <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
+        <span className={cn(
+          "font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-0.5",
+          isMobile ? "text-[9px]" : "text-[10px] mb-1"
+        )}>
           Llegada — Salida
         </span>
-        <span className={cn("text-sm font-body truncate block", dateRange?.from ? "text-section-dark-foreground" : "text-section-dark-foreground/40")}>
+        <span className={cn(
+          "font-body truncate block",
+          isMobile ? "text-xs" : "text-sm",
+          dateRange?.from ? "text-section-dark-foreground" : "text-section-dark-foreground/40"
+        )}>
           {dateLabel}
         </span>
       </div>
@@ -170,13 +180,22 @@ const FloatingBookingBar = () => {
   );
 
   const guestsTrigger = (
-    <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-lg px-3 py-2 text-left min-w-0">
-      <Users size={16} className="text-primary shrink-0" />
+    <button className={cn(
+      "flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-lg text-left min-w-0",
+      isMobile ? "px-2.5 py-1.5" : "px-3 py-2"
+    )}>
+      <Users size={isMobile ? 14 : 16} className="text-primary shrink-0" />
       <div className="flex-1 min-w-0">
-        <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
+        <span className={cn(
+          "font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-0.5",
+          isMobile ? "text-[9px]" : "text-[10px] mb-1"
+        )}>
           Huéspedes
         </span>
-        <span className="text-sm font-body text-section-dark-foreground truncate block">
+        <span className={cn(
+          "font-body text-section-dark-foreground truncate block",
+          isMobile ? "text-xs" : "text-sm"
+        )}>
           {summary}
         </span>
       </div>
@@ -207,45 +226,45 @@ const FloatingBookingBar = () => {
                   <span className="text-sm font-body text-muted-foreground">Consultando disponibilidad…</span>
                 </div>
               ) : result?.available ? (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-3">
+                <div className="space-y-2 sm:space-y-3">
+                  <div className={cn("flex items-center justify-between gap-2 sm:gap-3", isMobile && "flex-wrap")}>
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center">
-                        <Check size={16} className="text-primary" />
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                        <Check size={14} className="text-primary" />
                       </div>
                       <div>
-                        <span className="text-sm font-body font-semibold text-foreground">¡Disponible!</span>
-                        <span className="block text-xs text-muted-foreground">Las fechas seleccionadas están libres</span>
+                        <span className="text-xs sm:text-sm font-body font-semibold text-foreground">¡Disponible!</span>
+                        <span className="block text-[10px] sm:text-xs text-muted-foreground">Fechas libres</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={handleBookNow}
-                        className="px-5 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-body font-semibold hover:bg-primary/90 transition-all shadow-md hover:shadow-lg"
+                        className="px-3 sm:px-5 py-1.5 sm:py-2 bg-primary text-primary-foreground rounded-lg text-xs sm:text-sm font-body font-semibold hover:bg-primary/90 transition-all shadow-md"
                       >
                         Reservar ahora
                       </button>
-                      <button onClick={dismissResult} className="p-1.5 rounded-full hover:bg-muted transition-colors">
+                      <button onClick={dismissResult} className="p-1 sm:p-1.5 rounded-full hover:bg-muted transition-colors">
                         <X size={14} className="text-muted-foreground" />
                       </button>
                     </div>
                   </div>
                   {result.extensions && result.extensions.length > 0 && (
                     <div>
-                      <span className="text-[11px] font-body font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 block">
+                      <span className="text-[10px] sm:text-[11px] font-body font-semibold uppercase tracking-wider text-muted-foreground mb-1 block">
                         ¿Querés alargar tu estadía?
                       </span>
-                      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                      <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 scrollbar-hide">
                         {result.extensions.map((ext, i) => (
                           <button
                             key={i}
                             onClick={() => handleSelectAlternative(ext)}
-                            className="flex-shrink-0 px-3 py-2 bg-primary/5 hover:bg-primary/15 border border-primary/20 rounded-lg transition-all text-left group"
+                            className="flex-shrink-0 px-2 sm:px-3 py-1.5 sm:py-2 bg-primary/5 hover:bg-primary/15 border border-primary/20 rounded-lg transition-all text-left group"
                           >
-                            <span className="text-xs font-body font-semibold text-foreground block whitespace-nowrap">
+                            <span className="text-[10px] sm:text-xs font-body font-semibold text-foreground block whitespace-nowrap">
                               {format(new Date(ext.checkin + "T00:00:00"), "dd MMM", { locale: es })} → {format(new Date(ext.checkout + "T00:00:00"), "dd MMM", { locale: es })}
                             </span>
-                            <span className="text-[10px] text-muted-foreground group-hover:text-primary transition-colors">
+                            <span className="text-[9px] sm:text-[10px] text-muted-foreground group-hover:text-primary transition-colors">
                               {ext.nights} {ext.nights === 1 ? "noche" : "noches"}
                             </span>
                           </button>
@@ -255,33 +274,33 @@ const FloatingBookingBar = () => {
                   )}
                 </div>
               ) : result && !result.available ? (
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-destructive/15 flex items-center justify-center">
-                        <X size={16} className="text-destructive" />
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-destructive/15 flex items-center justify-center shrink-0">
+                        <X size={14} className="text-destructive" />
                       </div>
                       <div>
-                        <span className="text-sm font-body font-semibold text-foreground">No disponible</span>
-                        <span className="block text-xs text-muted-foreground">Probá con estas fechas alternativas</span>
+                        <span className="text-xs sm:text-sm font-body font-semibold text-foreground">No disponible</span>
+                        <span className="block text-[10px] sm:text-xs text-muted-foreground">Probá estas fechas</span>
                       </div>
                     </div>
-                    <button onClick={dismissResult} className="p-1.5 rounded-full hover:bg-muted transition-colors">
+                    <button onClick={dismissResult} className="p-1 sm:p-1.5 rounded-full hover:bg-muted transition-colors">
                       <X size={14} className="text-muted-foreground" />
                     </button>
                   </div>
                   {result.alternatives && result.alternatives.length > 0 && (
-                    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide max-h-24 sm:max-h-none">
+                    <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 scrollbar-hide max-h-20 sm:max-h-none">
                       {result.alternatives.map((alt, i) => (
                         <button
                           key={i}
                           onClick={() => handleSelectAlternative(alt)}
-                          className="flex-shrink-0 px-3 py-2 bg-muted/80 hover:bg-primary/10 border border-border/50 rounded-lg transition-all text-left group"
+                          className="flex-shrink-0 px-2 sm:px-3 py-1.5 sm:py-2 bg-muted/80 hover:bg-primary/10 border border-border/50 rounded-lg transition-all text-left group"
                         >
-                          <span className="text-xs font-body font-semibold text-foreground block whitespace-nowrap">
+                          <span className="text-[10px] sm:text-xs font-body font-semibold text-foreground block whitespace-nowrap">
                             {format(new Date(alt.checkin + "T00:00:00"), "dd MMM", { locale: es })} → {format(new Date(alt.checkout + "T00:00:00"), "dd MMM", { locale: es })}
                           </span>
-                          <span className="text-[10px] text-muted-foreground group-hover:text-primary transition-colors">
+                          <span className="text-[9px] sm:text-[10px] text-muted-foreground group-hover:text-primary transition-colors">
                             {alt.nights} {alt.nights === 1 ? "noche" : "noches"}
                           </span>
                         </button>
@@ -297,10 +316,10 @@ const FloatingBookingBar = () => {
 
       {/* Main bar */}
       <div className="bg-section-dark/90 backdrop-blur-xl border-t border-border/20 shadow-[0_-4px_30px_rgba(0,0,0,0.3)]">
-        <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3">
+        <div className={cn("container mx-auto", isMobile ? "px-2.5 py-1.5" : "px-4 py-3")}>
           <div className={cn(
             "flex items-center gap-2 sm:gap-3 max-w-5xl mx-auto",
-            isMobile && "flex-col"
+            isMobile && "flex-col gap-1.5"
           )}>
             {/* Row 1 on mobile: dates + guests */}
             <div className={cn("flex items-center gap-2 w-full", !isMobile && "flex-1")}>
@@ -344,16 +363,16 @@ const FloatingBookingBar = () => {
               onClick={handleSearch}
               disabled={!dateRange?.from || !dateRange?.to || loading}
               className={cn(
-                "bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-4 sm:px-6 py-3 font-body text-sm font-semibold tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl shrink-0 disabled:opacity-50 disabled:cursor-not-allowed",
-                isMobile && "w-full"
+                "bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-body font-semibold tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl shrink-0 disabled:opacity-50 disabled:cursor-not-allowed",
+                isMobile ? "w-full px-3 py-2.5 text-xs" : "px-6 py-3 text-sm"
               )}
             >
               {loading ? (
-                <Loader2 size={18} className="animate-spin" />
+                <Loader2 size={isMobile ? 16 : 18} className="animate-spin" />
               ) : (
-                <Search size={18} />
+                <Search size={isMobile ? 16 : 18} />
               )}
-              <span>{isMobile ? "Consultar disponibilidad" : "Consultar"}</span>
+              <span>{isMobile ? "Consultar" : "Consultar"}</span>
             </button>
           </div>
         </div>
