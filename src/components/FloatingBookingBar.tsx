@@ -316,10 +316,10 @@ const FloatingBookingBar = () => {
 
       {/* Main bar */}
       <div className="bg-section-dark/90 backdrop-blur-xl border-t border-border/20 shadow-[0_-4px_30px_rgba(0,0,0,0.3)]">
-        <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3">
+        <div className={cn("container mx-auto", isMobile ? "px-2.5 py-1.5" : "px-4 py-3")}>
           <div className={cn(
             "flex items-center gap-2 sm:gap-3 max-w-5xl mx-auto",
-            isMobile && "flex-col"
+            isMobile && "flex-col gap-1.5"
           )}>
             {/* Row 1 on mobile: dates + guests */}
             <div className={cn("flex items-center gap-2 w-full", !isMobile && "flex-1")}>
