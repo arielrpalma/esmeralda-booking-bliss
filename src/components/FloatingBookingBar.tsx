@@ -266,7 +266,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                       <div>
                         <span className="text-xs sm:text-sm font-body font-semibold text-foreground">¡Disponible!</span>
                         <span className="block text-[10px] sm:text-xs text-muted-foreground">
-                          {safeDateFormat(result.checkin, "d 'de' MMM")} al {safeDateFormat(result.checkout, "d 'de' MMM")} — {nightsLabel(result.nights)}
+                          <span className="font-bold text-foreground">{safeDateFormat(result.checkin, "d 'de' MMM")} al {safeDateFormat(result.checkout, "d 'de' MMM")} — {nightsLabel(result.nights)}</span>
                         </span>
                       </div>
                     </div>
