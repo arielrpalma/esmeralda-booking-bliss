@@ -59,7 +59,7 @@ function findAlternatives(
   blocked: BlockedRange[],
   count = 5
 ): { checkin: string; checkout: string; nights: number }[] {
-  const nights = Math.round(
+  const minNights = Math.round(
     (checkout.getTime() - checkin.getTime()) / (1000 * 60 * 60 * 24)
   );
   const alternatives: { checkin: string; checkout: string; nights: number }[] =
@@ -67,23 +67,30 @@ function findAlternatives(
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Search forward from checkin up to 90 days
-  for (let offset = -7; offset <= 90 && alternatives.length < count; offset++) {
-    if (offset === 0) continue;
-    const candidate = new Date(checkin);
-    candidate.setDate(candidate.getDate() + offset);
+  // Try same nights first, then +1, +2 extra nights
+  for (let extra = 0; extra <= 3 && alternatives.length < count; extra++) {
+    const nights = minNights + extra;
+    for (let offset = -7; offset <= 90 && alternatives.length < count; offset++) {
+      if (offset === 0 && extra === 0) continue;
+      const candidate = new Date(checkin);
+      candidate.setDate(candidate.getDate() + offset);
 
-    if (candidate < today) continue;
+      if (candidate < today) continue;
 
-    const candidateEnd = new Date(candidate);
-    candidateEnd.setDate(candidateEnd.getDate() + nights);
+      const candidateEnd = new Date(candidate);
+      candidateEnd.setDate(candidateEnd.getDate() + nights);
 
-    if (!isRangeBlocked(candidate, candidateEnd, blocked)) {
-      alternatives.push({
-        checkin: candidate.toISOString().slice(0, 10),
-        checkout: candidateEnd.toISOString().slice(0, 10),
-        nights,
-      });
+      // Avoid duplicates
+      const key = `${candidate.toISOString().slice(0, 10)}-${candidateEnd.toISOString().slice(0, 10)}`;
+      if (alternatives.some(a => `${a.checkin}-${a.checkout}` === key)) continue;
+
+      if (!isRangeBlocked(candidate, candidateEnd, blocked)) {
+        alternatives.push({
+          checkin: candidate.toISOString().slice(0, 10),
+          checkout: candidateEnd.toISOString().slice(0, 10),
+          nights,
+        });
+      }
     }
   }
   return alternatives;
