@@ -156,13 +156,23 @@ const FloatingBookingBar = () => {
   );
 
   const dateTrigger = (
-    <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-lg px-3 py-2 text-left min-w-0">
-      <CalendarDays size={16} className="text-primary shrink-0" />
+    <button className={cn(
+      "flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-lg text-left min-w-0",
+      isMobile ? "px-2.5 py-1.5" : "px-3 py-2"
+    )}>
+      <CalendarDays size={isMobile ? 14 : 16} className="text-primary shrink-0" />
       <div className="flex-1 min-w-0">
-        <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
+        <span className={cn(
+          "font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-0.5",
+          isMobile ? "text-[9px]" : "text-[10px] mb-1"
+        )}>
           Llegada — Salida
         </span>
-        <span className={cn("text-sm font-body truncate block", dateRange?.from ? "text-section-dark-foreground" : "text-section-dark-foreground/40")}>
+        <span className={cn(
+          "font-body truncate block",
+          isMobile ? "text-xs" : "text-sm",
+          dateRange?.from ? "text-section-dark-foreground" : "text-section-dark-foreground/40"
+        )}>
           {dateLabel}
         </span>
       </div>
@@ -170,13 +180,22 @@ const FloatingBookingBar = () => {
   );
 
   const guestsTrigger = (
-    <button className="flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-lg px-3 py-2 text-left min-w-0">
-      <Users size={16} className="text-primary shrink-0" />
+    <button className={cn(
+      "flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-lg text-left min-w-0",
+      isMobile ? "px-2.5 py-1.5" : "px-3 py-2"
+    )}>
+      <Users size={isMobile ? 14 : 16} className="text-primary shrink-0" />
       <div className="flex-1 min-w-0">
-        <span className="text-[10px] font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-1">
+        <span className={cn(
+          "font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-0.5",
+          isMobile ? "text-[9px]" : "text-[10px] mb-1"
+        )}>
           Huéspedes
         </span>
-        <span className="text-sm font-body text-section-dark-foreground truncate block">
+        <span className={cn(
+          "font-body text-section-dark-foreground truncate block",
+          isMobile ? "text-xs" : "text-sm"
+        )}>
           {summary}
         </span>
       </div>
