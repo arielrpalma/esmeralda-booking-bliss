@@ -1,5 +1,5 @@
 import { Search, CalendarDays, Plus, Minus, Users, Check, X, Loader2, ArrowRight, Clock } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import type { DateRange } from "react-day-picker";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -55,7 +55,7 @@ const nightsLabel = (n: number) => `${n} ${n === 1 ? "noche" : "noches"}`;
 
 // --- Main Component ---
 
-const FloatingBookingBar = ({ onBannerVisible }: { onBannerVisible?: (visible: boolean) => void }) => {
+const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: number) => void }) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
@@ -65,10 +65,18 @@ const FloatingBookingBar = ({ onBannerVisible }: { onBannerVisible?: (visible: b
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AvailabilityResult | null>(null);
   const isMobile = useIsMobile();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    onBannerVisible?.(!!result || loading);
-  }, [result, loading, onBannerVisible]);
+    if (!containerRef.current || !onHeightChange) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        onHeightChange(entry.contentRect.height);
+      }
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [onHeightChange]);
 
   const setCalendarOpen = (open: boolean) => {
     if (open) { setDateRange(undefined); setResult(null); }
@@ -220,7 +228,7 @@ const FloatingBookingBar = ({ onBannerVisible }: { onBannerVisible?: (visible: b
   const hasNoAlternatives = result && !result.available && !hasBefore && !hasAfter;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
+    <motion.div ref={containerRef} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 1 }} className="fixed bottom-0 left-0 right-0 z-50">
 
       {/* Results banner */}
