@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -9,6 +10,8 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 const Index = () => {
+  const [bannerVisible, setBannerVisible] = useState(false);
+
   return (
     <div className="min-h-screen bg-background pb-20">
       <Navbar />
@@ -18,8 +21,8 @@ const Index = () => {
       <AmenitiesSection />
       <GallerySection />
       <Footer />
-      <FloatingBookingBar />
-      <WhatsAppButton />
+      <FloatingBookingBar onBannerVisible={setBannerVisible} />
+      <WhatsAppButton extraBottom={bannerVisible ? 5 : 0} />
     </div>
   );
 };
