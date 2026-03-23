@@ -392,14 +392,38 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                     </div>
                   )}
 
-                  {hasNoAlternatives && (
-                    <div className="flex items-center gap-2 py-2 px-3 bg-muted/50 rounded-lg">
-                      <Clock size={14} className="text-muted-foreground shrink-0" />
-                      <span className="text-xs font-body text-muted-foreground">
-                        No encontramos opciones cercanas. Probá con otras fechas.
-                      </span>
-                    </div>
-                  )}
+                  {/* Retry with new dates button */}
+                  <div className="flex items-center gap-2">
+                    {hasNoAlternatives && (
+                      <div className="flex items-center gap-2 py-2 px-3 bg-muted/50 rounded-lg flex-1">
+                        <Clock size={14} className="text-muted-foreground shrink-0" />
+                        <span className="text-xs font-body text-muted-foreground">
+                          No encontramos opciones cercanas.
+                        </span>
+                      </div>
+                    )}
+                    {isMobile ? (
+                      <Drawer open={retryCalendarOpen} onOpenChange={setRetryCalendarOpen}>
+                        <DrawerTrigger asChild>
+                          <button className={cn("flex items-center gap-1.5 bg-[hsl(142,71%,45%)] hover:bg-[hsl(142,71%,40%)] text-white rounded-lg font-body font-semibold transition-all shadow-md whitespace-nowrap", isMobile ? "px-3 py-2 text-xs" : "px-4 py-2 text-sm")}>
+                            <CalendarPlus size={14} />
+                            <span>Otras fechas</span>
+                          </button>
+                        </DrawerTrigger>
+                        <DrawerContent><div className="p-4 flex justify-center overflow-auto">{retryCalendarContent}</div></DrawerContent>
+                      </Drawer>
+                    ) : (
+                      <Popover open={retryCalendarOpen} onOpenChange={setRetryCalendarOpen}>
+                        <PopoverTrigger asChild>
+                          <button className="flex items-center gap-1.5 bg-[hsl(142,71%,45%)] hover:bg-[hsl(142,71%,40%)] text-white rounded-lg font-body font-semibold transition-all shadow-md whitespace-nowrap px-4 py-2 text-sm">
+                            <CalendarPlus size={14} />
+                            <span>Otras fechas</span>
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="end" side="top" sideOffset={8}>{retryCalendarContent}</PopoverContent>
+                      </Popover>
+                    )}
+                  </div>
                 </div>
               ) : null}
 
