@@ -64,6 +64,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const [calendarOpen, setCalendarOpenRaw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AvailabilityResult | null>(null);
+  const [retryCalendarOpen, setRetryCalendarOpen] = useState(false);
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
 
