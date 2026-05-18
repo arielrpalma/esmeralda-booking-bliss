@@ -280,8 +280,50 @@ const Pago = () => {
                   Los datos de tu tarjeta viajan cifrados directo a Mercado Pago.
                 </div>
 
-                {isValid && (
+                {isValid && !paymentType && (
+                  <div className="border-t border-border pt-6 space-y-3">
+                    <p className="font-body text-sm text-foreground">Elegí tu medio de pago</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setPaymentType("credit")}
+                        className="flex items-center gap-3 p-4 rounded-sm border border-border hover:border-primary hover:bg-primary/5 transition-colors text-left"
+                      >
+                        <CreditCard className="text-primary" size={22} />
+                        <div>
+                          <p className="font-body text-sm text-foreground">Tarjeta de crédito</p>
+                          <p className="font-body text-xs text-muted-foreground">Hasta 12 cuotas</p>
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPaymentType("debit")}
+                        className="flex items-center gap-3 p-4 rounded-sm border border-border hover:border-primary hover:bg-primary/5 transition-colors text-left"
+                      >
+                        <Wallet className="text-primary" size={22} />
+                        <div>
+                          <p className="font-body text-sm text-foreground">Tarjeta de débito</p>
+                          <p className="font-body text-xs text-muted-foreground">Pago en un solo pago</p>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {isValid && paymentType && (
                   <div className="border-t border-border pt-6 relative">
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="font-body text-sm text-foreground">
+                        {paymentType === "credit" ? "Tarjeta de crédito" : "Tarjeta de débito"}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setPaymentType(null)}
+                        className="font-body text-xs text-primary hover:underline"
+                      >
+                        Cambiar
+                      </button>
+                    </div>
                     {mountingBrick && (
                       <div className="flex items-center justify-center py-10 text-muted-foreground">
                         <Loader2 className="animate-spin mr-2" /> Cargando formulario seguro...
