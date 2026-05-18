@@ -130,6 +130,7 @@ const Pago = () => {
               if (!cancelled) setMountingBrick(false);
             },
             onSubmit: async ({ formData }: { formData: Record<string, unknown> }) => {
+              setProcessing(true);
               try {
                 const { data, error } = await supabase.functions.invoke("process-mp-payment", {
                   body: {
@@ -151,6 +152,8 @@ const Pago = () => {
                   variant: "destructive",
                 });
                 throw err;
+              } finally {
+                setProcessing(false);
               }
             },
             onError: (error: unknown) => {
