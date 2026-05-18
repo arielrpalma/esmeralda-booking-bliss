@@ -51,6 +51,7 @@ const Pago = () => {
   const [debouncedAmount, setDebouncedAmount] = useState(0);
   const [mountingBrick, setMountingBrick] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [paymentType, setPaymentType] = useState<"credit" | "debit" | null>(null);
   const [result, setResult] = useState<PaymentResult | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const brickContainerRef = useRef<HTMLDivElement>(null);
