@@ -34,13 +34,16 @@ Deno.serve(async (req) => {
     }
     const { payment_id, amount, payer_email, payer_name } = parsed.data;
 
+    // Use port 587 with STARTTLS — lighter TLS handshake than implicit TLS on 465,
+    // which keeps the function under Supabase Edge Functions' CPU limit.
     const client = new SMTPClient({
       connection: {
         hostname: 'smtppro.zoho.com',
-        port: 465,
-        tls: true,
+        port: 587,
+        tls: false,
         auth: { username: SMTP_USER, password },
       },
+      pool: false,
     });
 
     const saludo = payer_name ? `Hola ${payer_name},` : 'Hola,';
