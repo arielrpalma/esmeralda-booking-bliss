@@ -215,7 +215,7 @@ const Pago = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="max-w-xl mx-auto bg-card rounded-sm shadow-xl border border-border p-4 sm:p-6 md:p-10 space-y-5 sm:space-y-6"
+            className="max-w-xl mx-auto bg-transparent sm:bg-card rounded-sm sm:shadow-xl sm:border sm:border-border p-0 sm:p-6 md:p-10 space-y-5 sm:space-y-6 relative"
           >
             {result ? (
               <div className="text-center space-y-5 py-4">
