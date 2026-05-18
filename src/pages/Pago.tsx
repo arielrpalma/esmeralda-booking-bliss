@@ -51,7 +51,6 @@ const Pago = () => {
   const [debouncedAmount, setDebouncedAmount] = useState(0);
   const [mountingBrick, setMountingBrick] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [paymentType, setPaymentType] = useState<"credit" | "debit">("credit");
   const [result, setResult] = useState<PaymentResult | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const brickContainerRef = useRef<HTMLDivElement>(null);
@@ -69,9 +68,9 @@ const Pago = () => {
     return () => clearTimeout(t);
   }, [importeNum, isValid]);
 
-  // Mount Payment Brick whenever we have a valid amount, a chosen payment type and no result yet
+  // Mount Payment Brick whenever we have a valid amount and no result yet
   useEffect(() => {
-    if (!debouncedAmount || result || !paymentType) return;
+    if (!debouncedAmount || result) return;
     let cancelled = false;
     setMountingBrick(true);
 
@@ -104,8 +103,8 @@ const Pago = () => {
           },
           customization: {
             paymentMethods: {
-              creditCard: paymentType === "credit" ? "all" : undefined,
-              debitCard: paymentType === "debit" ? "all" : undefined,
+              creditCard: "all",
+              debitCard: "all",
               maxInstallments: 12,
             },
             visual: {
@@ -181,13 +180,12 @@ const Pago = () => {
       brickControllerRef.current?.unmount();
       brickControllerRef.current = null;
     };
-  }, [debouncedAmount, result, paymentType]);
+  }, [debouncedAmount, result]);
 
   const reset = () => {
     setResult(null);
     setErrorMsg(null);
     setImporte("");
-    setPaymentType("credit");
   };
 
   const approved = result?.status === "approved";
@@ -282,30 +280,6 @@ const Pago = () => {
 
                 {isValid && (
                   <div className="border-t border-border pt-6 relative">
-                    <div className="inline-flex items-center rounded-sm border border-border p-1 mb-4 bg-muted/30">
-                      <button
-                        type="button"
-                        onClick={() => setPaymentType("credit")}
-                        className={`h-8 px-4 rounded-sm font-body text-xs transition-colors ${
-                          paymentType === "credit"
-                            ? "bg-primary text-primary-foreground"
-                            : "text-muted-foreground hover:text-foreground"
-                        }`}
-                      >
-                        Crédito
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setPaymentType("debit")}
-                        className={`h-8 px-4 rounded-sm font-body text-xs transition-colors ${
-                          paymentType === "debit"
-                            ? "bg-primary text-primary-foreground"
-                            : "text-muted-foreground hover:text-foreground"
-                        }`}
-                      >
-                        Débito
-                      </button>
-                    </div>
                     {mountingBrick && (
                       <div className="flex items-center justify-center py-10 text-muted-foreground">
                         <Loader2 className="animate-spin mr-2" /> Cargando formulario seguro...
