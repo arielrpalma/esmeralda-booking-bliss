@@ -73,6 +73,27 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Fire-and-forget: send confirmation email when payment is approved
+    if (mpData.status === 'approved') {
+      const supaUrl = Deno.env.get('SUPABASE_URL');
+      const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+      if (supaUrl && serviceKey) {
+        fetch(`${supaUrl}/functions/v1/send-payment-email`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${serviceKey}`,
+          },
+          body: JSON.stringify({
+            payment_id: mpData.id,
+            amount: mpData.transaction_amount,
+            payer_email: d.payer.email,
+            payer_name: mpData?.payer?.first_name ?? undefined,
+          }),
+        }).catch((e) => console.error('send-payment-email invoke failed', e));
+      }
+    }
+
     return new Response(JSON.stringify({
       id: mpData.id,
       status: mpData.status,
