@@ -69,9 +69,9 @@ const Pago = () => {
     return () => clearTimeout(t);
   }, [importeNum, isValid]);
 
-  // Mount Payment Brick whenever we have a valid amount and no result yet
+  // Mount Payment Brick whenever we have a valid amount, a chosen payment type and no result yet
   useEffect(() => {
-    if (!debouncedAmount || result) return;
+    if (!debouncedAmount || result || !paymentType) return;
     let cancelled = false;
     setMountingBrick(true);
 
