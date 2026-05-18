@@ -108,6 +108,9 @@ const Pago = () => {
               maxInstallments: 12,
             },
             visual: {
+              defaultPaymentOption: {
+                creditCardForm: true,
+              },
               style: {
                 theme: "default",
                 customVariables: {
