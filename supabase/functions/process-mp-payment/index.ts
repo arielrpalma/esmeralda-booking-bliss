@@ -1,0 +1,89 @@
+import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { z } from 'npm:zod@3.23.8';
+
+// Payload coming from MP Payment Brick after card tokenization
+const BodySchema = z.object({
+  token: z.string().min(1),
+  issuer_id: z.union([z.string(), z.number()]).optional(),
+  payment_method_id: z.string().min(1),
+  installments: z.number().int().positive(),
+  transaction_amount: z.number().positive().max(100000000),
+  payer: z.object({
+    email: z.string().email(),
+    identification: z.object({
+      type: z.string().min(1),
+      number: z.string().min(1),
+    }).optional(),
+  }),
+});
+
+Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
+
+  try {
+    const token = Deno.env.get('MP_ACCESS_TOKEN');
+    if (!token) {
+      return new Response(JSON.stringify({ error: 'MP_ACCESS_TOKEN no configurado' }), {
+        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const json = await req.json();
+    const parsed = BodySchema.safeParse(json);
+    if (!parsed.success) {
+      return new Response(JSON.stringify({ error: 'Datos inválidos', details: parsed.error.flatten().fieldErrors }), {
+        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    const d = parsed.data;
+
+    const payment = {
+      transaction_amount: Number(d.transaction_amount.toFixed(2)),
+      token: d.token,
+      description: 'Pago Esmeralda Apart',
+      installments: d.installments,
+      payment_method_id: d.payment_method_id,
+      issuer_id: d.issuer_id,
+      payer: {
+        email: d.payer.email,
+        identification: d.payer.identification,
+      },
+      statement_descriptor: 'ESMERALDA APART',
+    };
+
+    const mpRes = await fetch('https://api.mercadopago.com/v1/payments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'X-Idempotency-Key': `${d.token}-${Date.now()}`,
+      },
+      body: JSON.stringify(payment),
+    });
+
+    const mpData = await mpRes.json();
+    if (!mpRes.ok) {
+      console.error('MP error', JSON.stringify(mpData));
+      return new Response(JSON.stringify({
+        error: mpData?.message || 'Error procesando el pago',
+        status_detail: mpData?.status_detail,
+        details: mpData,
+      }), {
+        status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({
+      id: mpData.id,
+      status: mpData.status,
+      status_detail: mpData.status_detail,
+      transaction_amount: mpData.transaction_amount,
+      payment_method_id: mpData.payment_method_id,
+    }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  } catch (err) {
+    console.error(err);
+    return new Response(JSON.stringify({ error: (err as Error).message }), {
+      status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+});
