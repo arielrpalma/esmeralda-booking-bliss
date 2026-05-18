@@ -187,7 +187,7 @@ const Pago = () => {
     setResult(null);
     setErrorMsg(null);
     setImporte("");
-    setPaymentType(null);
+    setPaymentType("credit");
   };
 
   const approved = result?.status === "approved";
