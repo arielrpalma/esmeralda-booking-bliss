@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, CreditCard, Loader2, Lock, ShieldCheck, XCircle, MessageCircle, Wallet } from "lucide-react";
+import { CheckCircle2, Loader2, Lock, ShieldCheck, XCircle, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
@@ -51,7 +51,7 @@ const Pago = () => {
   const [debouncedAmount, setDebouncedAmount] = useState(0);
   const [mountingBrick, setMountingBrick] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [paymentType, setPaymentType] = useState<"credit" | "debit" | null>(null);
+  const [paymentType, setPaymentType] = useState<"credit" | "debit">("credit");
   const [result, setResult] = useState<PaymentResult | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const brickContainerRef = useRef<HTMLDivElement>(null);
@@ -187,7 +187,7 @@ const Pago = () => {
     setResult(null);
     setErrorMsg(null);
     setImporte("");
-    setPaymentType(null);
+    setPaymentType("credit");
   };
 
   const approved = result?.status === "approved";
@@ -280,48 +280,30 @@ const Pago = () => {
                   Los datos de tu tarjeta viajan cifrados directo a Mercado Pago.
                 </div>
 
-                {isValid && !paymentType && (
-                  <div className="border-t border-border pt-6 space-y-3">
-                    <p className="font-body text-sm text-foreground">Elegí tu medio de pago</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {isValid && (
+                  <div className="border-t border-border pt-6 relative">
+                    <div className="inline-flex items-center rounded-sm border border-border p-1 mb-4 bg-muted/30">
                       <button
                         type="button"
                         onClick={() => setPaymentType("credit")}
-                        className="flex items-center gap-3 p-4 rounded-sm border border-border hover:border-primary hover:bg-primary/5 transition-colors text-left"
+                        className={`h-8 px-4 rounded-sm font-body text-xs transition-colors ${
+                          paymentType === "credit"
+                            ? "bg-primary text-primary-foreground"
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
                       >
-                        <CreditCard className="text-primary" size={22} />
-                        <div>
-                          <p className="font-body text-sm text-foreground">Tarjeta de crédito</p>
-                          <p className="font-body text-xs text-muted-foreground">Hasta 12 cuotas</p>
-                        </div>
+                        Crédito
                       </button>
                       <button
                         type="button"
                         onClick={() => setPaymentType("debit")}
-                        className="flex items-center gap-3 p-4 rounded-sm border border-border hover:border-primary hover:bg-primary/5 transition-colors text-left"
+                        className={`h-8 px-4 rounded-sm font-body text-xs transition-colors ${
+                          paymentType === "debit"
+                            ? "bg-primary text-primary-foreground"
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
                       >
-                        <Wallet className="text-primary" size={22} />
-                        <div>
-                          <p className="font-body text-sm text-foreground">Tarjeta de débito</p>
-                          <p className="font-body text-xs text-muted-foreground">Pago en un solo pago</p>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {isValid && paymentType && (
-                  <div className="border-t border-border pt-6 relative">
-                    <div className="flex items-center justify-between mb-4">
-                      <p className="font-body text-sm text-foreground">
-                        {paymentType === "credit" ? "Tarjeta de crédito" : "Tarjeta de débito"}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => setPaymentType(null)}
-                        className="font-body text-xs text-primary hover:underline"
-                      >
-                        Cambiar
+                        Débito
                       </button>
                     </div>
                     {mountingBrick && (
