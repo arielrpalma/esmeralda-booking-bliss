@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Loader2, ShieldCheck, XCircle } from "lucide-react";
+import { CheckCircle2, Loader2, ShieldCheck, XCircle, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
@@ -224,6 +224,16 @@ const Pago = () => {
                     <p className="font-body text-muted-foreground text-sm">
                       Operación #{result.id} por ${formatARS(String(result.transaction_amount ?? importeNum))}
                     </p>
+                    <a
+                      href={`https://wa.me/5493472433334?text=${encodeURIComponent(
+                        `Hola! Adjunto comprobante de pago Esmeralda Apart.\nOperación: #${result.id}\nImporte: $${formatARS(String(result.transaction_amount ?? importeNum))}\nEstado: aprobado`,
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-sm bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity"
+                    >
+                      <MessageCircle size={16} /> Compartir comprobante por WhatsApp
+                    </a>
                   </>
                 ) : (
                   <>
@@ -234,11 +244,11 @@ const Pago = () => {
                     <p className="font-body text-muted-foreground text-sm">
                       {errorMsg ?? result.status_detail ?? "Intentá nuevamente con otra tarjeta."}
                     </p>
+                    <Button onClick={reset} variant="outline" className="font-body">
+                      Reintentar
+                    </Button>
                   </>
                 )}
-                <Button onClick={reset} variant="outline" className="font-body">
-                  Hacer otro pago
-                </Button>
               </div>
             ) : (
               <>
