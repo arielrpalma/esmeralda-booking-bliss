@@ -1,36 +1,26 @@
-# Pago simplificado con Payment Brick
+# Selector compacto de medio de pago
 
 ## Objetivo
-El cliente entra a `/pago`, escribe el importe en pesos, completa los datos de su tarjeta en un formulario embebido de Mercado Pago y paga. Sin redirección y sin pedir nombre, teléfono, departamento ni código de reserva.
+Eliminar el paso intermedio con dos botones grandes (Crédito / Débito) y mostrar el formulario de Mercado Pago directamente, con dos pestañas pequeñas arriba para alternar entre crédito y débito.
 
-## Cambios
+## Cambios en `src/pages/Pago.tsx`
 
-### 1. Frontend — `src/pages/Pago.tsx`
-- Eliminar los campos: nombre, apellido, email, teléfono, departamento, código de reserva.
-- Dejar un único input: **Importe (ARS)** con formato de miles.
-- Al presionar "Continuar", se monta el **Payment Brick** de Mercado Pago debajo, ya configurado con ese importe.
-- El Brick muestra el formulario oficial de MP con: número de tarjeta, vencimiento, CVV, titular, DNI y cuotas.
-- Al enviar, el Brick tokeniza la tarjeta en el navegador (los datos sensibles nunca tocan nuestro servidor) y llama a nuestra edge function con el token.
-- Mostrar pantalla de éxito o error según la respuesta, con el `payment_id` y el estado.
+1. **Default a crédito**: inicializar `paymentType` en `"credit"` en lugar de `null`, así el Brick se monta apenas el importe es válido.
+2. **Eliminar el bloque de selección grande**: quitar el `div` con los dos botones (`CreditCard` / `Wallet`) que aparecía cuando `!paymentType`.
+3. **Tabs compactos**: encima del contenedor del Brick, mostrar dos pestañas chicas estilo segmented control:
+   - "Crédito" y "Débito"
+   - Estado activo con `bg-primary text-primary-foreground`, inactivo con `text-muted-foreground hover:text-foreground`
+   - Tipografía `font-body text-xs`, alto reducido (~h-9), border inferior sutil
+4. **Cambio entre tabs**: al hacer click se actualiza `paymentType`, el `useEffect` ya remonta el Brick con la nueva configuración (lógica existente).
+5. **Quitar botón "Cambiar"** y la línea "Tarjeta de crédito/débito" sobre el Brick (los tabs ya cumplen esa función).
+6. **`reset`**: volver a `paymentType = "credit"` en vez de `null`.
+7. **Imports**: quitar `Wallet` si deja de usarse (mantener `CreditCard` solo si se usa en los tabs, opcional).
 
-### 2. Nueva edge function — `process-mp-payment`
-- Recibe del Brick: `token`, `issuer_id`, `payment_method_id`, `installments`, `payer.email`, `payer.identification`, `transaction_amount`.
-- Llama a `POST https://api.mercadopago.com/v1/payments` con el `MP_ACCESS_TOKEN` de producción.
-- Devuelve `{ status, status_detail, id }` al frontend.
-- Validación con Zod, CORS habilitado, sin guardar datos de tarjeta.
+## Resultado visual
+```text
+[ Importe: $ 12.345 ]
+[ Crédito | Débito ]   ← tabs compactos
+[ Formulario MP Brick ]
+```
 
-### 3. Secret nuevo
-- Agregar `MP_PUBLIC_KEY` con el valor `APP_USR-2c6aa44e-aba7-4f79-b415-14a04f58c56c` para que el frontend pueda inicializar el SDK de MP (es clave pública, va en el navegador).
-
-### 4. Mantener
-- La función actual `create-mp-preference` queda como está (sin uso desde la UI) por si más adelante querés volver a Checkout Pro.
-- Diseño Esmeralda (verde esmeralda + dorado, Playfair/Raleway).
-
-## Lo que queda registrado al pagar
-- En **Mercado Pago**: el pago completo (monto, tarjeta enmascarada, estado, email del pagador).
-- En tu base: **nada** todavía. Si querés persistirlo, lo agregamos en una iteración siguiente con una tabla `pagos` y/o webhook.
-
-## Notas técnicas
-- SDK: `https://sdk.mercadopago.com/js/v2` cargado dinámicamente en `Pago.tsx`.
-- Brick usado: `payment` (acepta tarjeta de crédito/débito). Se puede ampliar luego a efectivo/transferencia.
-- El email del pagador lo pide el propio Brick, por lo que tampoco hace falta un campo extra.
+Sin pantalla intermedia: el usuario completa el importe y ve directo el formulario, alternando medio con un click si lo necesita.
