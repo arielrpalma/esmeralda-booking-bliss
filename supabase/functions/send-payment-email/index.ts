@@ -1,5 +1,5 @@
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
-import { SMTPClient } from 'https://deno.land/x/denomailer@1.6.0/mod.ts';
+import nodemailer from 'npm:nodemailer@6.9.14';
 import { z } from 'npm:zod@3.23.8';
 
 const BodySchema = z.object({
@@ -34,16 +34,6 @@ Deno.serve(async (req) => {
     }
     const { payment_id, amount, payer_email, payer_name } = parsed.data;
 
-    const client = new SMTPClient({
-      connection: {
-        hostname: 'smtppro.zoho.com',
-        port: 465,
-        tls: true,
-        auth: { username: SMTP_USER, password },
-      },
-      pool: false,
-    });
-
     const saludo = payer_name ? `Hola ${payer_name},` : 'Hola,';
     const html = `
       <div style="font-family:Arial,sans-serif;color:#222;max-width:560px;margin:0 auto;padding:24px;background:#ffffff;border:1px solid #eee;border-radius:6px;">
@@ -58,24 +48,27 @@ Deno.serve(async (req) => {
     `;
     const text = `${saludo}\n\nTu pago N° ${payment_id} por $${formatARS(amount)} ARS ha sido procesado exitosamente.\n\n¡Muchas gracias por tu confianza y por elegir Esmeralda Apart!\n\n— Esmeralda Apart`;
 
-    // Run the SMTP send in background to avoid hitting per-request CPU limits.
-    const sendTask = (async () => {
-      try {
-        await client.send({
-          from: `Esmeralda Apart <${SMTP_USER}>`,
-          to: payer_email,
-          bcc: BCC_LIST,
-          replyTo: SMTP_USER,
-          subject: 'Pago Exitoso Esmeralda Apart',
-          content: text,
-          html,
-        });
-      } catch (e) {
-        console.error('SMTP send failed', e);
-      } finally {
-        try { await client.close(); } catch (_) { /* noop */ }
-      }
-    })();
+    // Use nodemailer (npm) — handles TLS more efficiently than denomailer in the Edge runtime.
+    const transporter = nodemailer.createTransport({
+      host: 'smtppro.zoho.com',
+      port: 465,
+      secure: true,
+      auth: { user: SMTP_USER, pass: password },
+    });
+
+    const sendTask = transporter.sendMail({
+      from: `Esmeralda Apart <${SMTP_USER}>`,
+      to: payer_email,
+      bcc: BCC_LIST,
+      replyTo: SMTP_USER,
+      subject: 'Pago Exitoso Esmeralda Apart',
+      text,
+      html,
+    }).then((info: unknown) => {
+      console.log('Email sent', info);
+    }).catch((e: unknown) => {
+      console.error('SMTP send failed', e);
+    });
 
     // @ts-ignore EdgeRuntime is provided by Supabase Edge Functions runtime
     if (typeof EdgeRuntime !== 'undefined' && EdgeRuntime?.waitUntil) {
