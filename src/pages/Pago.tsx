@@ -279,13 +279,20 @@ const Pago = () => {
                 </div>
 
                 {isValid && (
-                  <div className="border-t border-border pt-6">
+                  <div className="border-t border-border pt-6 relative">
                     {mountingBrick && (
                       <div className="flex items-center justify-center py-10 text-muted-foreground">
                         <Loader2 className="animate-spin mr-2" /> Cargando formulario seguro...
                       </div>
                     )}
                     <div id="mp-brick-container" ref={brickContainerRef} />
+                    {processing && (
+                      <div className="absolute inset-0 bg-background/85 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-10 rounded-sm">
+                        <Loader2 className="animate-spin text-primary" size={36} />
+                        <p className="font-body text-sm text-foreground">Procesando pago...</p>
+                        <p className="font-body text-xs text-muted-foreground">No cierres ni recargues la página</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
