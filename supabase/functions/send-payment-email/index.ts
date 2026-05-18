@@ -62,7 +62,7 @@ Deno.serve(async (req) => {
       to: payer_email,
       bcc: BCC_LIST,
       replyTo: SMTP_USER,
-      subject: 'Pago exitoso',
+      subject: 'Pago Exitoso Esmeralda Apart',
       content: text,
       html,
     });
