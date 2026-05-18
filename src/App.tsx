@@ -20,7 +20,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/gracias" element={<Gracias />} />
-          <Route path="/pago" element={<Pago />} />
+          <Route path="/posvirtual" element={<Pago />} />
           <Route path="/pago/success" element={<PagoStatus status="success" />} />
           <Route path="/pago/pending" element={<PagoStatus status="pending" />} />
           <Route path="/pago/failure" element={<PagoStatus status="failure" />} />
