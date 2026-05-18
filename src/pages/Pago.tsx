@@ -11,8 +11,9 @@ import { toast } from "@/hooks/use-toast";
 
 // Mercado Pago publishable key (safe to expose in frontend)
 const MP_PUBLIC_KEY = "APP_USR-2c6aa44e-aba7-4f79-b415-14a04f58c56c";
+// Brand emerald used inside the Mercado Pago Brick button
+const EMERALD_HEX = "#008A7C";
 
-type Step = "amount" | "brick" | "result";
 type PaymentResult = {
   id: number | string;
   status: string;
@@ -46,9 +47,8 @@ const loadMpSdk = () => {
 };
 
 const Pago = () => {
-  const [step, setStep] = useState<Step>("amount");
   const [importe, setImporte] = useState("");
-  const [importeError, setImporteError] = useState<string | undefined>();
+  const [debouncedAmount, setDebouncedAmount] = useState(0);
   const [mountingBrick, setMountingBrick] = useState(false);
   const [result, setResult] = useState<PaymentResult | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -57,19 +57,19 @@ const Pago = () => {
   const brickControllerRef = useRef<{ unmount: () => void } | null>(null);
 
   const importeNum = Number(importe.replace(/\D/g, ""));
+  const isValid = importeNum >= 100;
 
-  const handleContinue = () => {
-    if (!importeNum || importeNum < 100) {
-      setImporteError("Ingresá un importe válido (mínimo $100)");
-      return;
-    }
-    setImporteError(undefined);
-    setStep("brick");
-  };
-
-  // Mount Payment Brick whenever we enter the brick step
+  // Debounce so the Brick is not remounted on every keystroke
   useEffect(() => {
-    if (step !== "brick") return;
+    const t = setTimeout(() => {
+      setDebouncedAmount(isValid ? importeNum : 0);
+    }, 500);
+    return () => clearTimeout(t);
+  }, [importeNum, isValid]);
+
+  // Mount Payment Brick whenever we have a valid amount and no result yet
+  useEffect(() => {
+    if (!debouncedAmount || result) return;
     let cancelled = false;
     setMountingBrick(true);
 
@@ -93,13 +93,12 @@ const Pago = () => {
 
         const bricksBuilder = mp.bricks();
 
-        // Clear container to allow re-mount
         if (brickContainerRef.current) brickContainerRef.current.innerHTML = "";
         brickControllerRef.current?.unmount();
 
         const controller = await bricksBuilder.create("payment", "mp-brick-container", {
           initialization: {
-            amount: importeNum,
+            amount: debouncedAmount,
           },
           customization: {
             paymentMethods: {
@@ -110,6 +109,18 @@ const Pago = () => {
             visual: {
               style: {
                 theme: "default",
+                customVariables: {
+                  // Brand emerald applied to primary action button
+                  baseColor: EMERALD_HEX,
+                  baseColorFirstVariant: EMERALD_HEX,
+                  baseColorSecondVariant: EMERALD_HEX,
+                  buttonTextColor: "#ffffff",
+                  formBackgroundColor: "#ffffff",
+                  borderRadiusFull: "4px",
+                  borderRadiusLarge: "4px",
+                  borderRadiusMedium: "4px",
+                  borderRadiusSmall: "4px",
+                },
               },
             },
           },
@@ -122,19 +133,17 @@ const Pago = () => {
                 const { data, error } = await supabase.functions.invoke("process-mp-payment", {
                   body: {
                     ...formData,
-                    transaction_amount: importeNum,
+                    transaction_amount: debouncedAmount,
                   },
                 });
                 if (error) throw error;
                 const res = data as PaymentResult;
                 setResult(res);
                 setErrorMsg(null);
-                setStep("result");
               } catch (err) {
                 const message = (err as Error).message ?? "No pudimos procesar el pago";
                 setErrorMsg(message);
-                setResult(null);
-                setStep("result");
+                setResult({ id: "-", status: "rejected" });
                 toast({
                   title: "Pago rechazado",
                   description: message,
@@ -157,7 +166,6 @@ const Pago = () => {
             description: (err as Error).message,
             variant: "destructive",
           });
-          setStep("amount");
           setMountingBrick(false);
         }
       }
@@ -168,13 +176,12 @@ const Pago = () => {
       brickControllerRef.current?.unmount();
       brickControllerRef.current = null;
     };
-  }, [step, importeNum]);
+  }, [debouncedAmount, result]);
 
   const reset = () => {
     setResult(null);
     setErrorMsg(null);
     setImporte("");
-    setStep("amount");
   };
 
   const approved = result?.status === "approved";
@@ -206,10 +213,35 @@ const Pago = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="max-w-xl mx-auto bg-card rounded-sm shadow-xl border border-border p-6 md:p-10"
+            className="max-w-xl mx-auto bg-card rounded-sm shadow-xl border border-border p-6 md:p-10 space-y-6"
           >
-            {step === "amount" && (
-              <div className="space-y-6">
+            {result ? (
+              <div className="text-center space-y-5 py-4">
+                {approved ? (
+                  <>
+                    <CheckCircle2 className="mx-auto text-primary" size={64} />
+                    <h2 className="font-display text-2xl text-foreground">¡Pago aprobado!</h2>
+                    <p className="font-body text-muted-foreground text-sm">
+                      Operación #{result.id} por ${formatARS(String(result.transaction_amount ?? importeNum))}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="mx-auto text-destructive" size={64} />
+                    <h2 className="font-display text-2xl text-foreground">
+                      Pago {result.status}
+                    </h2>
+                    <p className="font-body text-muted-foreground text-sm">
+                      {errorMsg ?? result.status_detail ?? "Intentá nuevamente con otra tarjeta."}
+                    </p>
+                  </>
+                )}
+                <Button onClick={reset} variant="outline" className="font-body">
+                  Hacer otro pago
+                </Button>
+              </div>
+            ) : (
+              <>
                 <div className="space-y-2">
                   <Label htmlFor="importe" className="font-body">Importe a pagar (ARS)</Label>
                   <div className="relative">
@@ -219,15 +251,14 @@ const Pago = () => {
                       inputMode="numeric"
                       className="pl-7 h-12 text-lg"
                       value={importe}
-                      onChange={(e) => {
-                        setImporte(formatARS(e.target.value));
-                        setImporteError(undefined);
-                      }}
+                      onChange={(e) => setImporte(formatARS(e.target.value))}
                       placeholder="0"
                       autoFocus
                     />
                   </div>
-                  {importeError && <p className="text-xs text-destructive">{importeError}</p>}
+                  {!isValid && importe && (
+                    <p className="text-xs text-destructive">Importe mínimo $100</p>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-2 text-xs text-muted-foreground font-body">
@@ -235,64 +266,17 @@ const Pago = () => {
                   Los datos de tu tarjeta viajan cifrados directo a Mercado Pago.
                 </div>
 
-                <Button onClick={handleContinue} className="w-full h-12 text-base font-body">
-                  Continuar al pago
-                </Button>
-              </div>
-            )}
-
-            {step === "brick" && (
-              <div className="space-y-4">
-                <div className="flex items-baseline justify-between border-b border-border pb-4">
-                  <span className="font-body text-sm text-muted-foreground">Importe a pagar</span>
-                  <span className="font-display text-2xl text-foreground">
-                    ${formatARS(String(importeNum))}
-                  </span>
-                </div>
-
-                {mountingBrick && (
-                  <div className="flex items-center justify-center py-10 text-muted-foreground">
-                    <Loader2 className="animate-spin mr-2" /> Cargando formulario seguro...
+                {isValid && (
+                  <div className="border-t border-border pt-6">
+                    {mountingBrick && (
+                      <div className="flex items-center justify-center py-10 text-muted-foreground">
+                        <Loader2 className="animate-spin mr-2" /> Cargando formulario seguro...
+                      </div>
+                    )}
+                    <div id="mp-brick-container" ref={brickContainerRef} />
                   </div>
                 )}
-
-                <div id="mp-brick-container" ref={brickContainerRef} />
-
-                <button
-                  type="button"
-                  onClick={reset}
-                  className="text-xs font-body text-muted-foreground hover:text-foreground underline underline-offset-2"
-                >
-                  Cambiar importe
-                </button>
-              </div>
-            )}
-
-            {step === "result" && (
-              <div className="text-center space-y-5 py-4">
-                {approved ? (
-                  <>
-                    <CheckCircle2 className="mx-auto text-primary" size={64} />
-                    <h2 className="font-display text-2xl text-foreground">¡Pago aprobado!</h2>
-                    <p className="font-body text-muted-foreground text-sm">
-                      Operación #{result?.id} por ${formatARS(String(result?.transaction_amount ?? importeNum))}
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <XCircle className="mx-auto text-destructive" size={64} />
-                    <h2 className="font-display text-2xl text-foreground">
-                      {result ? `Pago ${result.status}` : "Pago rechazado"}
-                    </h2>
-                    <p className="font-body text-muted-foreground text-sm">
-                      {errorMsg ?? result?.status_detail ?? "Intentá nuevamente con otra tarjeta."}
-                    </p>
-                  </>
-                )}
-                <Button onClick={reset} variant="outline" className="font-body">
-                  Hacer otro pago
-                </Button>
-              </div>
+              </>
             )}
           </motion.div>
         </div>
