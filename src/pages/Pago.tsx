@@ -189,28 +189,29 @@ const Pago = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-      <main className="flex-1 py-24 md:py-32">
-        <div className="container mx-auto px-6">
+      <main className="flex-1 py-16 sm:py-24 md:py-32">
+        <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12 max-w-2xl mx-auto"
+            className="text-center mb-8 sm:mb-12 max-w-2xl mx-auto"
           >
-            <p className="text-sm font-body tracking-[0.3em] uppercase text-primary mb-4 inline-flex items-center gap-2">
-              <Lock size={14} /> Pago seguro
+            <p className="text-xs sm:text-sm font-body tracking-[0.25em] sm:tracking-[0.3em] uppercase text-primary mb-3 sm:mb-4 inline-flex items-center gap-2">
+              <Lock size={12} className="sm:hidden" />
+              <Lock size={14} className="hidden sm:inline" /> Pago seguro
             </p>
-            <h1 className="text-4xl md:text-5xl font-display font-semibold text-foreground mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-semibold text-foreground mb-4 sm:mb-6">
               Pagar reserva
             </h1>
-            <div className="w-16 h-[2px] bg-primary mx-auto mb-6" />
+            <div className="w-12 sm:w-16 h-[2px] bg-primary mx-auto" />
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="max-w-xl mx-auto bg-card rounded-sm shadow-xl border border-border p-6 md:p-10 space-y-6"
+            className="max-w-xl mx-auto bg-card rounded-sm shadow-xl border border-border p-4 sm:p-6 md:p-10 space-y-5 sm:space-y-6"
           >
             {result ? (
               <div className="text-center space-y-5 py-4">
@@ -227,7 +228,7 @@ const Pago = () => {
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-sm bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-12 px-4 sm:px-6 rounded-sm bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity"
                     >
                       <MessageCircle size={16} /> Compartir comprobante por WhatsApp
                     </a>
