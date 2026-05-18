@@ -202,7 +202,7 @@ const Pago = () => {
               <Lock size={14} className="hidden sm:inline" /> Pago seguro
             </p>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-semibold text-foreground mb-4 sm:mb-6">
-              Pagar reserva
+              Pagar reserva Esmeralda Apart
             </h1>
             <div className="w-12 sm:w-16 h-[2px] bg-primary mx-auto" />
           </motion.div>
