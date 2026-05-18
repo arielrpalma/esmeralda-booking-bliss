@@ -74,8 +74,9 @@ Deno.serve(async (req) => {
 
     const mpData = await mpRes.json();
     if (!mpRes.ok) {
-      console.error('MP error', mpData);
-      return new Response(JSON.stringify({ error: 'Error creando preferencia', details: mpData }), {
+      console.error('MP error', JSON.stringify(mpData));
+      const msg = mpData?.message || mpData?.error || 'Error creando preferencia';
+      return new Response(JSON.stringify({ error: msg, code: mpData?.code, details: mpData }), {
         status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
