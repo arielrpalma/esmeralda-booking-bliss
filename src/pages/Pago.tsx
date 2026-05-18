@@ -104,8 +104,8 @@ const Pago = () => {
           },
           customization: {
             paymentMethods: {
-              creditCard: "all",
-              debitCard: "all",
+              creditCard: paymentType === "credit" ? "all" : undefined,
+              debitCard: paymentType === "debit" ? "all" : undefined,
               maxInstallments: 12,
             },
             visual: {
