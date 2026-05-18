@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Loader2, ShieldCheck, XCircle, MessageCircle } from "lucide-react";
+import { CheckCircle2, Loader2, Lock, ShieldCheck, XCircle, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
@@ -197,16 +197,13 @@ const Pago = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12 max-w-2xl mx-auto"
           >
-            <p className="text-sm font-body tracking-[0.3em] uppercase text-primary mb-4">
-              Pago seguro
+            <p className="text-sm font-body tracking-[0.3em] uppercase text-primary mb-4 inline-flex items-center gap-2">
+              <Lock size={14} /> Pago seguro
             </p>
             <h1 className="text-4xl md:text-5xl font-display font-semibold text-foreground mb-6">
               Pagar reserva
             </h1>
             <div className="w-16 h-[2px] bg-primary mx-auto mb-6" />
-            <p className="font-body text-muted-foreground">
-              Ingresá el importe y pagá con tu tarjeta. Procesado de forma segura por Mercado Pago.
-            </p>
           </motion.div>
 
           <motion.div
