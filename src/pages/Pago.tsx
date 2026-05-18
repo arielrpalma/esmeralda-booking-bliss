@@ -250,7 +250,7 @@ const Pago = () => {
             ) : (
               <>
                 <div className="space-y-2">
-                  <Label htmlFor="importe" className="font-body">Importe a pagar (ARS)</Label>
+                  <Label htmlFor="importe" className="font-body">Importe de tu reserva (ARS)</Label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-body">$</span>
                     <Input
