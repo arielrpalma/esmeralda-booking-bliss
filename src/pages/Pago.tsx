@@ -50,6 +50,7 @@ const Pago = () => {
   const [importe, setImporte] = useState("");
   const [debouncedAmount, setDebouncedAmount] = useState(0);
   const [mountingBrick, setMountingBrick] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState<PaymentResult | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const brickContainerRef = useRef<HTMLDivElement>(null);
@@ -129,6 +130,7 @@ const Pago = () => {
               if (!cancelled) setMountingBrick(false);
             },
             onSubmit: async ({ formData }: { formData: Record<string, unknown> }) => {
+              setProcessing(true);
               try {
                 const { data, error } = await supabase.functions.invoke("process-mp-payment", {
                   body: {
@@ -150,6 +152,8 @@ const Pago = () => {
                   variant: "destructive",
                 });
                 throw err;
+              } finally {
+                setProcessing(false);
               }
             },
             onError: (error: unknown) => {
@@ -211,7 +215,7 @@ const Pago = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="max-w-xl mx-auto bg-card rounded-sm shadow-xl border border-border p-4 sm:p-6 md:p-10 space-y-5 sm:space-y-6"
+            className="max-w-xl mx-auto bg-transparent sm:bg-card rounded-sm sm:shadow-xl sm:border sm:border-border p-0 sm:p-6 md:p-10 space-y-5 sm:space-y-6 relative"
           >
             {result ? (
               <div className="text-center space-y-5 py-4">
@@ -275,13 +279,20 @@ const Pago = () => {
                 </div>
 
                 {isValid && (
-                  <div className="border-t border-border pt-6">
+                  <div className="border-t border-border pt-6 relative">
                     {mountingBrick && (
                       <div className="flex items-center justify-center py-10 text-muted-foreground">
                         <Loader2 className="animate-spin mr-2" /> Cargando formulario seguro...
                       </div>
                     )}
                     <div id="mp-brick-container" ref={brickContainerRef} />
+                    {processing && (
+                      <div className="absolute inset-0 bg-background/85 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-10 rounded-sm">
+                        <Loader2 className="animate-spin text-primary" size={36} />
+                        <p className="font-body text-sm text-foreground">Procesando pago...</p>
+                        <p className="font-body text-xs text-muted-foreground">No cierres ni recargues la página</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
