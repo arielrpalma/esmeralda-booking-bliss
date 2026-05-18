@@ -181,12 +181,13 @@ const Pago = () => {
       brickControllerRef.current?.unmount();
       brickControllerRef.current = null;
     };
-  }, [debouncedAmount, result]);
+  }, [debouncedAmount, result, paymentType]);
 
   const reset = () => {
     setResult(null);
     setErrorMsg(null);
     setImporte("");
+    setPaymentType(null);
   };
 
   const approved = result?.status === "approved";
