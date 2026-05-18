@@ -1,35 +1,23 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Loader2, CreditCard, ShieldCheck } from "lucide-react";
+import { CheckCircle2, Loader2, ShieldCheck, XCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
-interface FormState {
-  nombre: string;
-  apellido: string;
-  email: string;
-  telefono: string;
-  departamento: string;
-  codigo_reserva: string;
-  importe: string;
-}
+// Mercado Pago publishable key (safe to expose in frontend)
+const MP_PUBLIC_KEY = "APP_USR-2c6aa44e-aba7-4f79-b415-14a04f58c56c";
 
-const initialState: FormState = {
-  nombre: "",
-  apellido: "",
-  email: "",
-  telefono: "",
-  departamento: "",
-  codigo_reserva: "",
-  importe: "",
+type Step = "amount" | "brick" | "result";
+type PaymentResult = {
+  id: number | string;
+  status: string;
+  status_detail?: string;
+  transaction_amount?: number;
 };
 
 const formatARS = (value: string) => {
@@ -38,62 +26,158 @@ const formatARS = (value: string) => {
   return new Intl.NumberFormat("es-AR").format(Number(digits));
 };
 
-const Pago = () => {
-  const [form, setForm] = useState<FormState>(initialState);
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
-
-  const handleChange = (key: keyof FormState, value: string) => {
-    setForm((f) => ({ ...f, [key]: value }));
-    setErrors((e) => ({ ...e, [key]: undefined }));
-  };
-
-  const validate = (): boolean => {
-    const e: Partial<Record<keyof FormState, string>> = {};
-    if (!form.nombre.trim()) e.nombre = "Requerido";
-    if (!form.apellido.trim()) e.apellido = "Requerido";
-    if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) e.email = "Email inválido";
-    if (form.telefono.trim().length < 6) e.telefono = "Teléfono inválido";
-    if (!form.departamento) e.departamento = "Seleccioná un departamento";
-    if (!form.codigo_reserva.trim()) e.codigo_reserva = "Requerido";
-    const importeNum = Number(form.importe.replace(/\D/g, ""));
-    if (!importeNum || importeNum < 100) e.importe = "Importe inválido";
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
-
-  const handleSubmit = async (ev: React.FormEvent) => {
-    ev.preventDefault();
-    if (!validate()) return;
-    setLoading(true);
-    try {
-      const importeNum = Number(form.importe.replace(/\D/g, ""));
-      const { data, error } = await supabase.functions.invoke("create-mp-preference", {
-        body: {
-          nombre: form.nombre.trim(),
-          apellido: form.apellido.trim(),
-          email: form.email.trim(),
-          telefono: form.telefono.trim(),
-          departamento: form.departamento,
-          codigo_reserva: form.codigo_reserva.trim(),
-          importe: importeNum,
-        },
-      });
-      if (error) throw error;
-      const url = (data as { init_point?: string; sandbox_init_point?: string })?.init_point
-        ?? (data as { sandbox_init_point?: string })?.sandbox_init_point;
-      if (!url) throw new Error("No se recibió el link de pago");
-      window.location.href = url;
-    } catch (err) {
-      console.error(err);
-      toast({
-        title: "No pudimos iniciar el pago",
-        description: (err as Error).message ?? "Intentá nuevamente en unos minutos.",
-        variant: "destructive",
-      });
-      setLoading(false);
+// Lazy-load the MP SDK once
+let sdkPromise: Promise<void> | null = null;
+const loadMpSdk = () => {
+  if (sdkPromise) return sdkPromise;
+  sdkPromise = new Promise((resolve, reject) => {
+    if ((window as unknown as { MercadoPago?: unknown }).MercadoPago) {
+      resolve();
+      return;
     }
+    const script = document.createElement("script");
+    script.src = "https://sdk.mercadopago.com/js/v2";
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("No se pudo cargar Mercado Pago"));
+    document.head.appendChild(script);
+  });
+  return sdkPromise;
+};
+
+const Pago = () => {
+  const [step, setStep] = useState<Step>("amount");
+  const [importe, setImporte] = useState("");
+  const [importeError, setImporteError] = useState<string | undefined>();
+  const [mountingBrick, setMountingBrick] = useState(false);
+  const [result, setResult] = useState<PaymentResult | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const brickContainerRef = useRef<HTMLDivElement>(null);
+  // Brick controller used to safely unmount on re-render
+  const brickControllerRef = useRef<{ unmount: () => void } | null>(null);
+
+  const importeNum = Number(importe.replace(/\D/g, ""));
+
+  const handleContinue = () => {
+    if (!importeNum || importeNum < 100) {
+      setImporteError("Ingresá un importe válido (mínimo $100)");
+      return;
+    }
+    setImporteError(undefined);
+    setStep("brick");
   };
+
+  // Mount Payment Brick whenever we enter the brick step
+  useEffect(() => {
+    if (step !== "brick") return;
+    let cancelled = false;
+    setMountingBrick(true);
+
+    (async () => {
+      try {
+        await loadMpSdk();
+        if (cancelled) return;
+
+        const MercadoPagoCtor = (
+          window as unknown as { MercadoPago: new (key: string, opts: { locale: string }) => unknown }
+        ).MercadoPago;
+        const mp = new MercadoPagoCtor(MP_PUBLIC_KEY, { locale: "es-AR" }) as {
+          bricks: () => {
+            create: (
+              brick: string,
+              container: string,
+              settings: Record<string, unknown>,
+            ) => Promise<{ unmount: () => void }>;
+          };
+        };
+
+        const bricksBuilder = mp.bricks();
+
+        // Clear container to allow re-mount
+        if (brickContainerRef.current) brickContainerRef.current.innerHTML = "";
+        brickControllerRef.current?.unmount();
+
+        const controller = await bricksBuilder.create("payment", "mp-brick-container", {
+          initialization: {
+            amount: importeNum,
+          },
+          customization: {
+            paymentMethods: {
+              creditCard: "all",
+              debitCard: "all",
+              maxInstallments: 12,
+            },
+            visual: {
+              style: {
+                theme: "default",
+              },
+            },
+          },
+          callbacks: {
+            onReady: () => {
+              if (!cancelled) setMountingBrick(false);
+            },
+            onSubmit: async ({ formData }: { formData: Record<string, unknown> }) => {
+              try {
+                const { data, error } = await supabase.functions.invoke("process-mp-payment", {
+                  body: {
+                    ...formData,
+                    transaction_amount: importeNum,
+                  },
+                });
+                if (error) throw error;
+                const res = data as PaymentResult;
+                setResult(res);
+                setErrorMsg(null);
+                setStep("result");
+              } catch (err) {
+                const message = (err as Error).message ?? "No pudimos procesar el pago";
+                setErrorMsg(message);
+                setResult(null);
+                setStep("result");
+                toast({
+                  title: "Pago rechazado",
+                  description: message,
+                  variant: "destructive",
+                });
+                throw err;
+              }
+            },
+            onError: (error: unknown) => {
+              console.error("Brick error", error);
+            },
+          },
+        });
+
+        brickControllerRef.current = controller;
+      } catch (err) {
+        if (!cancelled) {
+          toast({
+            title: "Error",
+            description: (err as Error).message,
+            variant: "destructive",
+          });
+          setStep("amount");
+          setMountingBrick(false);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      brickControllerRef.current?.unmount();
+      brickControllerRef.current = null;
+    };
+  }, [step, importeNum]);
+
+  const reset = () => {
+    setResult(null);
+    setErrorMsg(null);
+    setImporte("");
+    setStep("amount");
+  };
+
+  const approved = result?.status === "approved";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -114,97 +198,103 @@ const Pago = () => {
             </h1>
             <div className="w-16 h-[2px] bg-primary mx-auto mb-6" />
             <p className="font-body text-muted-foreground">
-              Completá tus datos para abonar tu estadía a través de Mercado Pago.
+              Ingresá el importe y pagá con tu tarjeta. Procesado de forma segura por Mercado Pago.
             </p>
           </motion.div>
 
-          <motion.form
-            onSubmit={handleSubmit}
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="max-w-2xl mx-auto bg-card rounded-sm shadow-xl border border-border p-6 md:p-10 space-y-6"
+            className="max-w-xl mx-auto bg-card rounded-sm shadow-xl border border-border p-6 md:p-10"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="space-y-2">
-                <Label htmlFor="nombre" className="font-body">Nombre</Label>
-                <Input id="nombre" value={form.nombre} onChange={(e) => handleChange("nombre", e.target.value)} placeholder="Juan" autoComplete="given-name" />
-                {errors.nombre && <p className="text-xs text-destructive">{errors.nombre}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="apellido" className="font-body">Apellido</Label>
-                <Input id="apellido" value={form.apellido} onChange={(e) => handleChange("apellido", e.target.value)} placeholder="Pérez" autoComplete="family-name" />
-                {errors.apellido && <p className="text-xs text-destructive">{errors.apellido}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email" className="font-body">Email</Label>
-                <Input id="email" type="email" value={form.email} onChange={(e) => handleChange("email", e.target.value)} placeholder="tu@email.com" autoComplete="email" />
-                {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="telefono" className="font-body">Teléfono</Label>
-                <Input id="telefono" type="tel" value={form.telefono} onChange={(e) => handleChange("telefono", e.target.value)} placeholder="+54 9 ..." autoComplete="tel" />
-                {errors.telefono && <p className="text-xs text-destructive">{errors.telefono}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="departamento" className="font-body">Departamento</Label>
-                <Select value={form.departamento} onValueChange={(v) => handleChange("departamento", v)}>
-                  <SelectTrigger id="departamento">
-                    <SelectValue placeholder="Elegí tu departamento" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Esmeralda Apart 1">Esmeralda Apart 1</SelectItem>
-                    <SelectItem value="Esmeralda Apart 2">Esmeralda Apart 2</SelectItem>
-                    <SelectItem value="Esmeralda Apart 3">Esmeralda Apart 3</SelectItem>
-                    <SelectItem value="Esmeralda Apart 4">Esmeralda Apart 4</SelectItem>
-                    <SelectItem value="Otro">Otro</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.departamento && <p className="text-xs text-destructive">{errors.departamento}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="codigo_reserva" className="font-body">Código de reserva</Label>
-                <Input id="codigo_reserva" value={form.codigo_reserva} onChange={(e) => handleChange("codigo_reserva", e.target.value.toUpperCase())} placeholder="EJ: ESM-1234" />
-                {errors.codigo_reserva && <p className="text-xs text-destructive">{errors.codigo_reserva}</p>}
-              </div>
-              <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="importe" className="font-body">Importe a pagar (ARS)</Label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-body">$</span>
-                  <Input
-                    id="importe"
-                    inputMode="numeric"
-                    className="pl-7"
-                    value={form.importe}
-                    onChange={(e) => handleChange("importe", formatARS(e.target.value))}
-                    placeholder="0"
-                  />
+            {step === "amount" && (
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="importe" className="font-body">Importe a pagar (ARS)</Label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-body">$</span>
+                    <Input
+                      id="importe"
+                      inputMode="numeric"
+                      className="pl-7 h-12 text-lg"
+                      value={importe}
+                      onChange={(e) => {
+                        setImporte(formatARS(e.target.value));
+                        setImporteError(undefined);
+                      }}
+                      placeholder="0"
+                      autoFocus
+                    />
+                  </div>
+                  {importeError && <p className="text-xs text-destructive">{importeError}</p>}
                 </div>
-                {errors.importe && <p className="text-xs text-destructive">{errors.importe}</p>}
+
+                <div className="flex items-center gap-2 text-xs text-muted-foreground font-body">
+                  <ShieldCheck size={14} className="text-primary" />
+                  Los datos de tu tarjeta viajan cifrados directo a Mercado Pago.
+                </div>
+
+                <Button onClick={handleContinue} className="w-full h-12 text-base font-body">
+                  Continuar al pago
+                </Button>
               </div>
-            </div>
+            )}
 
-            <div className="flex items-center gap-2 text-xs text-muted-foreground font-body">
-              <ShieldCheck size={14} className="text-primary" />
-              Pago procesado de forma segura por Mercado Pago.
-            </div>
+            {step === "brick" && (
+              <div className="space-y-4">
+                <div className="flex items-baseline justify-between border-b border-border pb-4">
+                  <span className="font-body text-sm text-muted-foreground">Importe a pagar</span>
+                  <span className="font-display text-2xl text-foreground">
+                    ${formatARS(String(importeNum))}
+                  </span>
+                </div>
 
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full h-12 text-base font-body"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="animate-spin" /> Generando pago...
-                </>
-              ) : (
-                <>
-                  <CreditCard /> Pagar ahora
-                </>
-              )}
-            </Button>
-          </motion.form>
+                {mountingBrick && (
+                  <div className="flex items-center justify-center py-10 text-muted-foreground">
+                    <Loader2 className="animate-spin mr-2" /> Cargando formulario seguro...
+                  </div>
+                )}
+
+                <div id="mp-brick-container" ref={brickContainerRef} />
+
+                <button
+                  type="button"
+                  onClick={reset}
+                  className="text-xs font-body text-muted-foreground hover:text-foreground underline underline-offset-2"
+                >
+                  Cambiar importe
+                </button>
+              </div>
+            )}
+
+            {step === "result" && (
+              <div className="text-center space-y-5 py-4">
+                {approved ? (
+                  <>
+                    <CheckCircle2 className="mx-auto text-primary" size={64} />
+                    <h2 className="font-display text-2xl text-foreground">¡Pago aprobado!</h2>
+                    <p className="font-body text-muted-foreground text-sm">
+                      Operación #{result?.id} por ${formatARS(String(result?.transaction_amount ?? importeNum))}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="mx-auto text-destructive" size={64} />
+                    <h2 className="font-display text-2xl text-foreground">
+                      {result ? `Pago ${result.status}` : "Pago rechazado"}
+                    </h2>
+                    <p className="font-body text-muted-foreground text-sm">
+                      {errorMsg ?? result?.status_detail ?? "Intentá nuevamente con otra tarjeta."}
+                    </p>
+                  </>
+                )}
+                <Button onClick={reset} variant="outline" className="font-body">
+                  Hacer otro pago
+                </Button>
+              </div>
+            )}
+          </motion.div>
         </div>
       </main>
       <Footer />
