@@ -51,7 +51,7 @@ Deno.serve(async (req) => {
         <p>Tu pago <strong>N° ${payment_id}</strong> por <strong>$${formatARS(amount)} ARS</strong> ha sido procesado exitosamente.</p>
         <p>¡Muchas gracias por tu confianza y por elegir <strong>Esmeralda Apart</strong>! Será un placer recibirte.</p>
         <hr style="border:none;border-top:1px solid #eee;margin:24px 0;" />
-        <p style="font-size:12px;color:#888;">Este es un comprobante automático de tu pago. Si necesitás ayuda, respondé a este correo.</p>
+        <p style="font-size:12px;color:#888;">Este es un comprobante automático de tu pago. Si necesitás ayuda, contactate con nosotros a través de WhatsApp <a href="https://wa.me/5493472433334" style="color:#0f5132;text-decoration:underline;">+5493472433334</a>.</p>
         <p style="font-size:12px;color:#888;">Esmeralda Apart — contacto@esmeraldadesarrollos.com.ar</p>
       </div>
     `;
