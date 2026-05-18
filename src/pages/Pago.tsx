@@ -282,7 +282,17 @@ const Pago = () => {
                 </div>
 
                 {isValid && (
-                  <div className="border-t border-border pt-6 relative">
+                  <div className="border-t border-border pt-4 relative">
+                    {/* Hide Mercado Pago Brick "Medios de pago" header and tighten its top spacing */}
+                    <style>{`
+                      #mp-brick-container h1,
+                      #mp-brick-container h2,
+                      #mp-brick-container h3,
+                      #mp-brick-container [class*="Title"],
+                      #mp-brick-container [class*="title"] { display: none !important; }
+                      #mp-brick-container > div:first-child,
+                      #mp-brick-container form { margin-top: 0 !important; padding-top: 0 !important; }
+                    `}</style>
                     {mountingBrick && (
                       <div className="flex items-center justify-center py-10 text-muted-foreground">
                         <Loader2 className="animate-spin mr-2" /> Cargando formulario seguro...
