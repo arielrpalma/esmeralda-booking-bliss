@@ -57,18 +57,32 @@ Deno.serve(async (req) => {
     `;
     const text = `${saludo}\n\nTu pago N° ${payment_id} por $${formatARS(amount)} ARS ha sido procesado exitosamente.\n\n¡Muchas gracias por tu confianza y por elegir Esmeralda Apart!\n\n— Esmeralda Apart`;
 
-    await client.send({
-      from: `Esmeralda Apart <${SMTP_USER}>`,
-      to: payer_email,
-      bcc: BCC_LIST,
-      replyTo: SMTP_USER,
-      subject: 'Pago Exitoso Esmeralda Apart',
-      content: text,
-      html,
-    });
-    await client.close();
+    // Run the SMTP send in background to avoid hitting per-request CPU limits.
+    const sendTask = (async () => {
+      try {
+        await client.send({
+          from: `Esmeralda Apart <${SMTP_USER}>`,
+          to: payer_email,
+          bcc: BCC_LIST,
+          replyTo: SMTP_USER,
+          subject: 'Pago Exitoso Esmeralda Apart',
+          content: text,
+          html,
+        });
+      } catch (e) {
+        console.error('SMTP send failed', e);
+      } finally {
+        try { await client.close(); } catch (_) { /* noop */ }
+      }
+    })();
 
-    return new Response(JSON.stringify({ ok: true }), {
+    // @ts-ignore EdgeRuntime is provided by Supabase Edge Functions runtime
+    if (typeof EdgeRuntime !== 'undefined' && EdgeRuntime?.waitUntil) {
+      // @ts-ignore
+      EdgeRuntime.waitUntil(sendTask);
+    }
+
+    return new Response(JSON.stringify({ ok: true, queued: true }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (err) {
