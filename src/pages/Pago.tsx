@@ -21,10 +21,32 @@ type PaymentResult = {
   transaction_amount?: number;
 };
 
+// Allow Argentine-format input with optional 2 decimals (comma decimal separator)
 const formatARS = (value: string) => {
-  const digits = value.replace(/\D/g, "");
-  if (!digits) return "";
-  return new Intl.NumberFormat("es-AR").format(Number(digits));
+  // Keep only digits and the first comma
+  let cleaned = value.replace(/[^\d,]/g, "");
+  const firstComma = cleaned.indexOf(",");
+  if (firstComma !== -1) {
+    cleaned =
+      cleaned.slice(0, firstComma + 1) +
+      cleaned.slice(firstComma + 1).replace(/,/g, "");
+  }
+  const [rawInt, rawDec] = cleaned.split(",");
+  const intDigits = (rawInt ?? "").replace(/\D/g, "");
+  const intPart = intDigits ? new Intl.NumberFormat("es-AR").format(Number(intDigits)) : "";
+  if (rawDec === undefined) return intPart;
+  const decDigits = rawDec.replace(/\D/g, "").slice(0, 2);
+  return `${intPart || "0"},${decDigits}`;
+};
+const formatARSNumber = (n: number) =>
+  new Intl.NumberFormat("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+
+
+const parseARS = (value: string) => {
+  if (!value) return 0;
+  const normalized = value.replace(/\./g, "").replace(",", ".");
+  const n = Number(normalized);
+  return Number.isFinite(n) ? n : 0;
 };
 
 // Lazy-load the MP SDK once
@@ -57,7 +79,7 @@ const Pago = () => {
   // Brick controller used to safely unmount on re-render
   const brickControllerRef = useRef<{ unmount: () => void } | null>(null);
 
-  const importeNum = Number(importe.replace(/\D/g, ""));
+  const importeNum = parseARS(importe);
   const isValid = importeNum >= 100;
 
   // Debounce so the Brick is not remounted on every keystroke
@@ -227,11 +249,11 @@ const Pago = () => {
                     <CheckCircle2 className="mx-auto text-primary" size={64} />
                     <h2 className="font-display text-2xl text-foreground">¡Pago aprobado!</h2>
                     <p className="font-body text-muted-foreground text-sm">
-                      Operación #{result.id} por ${formatARS(String(result.transaction_amount ?? importeNum))}
+                      Operación #{result.id} por ${formatARSNumber(Number(result.transaction_amount ?? importeNum))}
                     </p>
                     <a
                       href={`https://wa.me/5493472433334?text=${encodeURIComponent(
-                        `Hola! Adjunto comprobante de pago Esmeralda Apart.\nOperación: #${result.id}\nImporte: $${formatARS(String(result.transaction_amount ?? importeNum))}\nEstado: aprobado`,
+                        `Hola! Adjunto comprobante de pago Esmeralda Apart.\nOperación: #${result.id}\nImporte: $${formatARSNumber(Number(result.transaction_amount ?? importeNum))}\nEstado: aprobado`,
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
