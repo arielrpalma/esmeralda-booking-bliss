@@ -76,7 +76,7 @@ const Pago = () => {
   // Brick controller used to safely unmount on re-render
   const brickControllerRef = useRef<{ unmount: () => void } | null>(null);
 
-  const importeNum = Number(importe.replace(/\D/g, ""));
+  const importeNum = parseARS(importe);
   const isValid = importeNum >= 100;
 
   // Debounce so the Brick is not remounted on every keystroke
