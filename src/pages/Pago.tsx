@@ -21,10 +21,29 @@ type PaymentResult = {
   transaction_amount?: number;
 };
 
+// Allow Argentine-format input with optional 2 decimals (comma decimal separator)
 const formatARS = (value: string) => {
-  const digits = value.replace(/\D/g, "");
-  if (!digits) return "";
-  return new Intl.NumberFormat("es-AR").format(Number(digits));
+  // Keep only digits and the first comma
+  let cleaned = value.replace(/[^\d,]/g, "");
+  const firstComma = cleaned.indexOf(",");
+  if (firstComma !== -1) {
+    cleaned =
+      cleaned.slice(0, firstComma + 1) +
+      cleaned.slice(firstComma + 1).replace(/,/g, "");
+  }
+  const [rawInt, rawDec] = cleaned.split(",");
+  const intDigits = (rawInt ?? "").replace(/\D/g, "");
+  const intPart = intDigits ? new Intl.NumberFormat("es-AR").format(Number(intDigits)) : "";
+  if (rawDec === undefined) return intPart;
+  const decDigits = rawDec.replace(/\D/g, "").slice(0, 2);
+  return `${intPart || "0"},${decDigits}`;
+};
+
+const parseARS = (value: string) => {
+  if (!value) return 0;
+  const normalized = value.replace(/\./g, "").replace(",", ".");
+  const n = Number(normalized);
+  return Number.isFinite(n) ? n : 0;
 };
 
 // Lazy-load the MP SDK once
