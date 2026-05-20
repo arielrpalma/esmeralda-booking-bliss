@@ -38,6 +38,9 @@ const formatARS = (value: string) => {
   const decDigits = rawDec.replace(/\D/g, "").slice(0, 2);
   return `${intPart || "0"},${decDigits}`;
 };
+const formatARSNumber = (n: number) =>
+  new Intl.NumberFormat("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+
 
 const parseARS = (value: string) => {
   if (!value) return 0;
