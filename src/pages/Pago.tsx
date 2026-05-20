@@ -249,11 +249,11 @@ const Pago = () => {
                     <CheckCircle2 className="mx-auto text-primary" size={64} />
                     <h2 className="font-display text-2xl text-foreground">¡Pago aprobado!</h2>
                     <p className="font-body text-muted-foreground text-sm">
-                      Operación #{result.id} por ${formatARS(String(result.transaction_amount ?? importeNum))}
+                      Operación #{result.id} por ${formatARSNumber(Number(result.transaction_amount ?? importeNum))}
                     </p>
                     <a
                       href={`https://wa.me/5493472433334?text=${encodeURIComponent(
-                        `Hola! Adjunto comprobante de pago Esmeralda Apart.\nOperación: #${result.id}\nImporte: $${formatARS(String(result.transaction_amount ?? importeNum))}\nEstado: aprobado`,
+                        `Hola! Adjunto comprobante de pago Esmeralda Apart.\nOperación: #${result.id}\nImporte: $${formatARSNumber(Number(result.transaction_amount ?? importeNum))}\nEstado: aprobado`,
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
