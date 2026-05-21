@@ -14,7 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      pagos: {
+        Row: {
+          amount: number
+          created_at: string
+          external_reference: string | null
+          id: number
+          payer_email: string | null
+          payer_name: string | null
+          payment_method_id: string | null
+          raw: Json
+          status: string
+          status_detail: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          external_reference?: string | null
+          id: number
+          payer_email?: string | null
+          payer_name?: string | null
+          payment_method_id?: string | null
+          raw: Json
+          status: string
+          status_detail?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          external_reference?: string | null
+          id?: number
+          payer_email?: string | null
+          payer_name?: string | null
+          payment_method_id?: string | null
+          raw?: Json
+          status?: string
+          status_detail?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
