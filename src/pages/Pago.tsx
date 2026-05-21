@@ -303,7 +303,7 @@ const Pago = () => {
                       Pago {result.status}
                     </h2>
                     <p className="font-body text-muted-foreground text-sm">
-                      {errorMsg ?? result.status_detail ?? "Intentá nuevamente con otra tarjeta."}
+                      {errorMsg ?? friendlyError(result.status_detail)}
                     </p>
                     <Button onClick={reset} variant="outline" className="font-body">
                       Reintentar
