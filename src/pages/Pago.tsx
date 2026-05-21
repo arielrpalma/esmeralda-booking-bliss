@@ -49,6 +49,29 @@ const parseARS = (value: string) => {
   return Number.isFinite(n) ? n : 0;
 };
 
+// Friendly Spanish messages for the most common MP status_detail codes
+const MP_STATUS_MESSAGES: Record<string, string> = {
+  cc_rejected_insufficient_amount: "Tu tarjeta no tiene fondos suficientes.",
+  cc_rejected_bad_filled_security_code: "Revisá el código de seguridad de la tarjeta.",
+  cc_rejected_bad_filled_date: "Revisá la fecha de vencimiento de la tarjeta.",
+  cc_rejected_bad_filled_other: "Revisá los datos de la tarjeta e intentá nuevamente.",
+  cc_rejected_bad_filled_card_number: "Revisá el número de tarjeta.",
+  cc_rejected_call_for_authorize: "Llamá a tu banco para autorizar el pago e intentá de nuevo.",
+  cc_rejected_high_risk: "Pago rechazado por seguridad. Probá con otra tarjeta.",
+  cc_rejected_card_disabled: "La tarjeta está inhabilitada. Contactá a tu banco.",
+  cc_rejected_duplicated_payment: "Ya hiciste un pago por el mismo monto. Esperá unos minutos antes de reintentar.",
+  cc_rejected_card_error: "No pudimos procesar la tarjeta. Probá con otra.",
+  cc_rejected_invalid_installments: "El número de cuotas no es válido para esta tarjeta.",
+  cc_rejected_max_attempts: "Alcanzaste el máximo de intentos. Probá con otra tarjeta.",
+  cc_rejected_other_reason: "El banco rechazó el pago. Probá con otra tarjeta.",
+};
+
+const friendlyError = (statusDetail?: string, fallback?: string) => {
+  if (statusDetail && MP_STATUS_MESSAGES[statusDetail]) return MP_STATUS_MESSAGES[statusDetail];
+  return fallback ?? "Intentá nuevamente o probá con otra tarjeta.";
+};
+
+
 // Lazy-load the MP SDK once
 let sdkPromise: Promise<void> | null = null;
 const loadMpSdk = () => {
@@ -157,18 +180,28 @@ const Pago = () => {
             onSubmit: async ({ formData }: { formData: Record<string, unknown> }) => {
               setProcessing(true);
               try {
+                const externalRef = (typeof crypto !== "undefined" && "randomUUID" in crypto)
+                  ? crypto.randomUUID()
+                  : `esm-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
                 const { data, error } = await supabase.functions.invoke("process-mp-payment", {
                   body: {
                     ...formData,
                     transaction_amount: debouncedAmount,
+                    external_reference: externalRef,
                   },
                 });
                 if (error) throw error;
                 const res = data as PaymentResult;
                 setResult(res);
-                setErrorMsg(null);
+                if (res.status === "approved") {
+                  setErrorMsg(null);
+                } else {
+                  setErrorMsg(friendlyError(res.status_detail));
+                }
               } catch (err) {
-                const message = (err as Error).message ?? "No pudimos procesar el pago";
+                const raw = err as { message?: string; context?: { status_detail?: string } };
+                const detail = raw?.context?.status_detail;
+                const message = friendlyError(detail, raw?.message ?? "No pudimos procesar el pago");
                 setErrorMsg(message);
                 setResult({ id: "-", status: "rejected" });
                 toast({
@@ -181,6 +214,7 @@ const Pago = () => {
                 setProcessing(false);
               }
             },
+
             onError: (error: unknown) => {
               console.error("Brick error", error);
             },
@@ -269,7 +303,7 @@ const Pago = () => {
                       Pago {result.status}
                     </h2>
                     <p className="font-body text-muted-foreground text-sm">
-                      {errorMsg ?? result.status_detail ?? "Intentá nuevamente con otra tarjeta."}
+                      {errorMsg ?? friendlyError(result.status_detail)}
                     </p>
                     <Button onClick={reset} variant="outline" className="font-body">
                       Reintentar
