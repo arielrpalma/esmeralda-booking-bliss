@@ -180,18 +180,28 @@ const Pago = () => {
             onSubmit: async ({ formData }: { formData: Record<string, unknown> }) => {
               setProcessing(true);
               try {
+                const externalRef = (typeof crypto !== "undefined" && "randomUUID" in crypto)
+                  ? crypto.randomUUID()
+                  : `esm-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
                 const { data, error } = await supabase.functions.invoke("process-mp-payment", {
                   body: {
                     ...formData,
                     transaction_amount: debouncedAmount,
+                    external_reference: externalRef,
                   },
                 });
                 if (error) throw error;
                 const res = data as PaymentResult;
                 setResult(res);
-                setErrorMsg(null);
+                if (res.status === "approved") {
+                  setErrorMsg(null);
+                } else {
+                  setErrorMsg(friendlyError(res.status_detail));
+                }
               } catch (err) {
-                const message = (err as Error).message ?? "No pudimos procesar el pago";
+                const raw = err as { message?: string; context?: { status_detail?: string } };
+                const detail = raw?.context?.status_detail;
+                const message = friendlyError(detail, raw?.message ?? "No pudimos procesar el pago");
                 setErrorMsg(message);
                 setResult({ id: "-", status: "rejected" });
                 toast({
@@ -204,6 +214,7 @@ const Pago = () => {
                 setProcessing(false);
               }
             },
+
             onError: (error: unknown) => {
               console.error("Brick error", error);
             },
