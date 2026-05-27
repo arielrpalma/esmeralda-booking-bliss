@@ -341,13 +341,16 @@ const Pago = () => {
                   <div className="border-t border-border pt-4 relative">
                     {/* Hide Mercado Pago Brick "Medios de pago" header and tighten its top spacing */}
                     <style>{`
-                      #mp-brick-container h1,
-                      #mp-brick-container h2,
-                      #mp-brick-container h3,
-                      #mp-brick-container [class*="Title"],
-                      #mp-brick-container [class*="title"] { display: none !important; }
-                      #mp-brick-container > div:first-child,
-                      #mp-brick-container form { margin-top: 0 !important; padding-top: 0 !important; }
+                      /* Hide only the top-level "Medios de pago" header of the Brick,
+                         without touching nested labels/inputs (which broke card number
+                         entry on some Android/iOS WebViews). */
+                      #mp-brick-container > div > h1:first-child,
+                      #mp-brick-container > div > h2:first-child,
+                      #mp-brick-container > div > header:first-child { display: none !important; }
+                      #mp-brick-container > div:first-child { margin-top: 0 !important; padding-top: 0 !important; }
+                      /* Ensure inputs inside the Brick remain interactive on mobile */
+                      #mp-brick-container input,
+                      #mp-brick-container iframe { touch-action: manipulation; -webkit-user-select: text; user-select: text; }
                     `}</style>
                     {mountingBrick && (
                       <div className="flex items-center justify-center py-10 text-muted-foreground">
