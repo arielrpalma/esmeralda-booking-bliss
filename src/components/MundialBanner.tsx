@@ -1,43 +1,61 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
-const MundialBanner = () => {
+interface MundialBannerProps {
+  bottomOffset: number;
+  onHeightChange?: (height: number) => void;
+}
+
+const MundialBanner = ({ bottomOffset, onHeightChange }: MundialBannerProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current || !onHeightChange) return;
+    const el = ref.current;
+    const ro = new ResizeObserver(() => {
+      onHeightChange(el.getBoundingClientRect().height);
+    });
+    ro.observe(el);
+    onHeightChange(el.getBoundingClientRect().height);
+    return () => ro.disconnect();
+  }, [onHeightChange]);
+
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.9, delay: 0.8, ease: "easeOut" }}
-      className="w-full max-w-4xl mx-auto"
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      style={{ bottom: bottomOffset }}
+      className="fixed left-0 right-0 z-40 pointer-events-none"
     >
-      <div className="relative backdrop-blur-md bg-section-dark/60 border border-accent/40 rounded-sm px-5 py-4 md:px-8 md:py-5 shadow-2xl">
-        {/* Subtle gold glow */}
-        <div className="absolute inset-0 rounded-sm bg-gradient-to-r from-accent/5 via-transparent to-accent/5 pointer-events-none" />
+      <div className="pointer-events-auto bg-section-dark/95 backdrop-blur-md border-t border-accent/40 shadow-2xl">
+        <div className="container mx-auto px-4 py-2.5 md:py-3 flex items-center justify-center gap-3 md:gap-5">
+          {/* DirecTV Go logo - already transparent */}
+          <img
+            src="/images/directv-go.png"
+            alt="DirecTV Go"
+            className="h-5 md:h-7 w-auto object-contain shrink-0"
+          />
 
-        <div className="relative flex flex-col md:flex-row items-center gap-4 md:gap-6">
-          {/* Logos */}
-          <div className="flex items-center gap-3 md:gap-4 shrink-0">
-            <div className="bg-white rounded-sm px-3 py-2 flex items-center justify-center">
-              <img
-                src="/images/directv-go.png"
-                alt="DirecTV Go"
-                className="h-6 md:h-8 w-auto object-contain"
-              />
-            </div>
-            <div className="bg-white rounded-sm p-1 flex items-center justify-center">
-              <img
-                src="/images/mundial-logo.png"
-                alt="Mundial FIFA 2026"
-                className="h-10 md:h-12 w-auto object-contain"
-              />
-            </div>
-          </div>
-
+          {/* Vertical separator */}
+          <div className="h-6 md:h-8 w-px bg-accent/40 shrink-0" />
 
           {/* Text */}
-          <p className="font-body text-sm md:text-base text-section-dark-foreground text-center md:text-left leading-snug">
+          <p className="font-body text-[11px] md:text-sm text-section-dark-foreground text-center leading-tight">
             Mirá todos los partidos del{" "}
-            <span className="font-display italic text-accent">Mundial</span> a
-            través de streaming en nuestros departamentos
+            <span className="font-display italic text-accent font-semibold">
+              Mundial
+            </span>{" "}
+            por streaming en nuestros departamentos
           </p>
+
+          {/* Mundial trophy - calado, sólo el trofeo dorado */}
+          <img
+            src="/images/mundial-logo.png"
+            alt="Copa Mundial FIFA"
+            className="h-9 md:h-12 w-auto object-contain shrink-0 drop-shadow-[0_0_8px_rgba(212,161,74,0.3)]"
+          />
         </div>
       </div>
     </motion.div>
