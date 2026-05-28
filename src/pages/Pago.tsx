@@ -99,8 +99,11 @@ const Pago = () => {
   const [mountingBrick, setMountingBrick] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState<PaymentResult | null>(null);
+  const [receiptDate, setReceiptDate] = useState<Date | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const brickContainerRef = useRef<HTMLDivElement>(null);
+  // Hidden DOM node rendering the POS-style receipt, captured by html-to-image
+  const receiptRef = useRef<HTMLDivElement>(null);
   // Brick controller used to safely unmount on re-render
   const brickControllerRef = useRef<{ unmount: () => void } | null>(null);
 
