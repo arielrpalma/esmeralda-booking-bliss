@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Loader2, Lock, ShieldCheck, XCircle, MessageCircle } from "lucide-react";
+import { CheckCircle2, Loader2, Lock, ShieldCheck, XCircle, MessageCircle, Download } from "lucide-react";
+import { toPng } from "html-to-image";
+import { PaymentReceipt } from "@/components/PaymentReceipt";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
