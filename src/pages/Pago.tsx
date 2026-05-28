@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Loader2, Lock, ShieldCheck, XCircle, MessageCircle } from "lucide-react";
+import { CheckCircle2, Loader2, Lock, ShieldCheck, XCircle, MessageCircle, Download } from "lucide-react";
+import { toPng } from "html-to-image";
+import { PaymentReceipt } from "@/components/PaymentReceipt";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
@@ -19,6 +21,7 @@ type PaymentResult = {
   status: string;
   status_detail?: string;
   transaction_amount?: number;
+  payment_method_id?: string;
 };
 
 // Allow Argentine-format input with optional 2 decimals (comma decimal separator)
@@ -97,8 +100,11 @@ const Pago = () => {
   const [mountingBrick, setMountingBrick] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState<PaymentResult | null>(null);
+  const [receiptDate, setReceiptDate] = useState<Date | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const brickContainerRef = useRef<HTMLDivElement>(null);
+  // Hidden DOM node rendering the POS-style receipt, captured by html-to-image
+  const receiptRef = useRef<HTMLDivElement>(null);
   // Brick controller used to safely unmount on re-render
   const brickControllerRef = useRef<{ unmount: () => void } | null>(null);
 
@@ -241,13 +247,57 @@ const Pago = () => {
     };
   }, [debouncedAmount, result]);
 
+  // Capture receipt timestamp the moment a payment gets approved
+  useEffect(() => {
+    if (result?.status === "approved" && !receiptDate) {
+      setReceiptDate(new Date());
+    }
+  }, [result, receiptDate]);
+
   const reset = () => {
     setResult(null);
+    setReceiptDate(null);
     setErrorMsg(null);
     setImporte("");
   };
 
+  const downloadReceipt = async () => {
+    if (!receiptRef.current) return null;
+    try {
+      const dataUrl = await toPng(receiptRef.current, {
+        pixelRatio: 2,
+        backgroundColor: "#ffffff",
+        cacheBust: true,
+      });
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = `comprobante-esmeralda-${result?.id ?? "pago"}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return dataUrl;
+    } catch (e) {
+      console.error("download receipt failed", e);
+      toast({
+        title: "No pudimos generar el comprobante",
+        description: "Intentá nuevamente o sacá una captura de pantalla.",
+        variant: "destructive",
+      });
+      return null;
+    }
+  };
+
+  const shareOnWhatsApp = async () => {
+    await downloadReceipt();
+    const text = `Hola! Adjunto comprobante de pago Esmeralda Apart.\nOperación: #${result?.id}\nImporte: $${formatARSNumber(
+      Number(result?.transaction_amount ?? importeNum),
+    )}\nEstado: aprobado`;
+    window.open(`https://wa.me/5493472433334?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+  };
+
   const approved = result?.status === "approved";
+
+
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -285,16 +335,41 @@ const Pago = () => {
                     <p className="font-body text-muted-foreground text-sm">
                       Operación #{result.id} por ${formatARSNumber(Number(result.transaction_amount ?? importeNum))}
                     </p>
-                    <a
-                      href={`https://wa.me/5493472433334?text=${encodeURIComponent(
-                        `Hola! Adjunto comprobante de pago Esmeralda Apart.\nOperación: #${result.id}\nImporte: $${formatARSNumber(Number(result.transaction_amount ?? importeNum))}\nEstado: aprobado`,
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-12 px-4 sm:px-6 rounded-sm bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity"
-                    >
-                      <MessageCircle size={16} /> Compartir comprobante por WhatsApp
-                    </a>
+
+                    {/* Visible preview of the POS-style receipt */}
+                    {receiptDate && (
+                      <div className="flex justify-center pt-2">
+                        <div className="origin-top scale-90 sm:scale-100">
+                          <PaymentReceipt
+                            ref={receiptRef}
+                            operationId={result.id}
+                            amount={Number(result.transaction_amount ?? importeNum)}
+                            paymentMethodId={result.payment_method_id}
+                            date={receiptDate}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                      <button
+                        type="button"
+                        onClick={downloadReceipt}
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-12 px-4 sm:px-6 rounded-sm border border-primary text-primary font-body text-sm hover:bg-primary/5 transition-colors"
+                      >
+                        <Download size={16} /> Descargar comprobante
+                      </button>
+                      <button
+                        type="button"
+                        onClick={shareOnWhatsApp}
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-12 px-4 sm:px-6 rounded-sm bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity"
+                      >
+                        <MessageCircle size={16} /> Enviar por WhatsApp
+                      </button>
+                    </div>
+                    <p className="text-xs text-muted-foreground font-body pt-1">
+                      Al tocar “Enviar por WhatsApp” se descarga el comprobante y se abre el chat para que lo adjuntes.
+                    </p>
                   </>
                 ) : (
                   <>
