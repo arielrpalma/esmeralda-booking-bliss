@@ -48,6 +48,13 @@ const HeroSection = () => {
           </motion.div>
         </div>
 
+        {/* Mundial streaming banner */}
+        <div className="absolute bottom-24 left-0 right-0 px-6 z-20">
+          <MundialBanner />
+        </div>
+
+
+
         <motion.a
           href="#departamentos"
           className="absolute bottom-10 left-1/2 -translate-x-1/2 text-section-dark-foreground/60 hover:text-section-dark-foreground transition-colors"
