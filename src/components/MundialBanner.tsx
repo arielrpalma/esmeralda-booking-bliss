@@ -30,7 +30,7 @@ const MundialBanner = ({ bottomOffset, onHeightChange }: MundialBannerProps) => 
       className="fixed left-0 right-0 z-40 pointer-events-none"
     >
       <div className="pointer-events-auto bg-section-dark/95 backdrop-blur-md border-t border-accent/40 shadow-2xl">
-        <div className="container mx-auto px-4 py-3 md:py-5 flex items-center justify-center gap-3 md:gap-5">
+        <div className="container mx-auto px-4 py-2 md:py-3 flex items-center justify-center gap-2 md:gap-3">
           {/* DirecTV Go logo - already transparent */}
           <img
             src="/images/directv-go.png"
@@ -39,7 +39,7 @@ const MundialBanner = ({ bottomOffset, onHeightChange }: MundialBannerProps) => 
           />
 
           {/* Vertical separator */}
-          <div className="h-10 md:h-14 w-px bg-accent/40 shrink-0" />
+          <div className="h-7 md:h-9 w-px bg-accent/40 shrink-0" />
 
           {/* Text */}
           <p className="font-body text-[11px] md:text-sm text-section-dark-foreground text-center leading-tight">
