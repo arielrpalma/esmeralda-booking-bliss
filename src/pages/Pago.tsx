@@ -21,6 +21,7 @@ type PaymentResult = {
   status: string;
   status_detail?: string;
   transaction_amount?: number;
+  payment_method_id?: string;
 };
 
 // Allow Argentine-format input with optional 2 decimals (comma decimal separator)
