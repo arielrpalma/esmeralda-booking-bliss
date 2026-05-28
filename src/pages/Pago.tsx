@@ -296,7 +296,7 @@ const Pago = () => {
 
   const approved = result?.status === "approved";
 
-  const approved = result?.status === "approved";
+
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
