@@ -35,7 +35,7 @@ const MundialBanner = ({ bottomOffset, onHeightChange }: MundialBannerProps) => 
           <img
             src="/images/directv-go.png"
             alt="DirecTV Go"
-            className="h-7 md:h-10 w-auto object-contain shrink-0 drop-shadow-[0_0_10px_rgba(255,255,255,0.25)]"
+            className="h-14 md:h-20 w-auto object-contain shrink-0 drop-shadow-[0_0_12px_rgba(255,255,255,0.35)]"
           />
 
           {/* Vertical separator */}
