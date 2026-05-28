@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import MundialBanner from "./MundialBanner";
 
 const HeroSection = () => {
   return (
