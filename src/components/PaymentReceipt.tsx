@@ -56,11 +56,8 @@ export const PaymentReceipt = forwardRef<HTMLDivElement, PaymentReceiptProps>(
             "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
           fontSize: 13,
           lineHeight: 1.45,
-          padding: "20px 18px 22px",
-          // Zig-zag torn-paper effect top & bottom
-          WebkitMask:
-            "radial-gradient(circle at 6px 6px, transparent 5px, #000 6px) repeat-x top left / 12px 12px, radial-gradient(circle at 6px 6px, transparent 5px, #000 6px) repeat-x bottom left / 12px 12px, linear-gradient(#000, #000) no-repeat 0 6px / 100% calc(100% - 12px)",
-          mask: "radial-gradient(circle at 6px 6px, transparent 5px, #000 6px) repeat-x top left / 12px 12px, radial-gradient(circle at 6px 6px, transparent 5px, #000 6px) repeat-x bottom left / 12px 12px, linear-gradient(#000, #000) no-repeat 0 6px / 100% calc(100% - 12px)",
+          padding: "22px 18px 24px",
+          border: "1px dashed #cfcfcf",
         }}
       >
         <div style={{ textAlign: "center", fontWeight: 700, fontSize: 12, letterSpacing: 0.5 }}>
