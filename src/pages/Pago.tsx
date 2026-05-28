@@ -246,11 +246,55 @@ const Pago = () => {
     };
   }, [debouncedAmount, result]);
 
+  // Capture receipt timestamp the moment a payment gets approved
+  useEffect(() => {
+    if (result?.status === "approved" && !receiptDate) {
+      setReceiptDate(new Date());
+    }
+  }, [result, receiptDate]);
+
   const reset = () => {
     setResult(null);
+    setReceiptDate(null);
     setErrorMsg(null);
     setImporte("");
   };
+
+  const downloadReceipt = async () => {
+    if (!receiptRef.current) return null;
+    try {
+      const dataUrl = await toPng(receiptRef.current, {
+        pixelRatio: 2,
+        backgroundColor: "#ffffff",
+        cacheBust: true,
+      });
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = `comprobante-esmeralda-${result?.id ?? "pago"}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return dataUrl;
+    } catch (e) {
+      console.error("download receipt failed", e);
+      toast({
+        title: "No pudimos generar el comprobante",
+        description: "Intentá nuevamente o sacá una captura de pantalla.",
+        variant: "destructive",
+      });
+      return null;
+    }
+  };
+
+  const shareOnWhatsApp = async () => {
+    await downloadReceipt();
+    const text = `Hola! Adjunto comprobante de pago Esmeralda Apart.\nOperación: #${result?.id}\nImporte: $${formatARSNumber(
+      Number(result?.transaction_amount ?? importeNum),
+    )}\nEstado: aprobado`;
+    window.open(`https://wa.me/5493472433334?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+  };
+
+  const approved = result?.status === "approved";
 
   const approved = result?.status === "approved";
 
