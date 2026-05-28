@@ -47,10 +47,7 @@ const HeroSection = () => {
           </motion.div>
         </div>
 
-        {/* Mundial streaming banner */}
-        <div className="absolute bottom-24 left-0 right-0 px-6 z-20">
-          <MundialBanner />
-        </div>
+
 
 
 
