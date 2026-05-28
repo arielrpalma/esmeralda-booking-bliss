@@ -334,16 +334,41 @@ const Pago = () => {
                     <p className="font-body text-muted-foreground text-sm">
                       Operación #{result.id} por ${formatARSNumber(Number(result.transaction_amount ?? importeNum))}
                     </p>
-                    <a
-                      href={`https://wa.me/5493472433334?text=${encodeURIComponent(
-                        `Hola! Adjunto comprobante de pago Esmeralda Apart.\nOperación: #${result.id}\nImporte: $${formatARSNumber(Number(result.transaction_amount ?? importeNum))}\nEstado: aprobado`,
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-12 px-4 sm:px-6 rounded-sm bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity"
-                    >
-                      <MessageCircle size={16} /> Compartir comprobante por WhatsApp
-                    </a>
+
+                    {/* Visible preview of the POS-style receipt */}
+                    {receiptDate && (
+                      <div className="flex justify-center pt-2">
+                        <div className="origin-top scale-90 sm:scale-100">
+                          <PaymentReceipt
+                            ref={receiptRef}
+                            operationId={result.id}
+                            amount={Number(result.transaction_amount ?? importeNum)}
+                            paymentMethodId={result.payment_method_id}
+                            date={receiptDate}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                      <button
+                        type="button"
+                        onClick={downloadReceipt}
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-12 px-4 sm:px-6 rounded-sm border border-primary text-primary font-body text-sm hover:bg-primary/5 transition-colors"
+                      >
+                        <Download size={16} /> Descargar comprobante
+                      </button>
+                      <button
+                        type="button"
+                        onClick={shareOnWhatsApp}
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-12 px-4 sm:px-6 rounded-sm bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity"
+                      >
+                        <MessageCircle size={16} /> Enviar por WhatsApp
+                      </button>
+                    </div>
+                    <p className="text-xs text-muted-foreground font-body pt-1">
+                      Al tocar “Enviar por WhatsApp” se descarga el comprobante y se abre el chat para que lo adjuntes.
+                    </p>
                   </>
                 ) : (
                   <>
