@@ -59,12 +59,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 pt-8 border-t border-section-dark-foreground/10 flex flex-col items-center gap-3">
-          <div className="flex items-center gap-2 text-section-dark-foreground/40">
-            <span className="font-body text-[10px] tracking-[0.2em] uppercase">Powered by</span>
-            <svg width="80" height="14" viewBox="0 0 80 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Mercado Pago">
-              <text x="0" y="11" fill="currentColor" fontSize="11" fontFamily="Arial, Helvetica, sans-serif" fontWeight="700" letterSpacing="-0.3">mercado pago</text>
-            </svg>
-          </div>
+
           <p className="font-body text-xs text-section-dark-foreground/40">
             © {new Date().getFullYear()} Esmeralda Desarrollos. Todos los derechos reservados.
           </p>
