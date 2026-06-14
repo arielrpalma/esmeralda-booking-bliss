@@ -223,7 +223,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
         <span className="text-sm font-semibold text-foreground">1</span>
       </div>
       <div className="border-t border-border" />
-      <CounterRow label="Adultos" sublabel="+15 años" value={adults} onDecrement={() => adults > 1 && setAdults(adults - 1)} onIncrement={() => canAddMore && setAdults(adults + 1)} min={1} />
+      <CounterRow label="Adultos" sublabel="+4 años" value={adults} onDecrement={() => adults > 1 && setAdults(adults - 1)} onIncrement={() => canAddMore && setAdults(adults + 1)} min={1} />
       <CounterRow label="Menores" sublabel="3-14 años" value={children} onDecrement={() => children > 0 && setChildren(children - 1)} onIncrement={() => canAddMore && setChildren(children + 1)} min={0} />
       <CounterRow label="Bebés" sublabel="< 2 años" value={babies} onDecrement={() => babies > 0 && setBabies(babies - 1)} onIncrement={() => canAddMore && setBabies(babies + 1)} min={0} />
       <div className="flex justify-end pt-2 border-t border-border">
