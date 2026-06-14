@@ -38,7 +38,7 @@ interface AvailabilityResult {
   after?: Suggestion[];
 }
 
-// --- Helpers ---
+// --- CounterRow sublabel updates moved inline ---
 
 const safeDateFormat = (dateStr: string, fmt: string) => {
   if (!dateStr) return "—";
