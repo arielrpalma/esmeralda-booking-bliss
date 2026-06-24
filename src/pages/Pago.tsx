@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { CheckCircle2, Loader2, Lock, ShieldCheck, XCircle, MessageCircle, Download } from "lucide-react";
 import { toPng } from "html-to-image";
 import { PaymentReceipt } from "@/components/PaymentReceipt";
@@ -301,6 +302,13 @@ const Pago = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <Helmet>
+        <title>Pago seguro | Esmeralda Apart</title>
+        <meta name="description" content="Realizá tu pago de forma segura con tarjeta para tu reserva en Esmeralda Apart." />
+        <meta name="robots" content="noindex" />
+        <link rel="canonical" href="https://esmeraldaapart.com.ar/posnet" />
+        <meta property="og:url" content="https://esmeraldaapart.com.ar/posnet" />
+      </Helmet>
       <Navbar />
       <main className="flex-1 py-16 sm:py-24 md:py-32">
         <div className="container mx-auto px-4 sm:px-6">

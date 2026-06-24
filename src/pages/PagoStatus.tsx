@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { CheckCircle, Clock, XCircle, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 type Status = "success" | "pending" | "failure";
 
@@ -34,7 +35,14 @@ const PagoStatus = ({ status }: Props) => {
 
   return (
     <div className="min-h-screen relative flex flex-col items-center justify-center px-6 py-16 overflow-hidden">
-      <div
+      <Helmet>
+        <title>{title} | Esmeralda Apart</title>
+        <meta name="description" content={message} />
+        <meta name="robots" content="noindex" />
+        <link rel="canonical" href={`https://esmeraldaapart.com.ar/pago/${status}`} />
+        <meta property="og:url" content={`https://esmeraldaapart.com.ar/pago/${status}`} />
+        <meta property="og:title" content={`${title} | Esmeralda Apart`} />
+      </Helmet>
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/images/hero.jpg')" }}
       />
