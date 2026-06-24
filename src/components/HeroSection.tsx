@@ -4,9 +4,14 @@ import { ChevronDown } from "lucide-react";
 const HeroSection = () => {
   return (
     <section id="hero" className="relative min-h-screen overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/hero.jpg')" }}
+      <img
+        src="/images/hero.jpg"
+        srcSet="/images/hero-mobile.jpg 800w, /images/hero.jpg 1800w"
+        sizes="(max-width: 768px) 100vw, 1800px"
+        alt=""
+        aria-hidden="true"
+        fetchPriority="high"
+        className="absolute inset-0 w-full h-full object-cover"
       />
       <div
         className="absolute inset-0"
