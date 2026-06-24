@@ -32,6 +32,7 @@ const Index = () => {
       <FeaturesSection />
       <AmenitiesSection />
       <GallerySection />
+      <FaqSection />
       <Footer />
       <MundialBanner bottomOffset={barHeight} onHeightChange={handleMundialHeight} />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
