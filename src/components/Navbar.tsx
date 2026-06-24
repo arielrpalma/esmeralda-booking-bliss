@@ -13,10 +13,11 @@ const Navbar = () => {
   }, []);
 
   const links = [
-    { label: "Inicio", href: "#hero" },
-    { label: "Departamentos", href: "#departamentos" },
-    { label: "Servicios", href: "#servicios" },
-    { label: "Galería", href: "#galeria" },
+    { label: "Inicio", href: "/#hero" },
+    { label: "Departamentos", href: "/#departamentos" },
+    { label: "Servicios", href: "/#servicios" },
+    { label: "Galería", href: "/#galeria" },
+    { label: "Blog", href: "/blog" },
   ];
 
   return (
