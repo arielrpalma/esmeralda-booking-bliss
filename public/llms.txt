@@ -1,0 +1,13 @@
+# Esmeralda Apart
+
+> Departamentos temporarios de lujo en el centro de Marcos Juárez, Córdoba, Argentina. Diseño moderno, totalmente equipados, con la mejor ubicación para estadías cortas o prolongadas.
+
+Esmeralda Apart ofrece alojamiento de alta gama en Marcos Juárez. Las reservas se realizan a través de una barra inferior fija con verificación de disponibilidad en tiempo real conectada a Airbnb.
+
+## Pages
+
+- [Inicio](/): Información del complejo, departamentos, servicios, galería y reservas.
+
+## Optional
+
+- [Gracias](/gracias): Página de agradecimiento posterior a una reserva.

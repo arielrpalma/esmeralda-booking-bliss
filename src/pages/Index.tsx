@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -18,6 +19,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
+      <Helmet>
+        <title>Esmeralda Apart | Departamentos de lujo en Marcos Juárez</title>
+        <meta name="description" content="Departamentos temporarios de lujo totalmente equipados en el centro de Marcos Juárez, Córdoba. Reservá online con disponibilidad en tiempo real." />
+        <link rel="canonical" href="https://esmeraldaapart.com.ar/" />
+        <meta property="og:url" content="https://esmeraldaapart.com.ar/" />
+      </Helmet>
       <Navbar />
       <HeroSection />
       <AboutSection />

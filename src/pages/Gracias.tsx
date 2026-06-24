@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { CheckCircle, ArrowLeft, Instagram, Facebook, Phone } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 const Gracias = () => {
   const navigate = useNavigate();
@@ -23,6 +24,14 @@ const Gracias = () => {
 
   return (
     <div className="min-h-screen relative flex flex-col items-center justify-center px-6 py-16 overflow-hidden">
+      <Helmet>
+        <title>¡Gracias por tu reserva! | Esmeralda Apart</title>
+        <meta name="description" content="Confirmamos la recepción de tu solicitud de reserva en Esmeralda Apart. Te contactaremos a la brevedad." />
+        <meta name="robots" content="noindex" />
+        <link rel="canonical" href="https://esmeraldaapart.com.ar/gracias" />
+        <meta property="og:url" content="https://esmeraldaapart.com.ar/gracias" />
+        <meta property="og:title" content="¡Gracias por tu reserva! | Esmeralda Apart" />
+      </Helmet>
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center"

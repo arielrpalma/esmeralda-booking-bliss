@@ -346,7 +346,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                         className={cn("bg-primary text-primary-foreground rounded-lg font-body font-semibold hover:bg-primary/90 transition-all shadow-md", isMobile ? "px-3 py-1.5 text-xs" : "px-5 py-2 text-sm")}>
                         Reservar ahora
                       </button>
-                      <button onClick={dismissResult} className="p-1 rounded-full hover:bg-muted transition-colors">
+                      <button onClick={dismissResult} aria-label="Cerrar resultado de disponibilidad" className="p-1 rounded-full hover:bg-muted transition-colors">
                         <X size={14} className="text-muted-foreground" />
                       </button>
                     </div>
@@ -382,7 +382,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                         </span>
                       </div>
                     </div>
-                    <button onClick={dismissResult} className="p-1 rounded-full hover:bg-muted transition-colors shrink-0">
+                    <button onClick={dismissResult} aria-label="Cerrar mensaje de no disponibilidad" className="p-1 rounded-full hover:bg-muted transition-colors shrink-0">
                       <X size={14} className="text-muted-foreground" />
                     </button>
                   </div>
