@@ -6,6 +6,71 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://esmeraldaapart.com.ar/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/blog/donde-alojarse-en-marcos-juarez-guia-completa</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/blog/mejores-opciones-de-alojamiento-en-marcos-juarez</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/blog/departamentos-por-dia-vs-hotel-en-marcos-juarez</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/blog/alojamiento-para-empresas-en-marcos-juarez</loc>
+    <lastmod>2026-06-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/blog/alquiler-temporario-economico-en-marcos-juarez</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/blog/que-hacer-en-marcos-juarez</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/blog/donde-dormir-barato-en-marcos-juarez</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/blog/departamentos-amoblados-en-marcos-juarez</loc>
+    <lastmod>2026-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/blog/guia-para-viajeros-en-marcos-juarez-cordoba</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/blog/alojamiento-con-cochera-en-marcos-juarez</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://esmeraldaapart.com.ar/gracias</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

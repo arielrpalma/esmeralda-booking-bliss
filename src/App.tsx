@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import Gracias from "./pages/Gracias";
 import Pago from "./pages/Pago";
 import PagoStatus from "./pages/PagoStatus";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +26,8 @@ const App = () => (
           <Route path="/pago/success" element={<PagoStatus status="success" />} />
           <Route path="/pago/pending" element={<PagoStatus status="pending" />} />
           <Route path="/pago/failure" element={<PagoStatus status="failure" />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

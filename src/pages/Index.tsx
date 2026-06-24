@@ -6,6 +6,7 @@ import AboutSection from "@/components/AboutSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import AmenitiesSection from "@/components/AmenitiesSection";
 import GallerySection from "@/components/GallerySection";
+import FaqSection from "@/components/FaqSection";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import MundialBanner from "@/components/MundialBanner";
 import Footer from "@/components/Footer";
@@ -20,8 +21,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       <Helmet>
-        <title>Esmeralda Apart | Departamentos de lujo en Marcos Juárez</title>
-        <meta name="description" content="Departamentos temporarios de lujo totalmente equipados en el centro de Marcos Juárez, Córdoba. Reservá online con disponibilidad en tiempo real." />
+        <title>Alquiler temporario en Marcos Juárez | Esmeralda Apart</title>
+        <meta name="description" content="Departamentos por día totalmente equipados en el centro de Marcos Juárez, Córdoba. WiFi, Smart TV, cocina, cochera y factura. Reservá directo y pagá menos." />
         <link rel="canonical" href="https://esmeraldaapart.com.ar/" />
         <meta property="og:url" content="https://esmeraldaapart.com.ar/" />
       </Helmet>
@@ -31,6 +32,7 @@ const Index = () => {
       <FeaturesSection />
       <AmenitiesSection />
       <GallerySection />
+      <FaqSection />
       <Footer />
       <MundialBanner bottomOffset={barHeight} onHeightChange={handleMundialHeight} />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
