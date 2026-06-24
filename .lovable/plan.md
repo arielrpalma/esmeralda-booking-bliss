@@ -1,61 +1,52 @@
 ## Objetivo
-Cuando un pago en `/posnet` se aprueba, generar un comprobante visual con el formato de un ticket térmico de Posnet, permitiendo al usuario **descargarlo como PNG** en su celular y **compartirlo por WhatsApp** (descarga automática + apertura del chat con texto).
 
-## Cambios
+Maximizar el alcance en Google con cambios mínimos en la home actual, más conexión a Google Search Console.
 
-### 1. `src/components/PaymentReceipt.tsx` (nuevo)
-Componente React que renderiza el ticket con el look & feel de un comprobante térmico de Posnet:
+## 1. SEO on-page sin tocar el diseño
 
-- Ancho fijo angosto (~340px) sobre fondo blanco, fuente monoespaciada (`font-mono`).
-- Encabezado centrado:
-  - **ESMERALDA DESARROLLOS INMOBILIARIOS S.R.L.**
-  - 9 de Julio 262 — Marcos Juárez
-  - CUIT 30-71546692-5
-- Separador de guiones (`-----------------------`).
-- Bloque de transacción: fecha y hora (dd/mm/aaaa hh:mm, hora Argentina), N° operación, método de pago (Mercado Pago + `payment_method_id`), cuotas si aplica.
-- Importe en grande, centrado: `$ 12.345,67`.
-- Estado: **APROBADO** en negrita.
-- Footer: "Gracias por su pago" + leyenda "Comprobante no válido como factura".
-- Bordes festoneados arriba y abajo (efecto ticket recortado) con CSS (`mask-image` o pseudo-elementos triangulares).
+- **FAQ con schema en la home**: nueva sección `FaqSection` al final (antes del footer), con 8 preguntas frecuentes orientadas a keywords locales (cochera, factura, mascotas, check-in, mejor precio sin comisión, mascotas, niños, cancelación). Inyecta `FAQPage` JSON-LD vía Helmet → habilita rich snippets en Google.
+- **Reescritura ligera de copys existentes** en `AboutSection`, `AmenitiesSection`, `BookingSection` para incluir naturalmente "alquiler temporario en Marcos Juárez", "departamentos por día", "apart hotel Marcos Juárez", "alojamiento en Marcos Juárez Córdoba". Mismo layout, mismas imágenes.
+- **`alt` de imágenes** enriquecido con keywords descriptivas.
+- **Meta description e índice** revisados en `index.html` para apuntar a las keywords principales.
 
-El ticket vive oculto fuera de viewport (`position: absolute; left: -9999px`) para que `html-to-image` pueda capturarlo a alta resolución.
+## 2. Blog estático con 10 artículos SEO
 
-### 2. `src/pages/Pago.tsx`
-En la vista de éxito (`approved === true`):
+Lo más rentable para alcance: contenido nuevo indexable sin tocar la home.
 
-- Renderizar `<PaymentReceipt ref={receiptRef} ... />` oculto.
-- Reemplazar el bloque actual de éxito por:
-  - Ícono ✓ y título "¡Pago aprobado!" (se mantiene).
-  - Vista previa miniatura del ticket (escalada al 70%, visible en pantalla, con sombra suave).
-  - Botón **"Descargar comprobante"** (icon `Download`) → genera PNG con `html-to-image` y dispara descarga `comprobante-<id>.png`.
-  - Botón **"Enviar por WhatsApp"** (se mantiene) → primero descarga el PNG automáticamente, luego abre `wa.me/...` con el texto actual + nota "Adjuntá la imagen recién descargada".
-- Helper `downloadReceipt()` reutilizable por ambos botones.
+- Nuevas rutas `/blog` (índice) y `/blog/:slug` (post individual), con Helmet por ruta (`title`, `description`, `canonical`, `og:url`, JSON-LD `Article` + `BreadcrumbList`).
+- 10 posts en `src/content/posts.ts` (≥800 palabras, español argentino) con los títulos del brief original. Cada post enlaza internamente a `/` y cierra con CTA "Reservá ahora" / WhatsApp.
+- Link "Blog" en el Navbar.
 
-### 3. Dependencia
-Instalar `html-to-image` (~15 KB gzip, sin canvas nativo, compatible con iOS Safari).
+## 3. SEO técnico
 
-## Detalles técnicos
+- Regenero `public/sitemap.xml` con `/`, `/blog`, y cada `/blog/:slug`.
+- `robots.txt` con la línea `Sitemap: https://esmeraldaapart.com.ar/sitemap.xml`.
+- Aprovecho `react-helmet-async` que ya está montado.
 
-**Datos disponibles tras aprobación** (ya devueltos por `process-mp-payment`):
-- `id`, `status`, `transaction_amount`, `payment_method_id`, `external_reference`.
+## 4. Google Search Console (asistido)
 
-**Fecha y hora**: generadas en el cliente al recibir la respuesta, formateadas con `Intl.DateTimeFormat('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })`.
+Conectar GSC requiere tu autorización OAuth (no puedo hacerlo solo). El flujo será:
 
-**Cuotas / tarjeta**: el endpoint actual no devuelve `installments` ni los últimos 4 dígitos. Se omiten en esta iteración (el usuario eligió mostrar comercio + CUIT + dirección; cuotas/tarjeta no fueron seleccionadas). Si más adelante se quieren incluir, habrá que extender la respuesta del edge function `process-mp-payment` agregando `installments` y `card.last_four_digits` desde `mpData`.
+1. Disparar el conector de Google Search Console — verás un botón "Conectar" en el chat para autorizar con tu cuenta de Google.
+2. Solicitar un token de verificación META a Google y agregarlo como `<meta name="google-site-verification">` en `index.html`.
+3. **Publicar el sitio** (paso tuyo) para que el meta tag quede en el HTML servido.
+4. Llamar a Google para verificar la propiedad de `https://esmeraldaapart.com.ar/`.
+5. Dar de alta el sitio en Search Console y enviar el sitemap `https://esmeraldaapart.com.ar/sitemap.xml`.
+6. Inspeccionar la URL principal para confirmar indexación.
 
-**Render PNG**:
-```ts
-import { toPng } from 'html-to-image';
-const dataUrl = await toPng(receiptRef.current, { pixelRatio: 2, backgroundColor: '#ffffff' });
-const a = document.createElement('a');
-a.href = dataUrl;
-a.download = `comprobante-${result.id}.png`;
-a.click();
-```
+A partir de ahí podés ver impresiones, clics, queries y errores directamente desde GSC, y pedirme inspeccionar URLs o resubir el sitemap cuando agregues posts.
 
-**Flujo WhatsApp**: `await downloadReceipt()` → `window.open(wa.me URL, '_blank')`. En mobile el archivo queda en Descargas y el usuario lo adjunta manualmente en el chat (limitación conocida de wa.me, no permite adjuntos automáticos).
+## Entregable extra
+
+Documento `/mnt/documents/esmeralda-apart-marketing.md` con: 10 títulos extra de blog, 10 ideas para redes, 5 Google Ads, 5 Meta Ads, FAQ ampliadas. Para usar fuera del sitio.
 
 ## Fuera de alcance
-- Generar PDF (el usuario eligió PNG).
-- Adjuntar el archivo automáticamente al chat de WhatsApp (no es posible vía wa.me).
-- Cambios en el edge function de pago.
+
+- Páginas separadas /departamentos /ubicacion /servicios (su contenido ya vive en la home).
+- Cambios de diseño del Hero, barra de reservas, WhatsApp, /gracias, /pago.
+- Backend o panel admin para posts (se editan en `src/content/posts.ts`).
+
+## Notas
+
+- Tras publicar, Google tarda días/semanas en indexar; el sitemap + GSC aceleran el proceso.
+- Para que la verificación META funcione, hay que publicar **después** de agregar el meta tag y **antes** de pedir verify.
