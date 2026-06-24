@@ -99,7 +99,7 @@ const Gracias = () => {
             </a>
           </div>
 
-          <p className="text-xs font-body text-section-dark-foreground/40">
+          <p className="text-xs font-body text-section-dark-foreground/70">
             Volviendo al inicio en {countdown}s…
           </p>
 

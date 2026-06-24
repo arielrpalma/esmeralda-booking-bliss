@@ -60,7 +60,7 @@ const Footer = () => {
 
         <div className="mt-12 pt-8 border-t border-section-dark-foreground/10 flex flex-col items-center gap-3">
 
-          <p className="font-body text-xs text-section-dark-foreground/40">
+          <p className="font-body text-xs text-section-dark-foreground/70">
             © {new Date().getFullYear()} Esmeralda Desarrollos. Todos los derechos reservados.
           </p>
         </div>
