@@ -6,6 +6,7 @@ import AboutSection from "@/components/AboutSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import AmenitiesSection from "@/components/AmenitiesSection";
 import GallerySection from "@/components/GallerySection";
+import FaqSection from "@/components/FaqSection";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import MundialBanner from "@/components/MundialBanner";
 import Footer from "@/components/Footer";
