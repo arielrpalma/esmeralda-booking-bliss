@@ -43,6 +43,7 @@ const PagoStatus = ({ status }: Props) => {
         <meta property="og:url" content={`https://esmeraldaapart.com.ar/pago/${status}`} />
         <meta property="og:title" content={`${title} | Esmeralda Apart`} />
       </Helmet>
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/images/hero.jpg')" }}
       />
