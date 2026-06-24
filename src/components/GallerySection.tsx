@@ -66,6 +66,7 @@ const GallerySection = () => {
           <button
             onClick={() => setLightbox(null)}
             className="absolute top-6 right-6 text-section-dark-foreground/80 hover:text-section-dark-foreground transition-colors"
+            aria-label="Cerrar galería"
           >
             <X size={32} />
           </button>

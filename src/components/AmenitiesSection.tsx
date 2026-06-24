@@ -60,9 +60,9 @@ const AmenitiesSection = () => {
                     <a.icon className="text-primary" size={20} />
                   </div>
                   <div>
-                    <h4 className="font-display font-semibold text-foreground mb-2">
+                    <h3 className="font-display font-semibold text-foreground mb-2">
                       {a.title}
-                    </h4>
+                    </h3>
                     <p className="font-body text-sm text-muted-foreground leading-relaxed">
                       {a.items.join(" · ")}
                     </p>

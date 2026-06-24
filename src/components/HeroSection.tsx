@@ -25,6 +25,7 @@ const HeroSection = () => {
             <div className="w-20 h-[2px] bg-primary mb-8 mx-auto md:mx-0" />
             <h1 className="text-5xl md:text-7xl font-display font-semibold text-section-dark-foreground leading-tight mb-6">
               Esmeralda <span className="italic font-light">Apart</span>
+              <span className="sr-only"> — Departamentos temporarios de lujo en Marcos Juárez</span>
             </h1>
             <p className="text-lg md:text-xl font-body font-light text-section-dark-foreground/85 tracking-wide mb-6">
               Lujo, diseño y confort en cada detalle
@@ -53,6 +54,7 @@ const HeroSection = () => {
 
         <motion.a
           href="#departamentos"
+          aria-label="Bajar a la sección de departamentos"
           className="absolute bottom-10 left-1/2 -translate-x-1/2 text-section-dark-foreground/60 hover:text-section-dark-foreground transition-colors"
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
