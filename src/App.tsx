@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import Gracias from "./pages/Gracias";
 import Pago from "./pages/Pago";
 import PagoStatus from "./pages/PagoStatus";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
