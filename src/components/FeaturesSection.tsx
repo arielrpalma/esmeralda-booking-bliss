@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { trackViewSection } from "@/lib/analytics";
 import { Gem, Sparkles, AirVent } from "lucide-react";
 
 const features = [
@@ -29,6 +30,11 @@ const features = [
 const FeaturesSection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    if (inView) trackViewSection("features");
+  }, [inView]);
+
 
   return (
     <section id="servicios" className="py-24 md:py-32 bg-section-dark">
