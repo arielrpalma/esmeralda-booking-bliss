@@ -12,15 +12,31 @@ const Blog = () => {
   const [barHeight, setBarHeight] = useState(0);
   const handleHeightChange = useCallback((h: number) => setBarHeight(h), []);
 
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: posts.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `https://esmeraldaapart.com.ar/blog/${p.slug}`,
+      name: p.title,
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-background pb-24">
       <Helmet>
-        <title>Blog | Esmeralda Apart — Alquiler temporario en Marcos Juárez</title>
-        <meta name="description" content="Consejos, guías y novedades sobre alquiler temporario y alojamiento en Marcos Juárez, Córdoba. Aprendé a elegir, ahorrar y disfrutar tu estadía." />
+        <title>Blog · Alquiler temporario en Marcos Juárez | Esmeralda Apart</title>
+        <meta name="description" content="Guías y consejos sobre alquiler temporario en Marcos Juárez: zonas, precios, viajantes, mascotas y reservas directas sin comisiones." />
         <link rel="canonical" href="https://esmeraldaapart.com.ar/blog" />
-        <meta property="og:title" content="Blog | Esmeralda Apart" />
+        <meta property="og:title" content="Blog · Esmeralda Apart" />
+        <meta property="og:description" content="Guías y consejos sobre alquiler temporario en Marcos Juárez, Córdoba." />
         <meta property="og:url" content="https://esmeraldaapart.com.ar/blog" />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://esmeraldaapart.com.ar/images/hero.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://esmeraldaapart.com.ar/images/hero.jpg" />
+        <script type="application/ld+json">{JSON.stringify(itemListJsonLd)}</script>
       </Helmet>
 
       <Navbar />
