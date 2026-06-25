@@ -5,7 +5,7 @@ const steps = [
   { icon: CalendarCheck, title: "Reservás", text: "Online en menos de 2 minutos." },
   { icon: KeyRound, title: "Recibís tu código", text: "Te llega por WhatsApp y email." },
   { icon: Clock, title: "Llegás cuando quieras", text: "Sin esperas. 24 horas, todos los días." },
-  { icon: DoorOpen, title: "Abrís el portón", text: "Acceso electrónico simple y seguro." },
+  { icon: DoorOpen, title: "Abrís la Puerta Principal", text: "Acceso electrónico simple y seguro." },
   { icon: Home, title: "Ingresás al depto", text: "Todo listo: WiFi, cocina, ropa de cama." },
   { icon: Sparkles, title: "Disfrutás", text: "Tu estadía, a tu ritmo. Sin recepción." },
 ];

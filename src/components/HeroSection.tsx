@@ -50,7 +50,7 @@ const HeroSection = () => {
             <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-8">
               <Badge icon={Clock} text="24 horas" />
               <Badge icon={KeyRound} text="Acceso electrónico" />
-              <Badge icon={MapPin} text="A min. de Ruta 9" />
+              <Badge icon={MapPin} text="A min. de Au Ruta9" />
             </div>
 
             {/* CTAs */}

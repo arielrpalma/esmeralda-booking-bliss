@@ -10,7 +10,7 @@ const faqs = [
   },
   {
     q: "¿Los departamentos en Marcos Juárez incluyen cochera?",
-    a: "Sí. Todas las unidades de Esmeralda Apart cuentan con cochera privada incluida, sin costo adicional. Ideal para viajantes con auto y familias que viajan cargadas.",
+    a: "Sí, contamos con cocheras privadas previa coordinación y sujetas a disponibilidad. Además, estacionar frente al Apart también es muy seguro, por lo que siempre vas a tener una opción cómoda para dejar tu auto.",
   },
   {
     q: "¿Emiten factura para empresas o viajantes?",

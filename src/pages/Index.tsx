@@ -25,7 +25,7 @@ const Index = () => {
     <div className="min-h-screen bg-background pb-20">
       <Helmet>
         <title>Apart inteligente en Marcos Juárez | Check-in 24 h | Esmeralda Apart</title>
-        <meta name="description" content="Departamentos por día en Marcos Juárez con check-in electrónico 24 h. Sin recepción, sin esperas. A minutos de Ruta 9. Reservá directo y pagá menos." />
+        <meta name="description" content="Departamentos por día en Marcos Juárez con check-in electrónico 24 h. Sin recepción, sin esperas. A minutos de Au Ruta9. Reservá directo y pagá menos." />
         <link rel="canonical" href="https://esmeraldaapart.com.ar/" />
         <meta property="og:url" content="https://esmeraldaapart.com.ar/" />
       </Helmet>
