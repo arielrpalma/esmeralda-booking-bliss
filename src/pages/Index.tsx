@@ -38,6 +38,7 @@ const Index = () => {
       </Helmet>
       <Navbar />
       <HeroSection />
+      <IntentSelector />
       <WhyDirectSection />
       <CheckInStepsSection />
       <AboutSection />
