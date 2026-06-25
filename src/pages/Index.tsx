@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import IntentSelector from "@/components/IntentSelector";
 import WhyDirectSection from "@/components/WhyDirectSection";
 import CheckInStepsSection from "@/components/CheckInStepsSection";
 import AboutSection from "@/components/AboutSection";
@@ -37,6 +38,7 @@ const Index = () => {
       </Helmet>
       <Navbar />
       <HeroSection />
+      <IntentSelector />
       <WhyDirectSection />
       <CheckInStepsSection />
       <AboutSection />

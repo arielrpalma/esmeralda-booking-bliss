@@ -9,6 +9,10 @@ import Pago from "./pages/Pago";
 import PagoStatus from "./pages/PagoStatus";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import Trabajo from "./pages/personas/Trabajo";
+import Torneo from "./pages/personas/Torneo";
+import Ruta9 from "./pages/personas/Ruta9";
+import Familia from "./pages/personas/Familia";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +32,10 @@ const App = () => (
           <Route path="/pago/failure" element={<PagoStatus status="failure" />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/alojamiento/trabajo" element={<Trabajo />} />
+          <Route path="/alojamiento/torneo" element={<Torneo />} />
+          <Route path="/alojamiento/ruta-9" element={<Ruta9 />} />
+          <Route path="/alojamiento/familia" element={<Familia />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
