@@ -70,7 +70,7 @@ const FeaturesSection = () => {
                   className="w-full h-72 object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-section-dark/20 group-hover:bg-section-dark/10 transition-colors duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-section-dark/40 via-section-dark/5 to-transparent group-hover:from-section-dark/25 transition-colors duration-500" />
               </div>
               <div className="flex items-center gap-3 mb-4">
                 <f.icon className="text-primary" size={22} />
@@ -78,9 +78,10 @@ const FeaturesSection = () => {
                   {f.title}
                 </h3>
               </div>
-              <p className="font-body text-section-dark-foreground/70 leading-relaxed text-sm">
+              <p className="font-body text-section-dark-foreground/85 leading-relaxed text-sm">
                 {f.description}
               </p>
+
             </motion.div>
           ))}
         </div>
