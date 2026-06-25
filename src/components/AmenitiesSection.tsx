@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { UtensilsCrossed, Sofa, BedDouble } from "lucide-react";
+import { trackViewSection } from "@/lib/analytics";
 
 const amenities = [
   {
@@ -23,6 +24,10 @@ const amenities = [
 const AmenitiesSection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    if (inView) trackViewSection("amenities");
+  }, [inView]);
 
   return (
     <section className="py-24 md:py-32 bg-background">
