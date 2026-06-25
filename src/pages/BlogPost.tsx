@@ -82,6 +82,11 @@ const BlogPost = () => {
         <meta property="og:url" content={url} />
         <meta property="og:type" content="article" />
         <meta property="og:image" content={`https://esmeraldaapart.com.ar${post.image}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.description} />
+        <meta name="twitter:image" content={`https://esmeraldaapart.com.ar${post.image}`} />
+        <meta property="article:published_time" content={post.publishedAt} />
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
