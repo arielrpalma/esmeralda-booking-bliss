@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ChevronDown, KeyRound, Clock, MapPin, MessageCircle } from "lucide-react";
+import { ChevronDown, KeyRound, Clock, MapPin, MessageCircle, PawPrint, Rainbow } from "lucide-react";
 
 const HeroSection = () => {
   const scrollToBooking = () => {
@@ -51,6 +51,8 @@ const HeroSection = () => {
               <Badge icon={Clock} text="24 horas" />
               <Badge icon={KeyRound} text="Acceso electrónico" />
               <Badge icon={MapPin} text="A min. de Au Ruta9" />
+              <Badge icon={PawPrint} text="Pet friendly" />
+              <Badge icon={Rainbow} text="LGBT friendly" />
             </div>
 
             {/* CTAs */}
