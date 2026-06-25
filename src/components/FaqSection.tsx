@@ -18,7 +18,11 @@ const faqs = [
   },
   {
     q: "¿Aceptan mascotas?",
-    a: "Recibimos mascotas pequeñas previa consulta. Avisanos antes de reservar para confirmar disponibilidad y coordinar.",
+    a: "Sí, somos pet friendly. Recibimos mascotas pequeñas previa consulta; avisanos antes de reservar para confirmar disponibilidad y coordinar el ingreso.",
+  },
+  {
+    q: "¿Son LGBT friendly?",
+    a: "Sí. En Esmeralda Apart somos un espacio LGBT friendly: recibimos a todas las personas y parejas con el mismo respeto, calidez y privacidad.",
   },
   {
     q: "¿Qué incluye el equipamiento del departamento?",
