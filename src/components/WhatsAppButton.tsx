@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { trackWhatsAppClick } from "@/lib/analytics";
 
 interface WhatsAppButtonProps {
   barHeight?: number;
@@ -13,6 +14,7 @@ const WhatsAppButton = ({ barHeight = 0 }: WhatsAppButtonProps) => {
       href="https://wa.me/5493472433334"
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => trackWhatsAppClick("floating_button")}
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1, bottom: bottomPx }}
       transition={{ duration: 0.3 }}
