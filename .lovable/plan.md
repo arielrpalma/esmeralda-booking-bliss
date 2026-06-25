@@ -1,52 +1,62 @@
-## Objetivo
+# Plan: Esmeralda Apart — Reservas directas (Fase 1)
 
-Maximizar el alcance en Google con cambios mínimos en la home actual, más conexión a Google Search Console.
+Objetivo: maximizar reservas directas desde Google y Meta Ads. Empezamos por las bases que multiplican el efecto de todo lo demás: **medición + reposicionamiento del Home + bloque "reservá directo"**. Sin medición no sabemos qué funciona; sin Home reposicionado, todo el tráfico de Ads convierte mal.
 
-## 1. SEO on-page sin tocar el diseño
+Trabajo con las fotos y videos actuales (placeholders donde haga falta). URLs de landings serán descriptivas (ej. `/alojamiento-corporativo-marcos-juarez`).
 
-- **FAQ con schema en la home**: nueva sección `FaqSection` al final (antes del footer), con 8 preguntas frecuentes orientadas a keywords locales (cochera, factura, mascotas, check-in, mejor precio sin comisión, mascotas, niños, cancelación). Inyecta `FAQPage` JSON-LD vía Helmet → habilita rich snippets en Google.
-- **Reescritura ligera de copys existentes** en `AboutSection`, `AmenitiesSection`, `BookingSection` para incluir naturalmente "alquiler temporario en Marcos Juárez", "departamentos por día", "apart hotel Marcos Juárez", "alojamiento en Marcos Juárez Córdoba". Mismo layout, mismas imágenes.
-- **`alt` de imágenes** enriquecido con keywords descriptivas.
-- **Meta description e índice** revisados en `index.html` para apuntar a las keywords principales.
+---
 
-## 2. Blog estático con 10 artículos SEO
+## Fase 1 — Lo que voy a hacer ahora
 
-Lo más rentable para alcance: contenido nuevo indexable sin tocar la home.
+### 1. Medición (te creo las cuentas paso a paso)
+No tenés GA4, GTM ni Meta Pixel. Te preparo el código listo, vos creás las cuentas siguiendo una guía corta que te dejo, y me pasás los IDs. Voy a:
 
-- Nuevas rutas `/blog` (índice) y `/blog/:slug` (post individual), con Helmet por ruta (`title`, `description`, `canonical`, `og:url`, JSON-LD `Article` + `BreadcrumbList`).
-- 10 posts en `src/content/posts.ts` (≥800 palabras, español argentino) con los títulos del brief original. Cada post enlaza internamente a `/` y cierra con CTA "Reservá ahora" / WhatsApp.
-- Link "Blog" en el Navbar.
+- Instalar **Google Tag Manager** (contenedor único) en `index.html`.
+- Configurar **GA4** vía GTM con eventos: `view_apartment`, `check_availability`, `whatsapp_click`, `booking_start`, `booking_complete`.
+- Instalar **Meta Pixel** + eventos estándar (`ViewContent`, `Lead`, `InitiateCheckout`, `Purchase`).
+- Dejar **Meta Conversions API** preparada como Edge Function (server-side) para cuando tengas el token.
+- Disparar eventos desde: WhatsApp button, FloatingBookingBar, iframe de HotelPMS (lo que sea trackeable desde nuestro lado), página `/gracias`.
+- Documento corto: `docs/medicion-setup.md` con los 6 pasos para crear las cuentas y dónde pegar los IDs.
 
-## 3. SEO técnico
+### 2. Reposicionamiento del Home
+- **Hero nuevo**: titular "El apart inteligente de Marcos Juárez". Subtítulo: "Check-in electrónico 24 h · Llegá cuando quieras · Reservá directo". Dos CTAs grandes: **Reservar ahora** y **WhatsApp**. Badges de confianza (24h, sin recepción, a min. de Ruta 9).
+- **Bloque "¿Por qué reservar directo?"** con 5 ventajas (mejor precio, atención directa, sin intermediarios, beneficios, cambios simples).
+- **Sección "Cómo funciona el check-in 24 h"** — 6 pasos visuales (Reservás → Código → Llegás → Abrís portón → Ingresás → Disfrutás). Placeholder para video.
+- **Sección "Parada ideal sobre Ruta Nacional 9"** con mapa embebido y tiempos.
+- **CTAs persistentes**: ya existe FloatingBookingBar (la mantengo) + WhatsApp.
 
-- Regenero `public/sitemap.xml` con `/`, `/blog`, y cada `/blog/:slug`.
-- `robots.txt` con la línea `Sitemap: https://esmeraldaapart.com.ar/sitemap.xml`.
-- Aprovecho `react-helmet-async` que ya está montado.
+### 3. SEO técnico base para soportar landings futuras
+- Instalar `react-helmet-async` y mover meta tags a per-ruta.
+- Generador automático de sitemap (`scripts/generate-sitemap.ts`) en lugar del XML manual, para que las próximas landings se sumen solas.
 
-## 4. Google Search Console (asistido)
+---
 
-Conectar GSC requiere tu autorización OAuth (no puedo hacerlo solo). El flujo será:
+## Fases 2-5 — Lo que viene después (no se ejecuta ahora)
 
-1. Disparar el conector de Google Search Console — verás un botón "Conectar" en el chat para autorizar con tu cuenta de Google.
-2. Solicitar un token de verificación META a Google y agregarlo como `<meta name="google-site-verification">` en `index.html`.
-3. **Publicar el sitio** (paso tuyo) para que el meta tag quede en el HTML servido.
-4. Llamar a Google para verificar la propiedad de `https://esmeraldaapart.com.ar/`.
-5. Dar de alta el sitio en Search Console y enviar el sitemap `https://esmeraldaapart.com.ar/sitemap.xml`.
-6. Inspeccionar la URL principal para confirmar indexación.
+| Fase | Contenido | Entregable |
+|---|---|---|
+| **2. Landings de Ads** | `/alojamiento-corporativo-marcos-juarez`, `/hospedaje-deportistas-marcos-juarez`, `/parada-ruta-9-marcos-juarez`, `/turismo-raices-marcos-juarez` | 4 landings optimizadas para campañas Google/Meta con su propio Hero, prueba social, FAQ específica y CTA |
+| **3. SEO de contenidos** | Páginas de keywords ("alojamiento Marcos Juárez", "apart hotel Marcos Juárez", "cerca del INTA", etc.) + ampliar blog | Estructura silo con interlinking |
+| **4. Confianza y experiencia** | Reseñas reales (importadas/manuales), FAQ ampliada, sección seguridad/acceso electrónico, fotos con personas (cuando las tengas) | Sección Trust + galería renovada |
+| **5. Performance + Mobile polish** | Optimizar imágenes (AVIF/WebP), preload LCP, lazy-load, auditoría PageSpeed >90 mobile | Reporte antes/después |
 
-A partir de ahí podés ver impresiones, clics, queries y errores directamente desde GSC, y pedirme inspeccionar URLs o resubir el sitemap cuando agregues posts.
+---
 
-## Entregable extra
+## Detalles técnicos (para referencia)
 
-Documento `/mnt/documents/esmeralda-apart-marketing.md` con: 10 títulos extra de blog, 10 ideas para redes, 5 Google Ads, 5 Meta Ads, FAQ ampliadas. Para usar fuera del sitio.
+- **Stack**: React + Vite + Tailwind + shadcn ya existentes. No cambia.
+- **Medición**: GTM como single source; GA4 + Pixel viven dentro del contenedor. CAPI vía Supabase Edge Function (`send-meta-event`) para deduplicar con `event_id`.
+- **Helmet**: `HelmetProvider` en `main.tsx`; cada ruta nueva define su `<title>`, `description`, canonical y JSON-LD propio. Mantengo `og:*` sitewide en `index.html` como fallback.
+- **Sitemap**: script que se ejecuta en `predev`/`prebuild` y enumera rutas estáticas + posts del blog.
+- **Diseño**: respeto la identidad visual existente (emerald + gold, Playfair + Raleway). No mezclo nuevo sistema.
+- **HotelPMS iframe**: como es de terceros, los eventos de "reserva completada" se disparan en `/gracias` (post-redirect) y desde el webhook de Mercado Pago cuando aplique.
 
-## Fuera de alcance
+---
 
-- Páginas separadas /departamentos /ubicacion /servicios (su contenido ya vive en la home).
-- Cambios de diseño del Hero, barra de reservas, WhatsApp, /gracias, /pago.
-- Backend o panel admin para posts (se editan en `src/content/posts.ts`).
+## Qué necesito de vos después de aprobar
 
-## Notas
+1. Confirmar que avanzo con Fase 1 completa.
+2. Cuando termine, te paso una guía de 10 min para crear GA4 + GTM + Meta Business + Pixel y me devolvés los IDs.
+3. Cuando los tenga, los pego y la medición queda activa.
 
-- Tras publicar, Google tarda días/semanas en indexar; el sitemap + GSC aceleran el proceso.
-- Para que la verificación META funcione, hay que publicar **después** de agregar el meta tag y **antes** de pedir verify.
+¿Avanzo?
