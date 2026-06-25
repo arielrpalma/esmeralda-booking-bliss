@@ -1,62 +1,78 @@
-# Plan: Esmeralda Apart — Reservas directas (Fase 1)
+## Objetivo
 
-Objetivo: maximizar reservas directas desde Google y Meta Ads. Empezamos por las bases que multiplican el efecto de todo lo demás: **medición + reposicionamiento del Home + bloque "reservá directo"**. Sin medición no sabemos qué funciona; sin Home reposicionado, todo el tráfico de Ads convierte mal.
+Que el visitante identifique su motivo de viaje en 10 segundos y aterrice en una landing específica con copy, beneficios, testimonios y CTA alineados al motivo, para maximizar conversión de campañas Google y Meta.
 
-Trabajo con las fotos y videos actuales (placeholders donde haga falta). URLs de landings serán descriptivas (ej. `/alojamiento-corporativo-marcos-juarez`).
+## Cambios en la Home
 
----
+**Nuevo bloque "Selector de motivo"** insertado entre el Hero y `WhyDirectSection` (alta visibilidad sin tapar el Hero):
 
-## Fase 1 — Lo que voy a hacer ahora
+- Título: "¿Por qué venís a Marcos Juárez?"
+- 4 tarjetas grandes con ícono, título y micro-copy. Cada una linkea a su landing dedicada y dispara un evento `funnel_intent_select` al dataLayer (intent: trabajo/torneo/ruta9/familia) para medir cuál perfil convierte más.
 
-### 1. Medición (te creo las cuentas paso a paso)
-No tenés GA4, GTM ni Meta Pixel. Te preparo el código listo, vos creás las cuentas siguiendo una guía corta que te dejo, y me pasás los IDs. Voy a:
+```text
+[💼 Trabajo]  [🏆 Torneo]  [🛣 Ruta 9]  [👨‍👩‍👧 Familia]
+  Viajantes    Equipos      De paso       Visitas
+  Factura A/B  Grupos       1 noche       Mascotas OK
+```
 
-- Instalar **Google Tag Manager** (contenedor único) en `index.html`.
-- Configurar **GA4** vía GTM con eventos: `view_apartment`, `check_availability`, `whatsapp_click`, `booking_start`, `booking_complete`.
-- Instalar **Meta Pixel** + eventos estándar (`ViewContent`, `Lead`, `InitiateCheckout`, `Purchase`).
-- Dejar **Meta Conversions API** preparada como Edge Function (server-side) para cuando tengas el token.
-- Disparar eventos desde: WhatsApp button, FloatingBookingBar, iframe de HotelPMS (lo que sea trackeable desde nuestro lado), página `/gracias`.
-- Documento corto: `docs/medicion-setup.md` con los 6 pasos para crear las cuentas y dónde pegar los IDs.
+Además, agregar **tabs / chips secundarias dentro del Hero** ("Vengo por…") como acceso inmediato sin necesidad de scrollear, para usuarios mobile.
 
-### 2. Reposicionamiento del Home
-- **Hero nuevo**: titular "El apart inteligente de Marcos Juárez". Subtítulo: "Check-in electrónico 24 h · Llegá cuando quieras · Reservá directo". Dos CTAs grandes: **Reservar ahora** y **WhatsApp**. Badges de confianza (24h, sin recepción, a min. de Ruta 9).
-- **Bloque "¿Por qué reservar directo?"** con 5 ventajas (mejor precio, atención directa, sin intermediarios, beneficios, cambios simples).
-- **Sección "Cómo funciona el check-in 24 h"** — 6 pasos visuales (Reservás → Código → Llegás → Abrís portón → Ingresás → Disfrutás). Placeholder para video.
-- **Sección "Parada ideal sobre Ruta Nacional 9"** con mapa embebido y tiempos.
-- **CTAs persistentes**: ya existe FloatingBookingBar (la mantengo) + WhatsApp.
+## 4 Landings dedicadas
 
-### 3. SEO técnico base para soportar landings futuras
-- Instalar `react-helmet-async` y mover meta tags a per-ruta.
-- Generador automático de sitemap (`scripts/generate-sitemap.ts`) en lugar del XML manual, para que las próximas landings se sumen solas.
+Crear `/alojamiento/trabajo`, `/alojamiento/torneo`, `/alojamiento/ruta-9`, `/alojamiento/familia` (rutas amigables para SEO y para usar como destino de Ads).
 
----
+Cada landing reutiliza componentes existentes (Navbar, FloatingBookingBar, WhatsAppButton, Footer) y suma 1 archivo `PersonaLanding.tsx` parametrizado por config. Estructura común:
 
-## Fases 2-5 — Lo que viene después (no se ejecuta ahora)
+1. **Hero específico**: foto contextual + headline + sub-headline + 2 CTA (Reservar / WhatsApp con mensaje pre-cargado por persona).
+2. **3 beneficios clave** del perfil (ej. Trabajo: factura, WiFi para Zoom, check-in 24 h).
+3. **Prueba social**: 2-3 testimonios reales del perfil + logos/menciones.
+4. **FAQ filtrada** (3-4 preguntas relevantes al perfil).
+5. **Bloque "Cómo reservar"** con foco en 1 paso (mensaje único, sin distracciones).
+6. **CTA final**.
 
-| Fase | Contenido | Entregable |
-|---|---|---|
-| **2. Landings de Ads** | `/alojamiento-corporativo-marcos-juarez`, `/hospedaje-deportistas-marcos-juarez`, `/parada-ruta-9-marcos-juarez`, `/turismo-raices-marcos-juarez` | 4 landings optimizadas para campañas Google/Meta con su propio Hero, prueba social, FAQ específica y CTA |
-| **3. SEO de contenidos** | Páginas de keywords ("alojamiento Marcos Juárez", "apart hotel Marcos Juárez", "cerca del INTA", etc.) + ampliar blog | Estructura silo con interlinking |
-| **4. Confianza y experiencia** | Reseñas reales (importadas/manuales), FAQ ampliada, sección seguridad/acceso electrónico, fotos con personas (cuando las tengas) | Sección Trust + galería renovada |
-| **5. Performance + Mobile polish** | Optimizar imágenes (AVIF/WebP), preload LCP, lazy-load, auditoría PageSpeed >90 mobile | Reporte antes/después |
+Contenido por persona (resumen):
 
----
+| Landing | Headline | Beneficios destacados | WhatsApp prefijado |
+|---|---|---|---|
+| Trabajo | "Apart para viajantes en Marcos Juárez" | Factura A/B · WiFi premium · Cochera · Check-in 24 h | "Hola, vengo por trabajo, necesito disponibilidad…" |
+| Torneo | "Tu base para el torneo en Marcos Juárez" | Grupos · Cochera · Cerca de canchas · Late check-out | "Hola, vengo a un torneo, somos X personas…" |
+| Ruta 9 | "Parada estratégica sobre Au Ruta9" | Acceso rápido · Check-in 24 h · Estacionamiento seguro · 1 noche | "Hola, estoy viajando por Ruta 9 y necesito 1 noche…" |
+| Familia | "Departamento para visitar familia" | Pet friendly · Espacios amplios · Cocina equipada · Tranquilo | "Hola, vengo a visitar familia…" |
 
-## Detalles técnicos (para referencia)
+## SEO
 
-- **Stack**: React + Vite + Tailwind + shadcn ya existentes. No cambia.
-- **Medición**: GTM como single source; GA4 + Pixel viven dentro del contenedor. CAPI vía Supabase Edge Function (`send-meta-event`) para deduplicar con `event_id`.
-- **Helmet**: `HelmetProvider` en `main.tsx`; cada ruta nueva define su `<title>`, `description`, canonical y JSON-LD propio. Mantengo `og:*` sitewide en `index.html` como fallback.
-- **Sitemap**: script que se ejecuta en `predev`/`prebuild` y enumera rutas estáticas + posts del blog.
-- **Diseño**: respeto la identidad visual existente (emerald + gold, Playfair + Raleway). No mezclo nuevo sistema.
-- **HotelPMS iframe**: como es de terceros, los eventos de "reserva completada" se disparan en `/gracias` (post-redirect) y desde el webhook de Mercado Pago cuando aplique.
+- Cada landing con su propio `<Helmet>`: title, description, canonical, og y JSON-LD `LodgingBusiness` + `BreadcrumbList`.
+- Agregar las 4 URLs a `scripts/generate-sitemap.ts`.
+- Internal linking: Home → landings; cada landing → Home y Blog relacionado.
 
----
+## Medición (GTM / GA4 / Meta)
 
-## Qué necesito de vos después de aprobar
+Nuevos eventos en `src/lib/analytics.ts` que se empujan a `dataLayer` y `fbq`:
 
-1. Confirmar que avanzo con Fase 1 completa.
-2. Cuando termine, te paso una guía de 10 min para crear GA4 + GTM + Meta Business + Pixel y me devolvés los IDs.
-3. Cuando los tenga, los pego y la medición queda activa.
+- `funnel_intent_select` (parámetro `intent`) al clic en las 4 tarjetas de la Home.
+- `landing_view` (parámetro `persona`) al cargar cada landing.
+- Los eventos existentes (`whatsapp_click`, `check_availability`, `booking_start`, `booking_complete`) ya heredan automáticamente.
 
-¿Avanzo?
+Esto permite armar audiencias en Meta y conversiones en Google Ads por **persona**, no por sitio entero.
+
+## Campañas (recomendación, no se ejecuta acá)
+
+Cada landing es destino directo de:
+- Google Ads: campañas separadas por keyword cluster ("apart viajantes Marcos Juárez", "alojamiento torneo Marcos Juárez", "hotel ruta 9 cerca", "departamento familia Marcos Juárez").
+- Meta Ads: 4 conjuntos de anuncios con creatividades distintas pero misma landing matching.
+
+## Detalles técnicos
+
+- Nuevo componente `src/components/IntentSelector.tsx` (4 tarjetas + tracking).
+- Nuevo componente reutilizable `src/components/persona/PersonaLanding.tsx` que recibe `config: PersonaConfig`.
+- Nuevo archivo `src/content/personas.ts` con los 4 configs (textos, imágenes, FAQs, WhatsApp prefill, JSON-LD).
+- Nuevas páginas en `src/pages/personas/` (`Trabajo.tsx`, `Torneo.tsx`, `Ruta9.tsx`, `Familia.tsx`) — cada una importa `PersonaLanding` con su config.
+- Rutas agregadas en `src/App.tsx`.
+- `src/lib/analytics.ts`: helpers `trackIntentSelect(intent)` y `trackLandingView(persona)`.
+- Sitemap: agregar 4 entradas.
+
+## Fuera de alcance
+
+- No se crean campañas en Google/Meta (sólo se deja la infra y el tracking listos).
+- No se rediseña el Hero existente; se le suman chips de intención y un bloque selector debajo.
+- Las imágenes contextuales por persona usarán las que ya existen en `/images/`; si querés fotos específicas (ej. cancha, ruta, viajante con notebook) las generamos después.
