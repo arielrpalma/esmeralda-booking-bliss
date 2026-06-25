@@ -79,3 +79,15 @@ export const trackViewListing = (listingName: string = "Esmeralda Apart") => {
     content_category: "apartment",
   });
 };
+
+// Funnel: visitor self-selects intent on the home selector.
+export const trackIntentSelect = (intent: "trabajo" | "torneo" | "ruta9" | "familia") => {
+  pushDataLayer("funnel_intent_select", { intent });
+  fbqTrack("Lead", { content_category: "intent", content_name: intent });
+};
+
+// Funnel: persona-specific landing page view.
+export const trackLandingView = (persona: "trabajo" | "torneo" | "ruta9" | "familia") => {
+  pushDataLayer("landing_view", { persona });
+  fbqTrack("ViewContent", { content_category: "landing", content_name: persona });
+};
