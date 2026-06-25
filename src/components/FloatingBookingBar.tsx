@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
+import { trackCheckAvailability, trackBookingStart } from "@/lib/analytics";
 import {
   Popover,
   PopoverContent,
@@ -101,6 +102,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const checkAvailability = async (checkin: string, checkout: string) => {
     setLoading(true);
     setResult(null);
+    trackCheckAvailability(checkin, checkout, totalGuests);
     try {
       const { data, error } = await supabase.functions.invoke("check-availability", {
         body: { checkin, checkout },
@@ -119,7 +121,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     checkAvailability(format(dateRange.from, "yyyy-MM-dd"), format(dateRange.to, "yyyy-MM-dd"));
   };
 
-  const openBookingEngine = (checkin: string, checkout: string) => {
+  const openBookingEngine = (checkin: string, checkout: string, nights?: number) => {
     const params = new URLSearchParams();
     params.set("currency", "ARS");
     params.set("language", "es-ES");
@@ -129,12 +131,17 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     if (children > 0) params.set("nChilds", String(children));
     if (babies > 0) params.set("nBabies", String(babies));
     params.set("rp", "");
+    trackBookingStart(checkin, checkout, totalGuests, nights ?? 0);
     window.open(`${BASE_URL}?${params.toString()}`, "_blank");
   };
 
   const handleBookNow = () => {
     if (!dateRange?.from || !dateRange?.to) return;
-    openBookingEngine(format(dateRange.from, "yyyy-MM-dd"), format(dateRange.to, "yyyy-MM-dd"));
+    openBookingEngine(
+      format(dateRange.from, "yyyy-MM-dd"),
+      format(dateRange.to, "yyyy-MM-dd"),
+      result?.nights,
+    );
   };
 
   const handleSelectSuggestion = (s: Suggestion) => {
@@ -142,7 +149,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
       from: new Date(s.checkin + "T00:00:00"),
       to: new Date(s.checkout + "T00:00:00"),
     });
-    openBookingEngine(s.checkin, s.checkout);
+    openBookingEngine(s.checkin, s.checkout, s.nights);
   };
 
   const dismissResult = () => { setResult(null); setRetryCalendarOpen(false); };

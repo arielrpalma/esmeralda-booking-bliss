@@ -4,11 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 
+import { trackBookingComplete } from "@/lib/analytics";
+
 const Gracias = () => {
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState(10);
 
   useEffect(() => {
+    // Fire conversion once per session.
+    trackBookingComplete();
+
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
