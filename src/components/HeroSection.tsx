@@ -40,11 +40,11 @@ const HeroSection = () => {
               El apart inteligente de Marcos Juárez
             </p>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-semibold text-section-dark-foreground leading-tight mb-5">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-semibold text-white leading-tight mb-5 [text-shadow:0_2px_18px_rgba(0,0,0,0.55)]">
               Llegá <span className="italic font-light">cuando</span> quieras.
             </h1>
 
-            <p className="text-base md:text-xl font-body font-light text-section-dark-foreground/85 leading-relaxed mb-7 max-w-xl mx-auto lg:mx-0">
+            <p className="text-base md:text-xl font-body font-light text-white/95 leading-relaxed mb-7 max-w-xl mx-auto lg:mx-0 [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]">
               Check-in electrónico 24 h · Sin recepción · Reservá directo y pagá menos.
             </p>
 
