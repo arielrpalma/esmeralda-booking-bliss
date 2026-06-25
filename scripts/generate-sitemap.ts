@@ -16,6 +16,10 @@ interface SitemapEntry {
 const staticEntries: SitemapEntry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/blog", changefreq: "weekly", priority: "0.8" },
+  { path: "/alojamiento/trabajo", changefreq: "monthly", priority: "0.9" },
+  { path: "/alojamiento/torneo", changefreq: "monthly", priority: "0.9" },
+  { path: "/alojamiento/ruta-9", changefreq: "monthly", priority: "0.9" },
+  { path: "/alojamiento/familia", changefreq: "monthly", priority: "0.9" },
 ];
 
 const postEntries: SitemapEntry[] = posts.map((p) => ({
