@@ -31,11 +31,11 @@ const MundialBanner = ({ bottomOffset, onHeightChange }: MundialBannerProps) => 
     >
       <div className="pointer-events-auto bg-section-dark/95 backdrop-blur-md border-t border-accent/40 shadow-2xl overflow-visible">
         <div className="container mx-auto px-3 py-2 md:py-2.5 flex items-center justify-center gap-2 md:gap-3 flex-nowrap">
-          {/* Paramount+ logo */}
+          {/* PlayMe TV logo */}
           <img
-            src="/images/paramount-plus.png"
-            alt="Paramount+"
-            className="h-6 md:h-8 w-auto object-contain shrink-0 drop-shadow-[0_0_16px_rgba(255,255,255,0.45)]"
+            src="/images/playmetv.png"
+            alt="PlayMe TV"
+            className="h-8 md:h-10 w-auto object-contain shrink-0 drop-shadow-[0_0_16px_rgba(255,255,255,0.35)]"
           />
 
           {/* Vertical separator */}
