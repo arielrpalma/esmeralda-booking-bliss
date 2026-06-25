@@ -68,3 +68,14 @@ export const trackBookingComplete = (value?: number, currency: string = "ARS") =
 export const trackViewSection = (section: string) => {
   pushDataLayer("view_section", { section });
 };
+
+// Fired when the user actually sees the apartment listing (gallery in viewport).
+// Maps to Meta's standard ViewContent so it can be used as a custom audience event.
+export const trackViewListing = (listingName: string = "Esmeralda Apart") => {
+  pushDataLayer("view_listing", { listing_name: listingName });
+  fbqTrack("ViewContent", {
+    content_type: "lodging",
+    content_name: listingName,
+    content_category: "apartment",
+  });
+};

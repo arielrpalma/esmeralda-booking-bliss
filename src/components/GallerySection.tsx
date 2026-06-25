@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
+import { trackViewListing } from "@/lib/analytics";
 
 const images = [
   { src: "/images/gallery1.jpg", alt: "Vista del departamento" },
@@ -15,6 +16,11 @@ const GallerySection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [lightbox, setLightbox] = useState<string | null>(null);
+
+  // Fire "Vista de alojamiento" once when the gallery enters the viewport.
+  useEffect(() => {
+    if (inView) trackViewListing("Esmeralda Apart - Marcos Juárez");
+  }, [inView]);
 
   return (
     <>
