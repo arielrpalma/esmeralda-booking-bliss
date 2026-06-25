@@ -22,6 +22,8 @@ const HeroSection = () => {
         className="absolute inset-0"
         style={{ background: "var(--hero-overlay)" }}
       />
+      {/* Extra bottom vignette to ensure legibility on tall screens */}
+      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 to-transparent" />
 
       <div className="relative z-10 h-full flex items-center px-6 pt-28 pb-32">
         <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-10">
