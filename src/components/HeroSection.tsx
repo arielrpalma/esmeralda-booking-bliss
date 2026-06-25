@@ -22,6 +22,8 @@ const HeroSection = () => {
         className="absolute inset-0"
         style={{ background: "var(--hero-overlay)" }}
       />
+      {/* Extra bottom vignette to ensure legibility on tall screens */}
+      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 to-transparent" />
 
       <div className="relative z-10 h-full flex items-center px-6 pt-28 pb-32">
         <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-10">
@@ -38,11 +40,11 @@ const HeroSection = () => {
               El apart inteligente de Marcos Juárez
             </p>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-semibold text-section-dark-foreground leading-tight mb-5">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-semibold text-white leading-tight mb-5 [text-shadow:0_2px_18px_rgba(0,0,0,0.55)]">
               Llegá <span className="italic font-light">cuando</span> quieras.
             </h1>
 
-            <p className="text-base md:text-xl font-body font-light text-section-dark-foreground/85 leading-relaxed mb-7 max-w-xl mx-auto lg:mx-0">
+            <p className="text-base md:text-xl font-body font-light text-white/95 leading-relaxed mb-7 max-w-xl mx-auto lg:mx-0 [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]">
               Check-in electrónico 24 h · Sin recepción · Reservá directo y pagá menos.
             </p>
 
