@@ -9,6 +9,10 @@ import Pago from "./pages/Pago";
 import PagoStatus from "./pages/PagoStatus";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import Trabajo from "./pages/personas/Trabajo";
+import Torneo from "./pages/personas/Torneo";
+import Ruta9 from "./pages/personas/Ruta9";
+import Familia from "./pages/personas/Familia";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
