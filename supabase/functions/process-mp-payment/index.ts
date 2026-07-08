@@ -106,12 +106,10 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Persist initial record (webhook will keep it updated)
-    const supaUrl = Deno.env.get('SUPABASE_URL');
-    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    if (supaUrl && serviceKey) {
+    // Persist initial record (webhook will keep it updated). Upsert by external_reference
+    // so a rare race between two edge invocations collapses into a single row.
+    if (supabase) {
       try {
-        const supabase = createClient(supaUrl, serviceKey, { auth: { persistSession: false } });
         await supabase.from('pagos').upsert({
           id: mpData.id,
           status: mpData.status,
@@ -123,7 +121,7 @@ Deno.serve(async (req) => {
           payment_method_id: mpData.payment_method_id ?? d.payment_method_id,
           raw: mpData,
           updated_at: new Date().toISOString(),
-        }, { onConflict: 'id' });
+        }, { onConflict: 'external_reference' });
       } catch (e) {
         console.error('persist pago failed', e);
       }
