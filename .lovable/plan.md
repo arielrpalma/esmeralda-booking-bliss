@@ -1,78 +1,43 @@
-## Objetivo
+## Problema
 
-Que el visitante identifique su motivo de viaje en 10 segundos y aterrice en una landing específica con copy, beneficios, testimonios y CTA alineados al motivo, para maximizar conversión de campañas Google y Meta.
+En `/posnet` un cliente pudo pagar dos veces la misma reserva. La causa más probable: doble clic sobre "Pagar" del Brick de Mercado Pago antes de que el frontend bloquee el botón, o reintento manual tras un aparente cuelgue. Hoy la protección es débil:
 
-## Cambios en la Home
+- El `X-Idempotency-Key` que enviamos a MP es `${token}-${Date.now()}`. Al usar `Date.now()`, cada clic genera una key distinta → MP procesa los dos cobros como independientes.
+- El `external_reference` se genera nuevo en cada submit del Brick (nuevo `crypto.randomUUID()` en el cliente), así que tampoco sirve para deduplicar server-side.
+- En el frontend hay un `setProcessing(true)` pero el overlay se monta *después* del primer `await`, dejando una ventana de ~100–300 ms donde el botón del Brick sigue clickeable.
 
-**Nuevo bloque "Selector de motivo"** insertado entre el Hero y `WhyDirectSection` (alta visibilidad sin tapar el Hero):
+## Solución (defensa en 3 capas)
 
-- Título: "¿Por qué venís a Marcos Juárez?"
-- 4 tarjetas grandes con ícono, título y micro-copy. Cada una linkea a su landing dedicada y dispara un evento `funnel_intent_select` al dataLayer (intent: trabajo/torneo/ruta9/familia) para medir cuál perfil convierte más.
+### 1. Idempotencia real contra Mercado Pago (backend)
+En `supabase/functions/process-mp-payment/index.ts`:
+- Exigir `external_reference` en el body (quitar el fallback `crypto.randomUUID()` server-side, que enmascara duplicados).
+- Usar como `X-Idempotency-Key` el propio `external_reference` (sin `Date.now()`). MP garantiza que dos requests con la misma key devuelven el mismo `payment.id` en vez de crear un cobro nuevo — es exactamente el caso del doble clic.
+- Antes de llamar a MP, hacer un `SELECT` en `pagos` por `external_reference`; si ya existe un pago con `status = approved | in_process | pending`, devolver ese mismo registro sin volver a llamar a MP.
 
-```text
-[💼 Trabajo]  [🏆 Torneo]  [🛣 Ruta 9]  [👨‍👩‍👧 Familia]
-  Viajantes    Equipos      De paso       Visitas
-  Factura A/B  Grupos       1 noche       Mascotas OK
-```
+### 2. Bloqueo idempotente en la base (backend)
+Migración sobre `public.pagos`:
+- `ALTER TABLE public.pagos ADD CONSTRAINT pagos_external_reference_key UNIQUE (external_reference);`
+- Así, aun si dos invocaciones concurrentes de la edge function llegaran al mismo tiempo, el segundo `upsert`/`insert` cae por violación de unicidad y podemos devolver el pago existente en lugar de duplicar.
 
-Además, agregar **tabs / chips secundarias dentro del Hero** ("Vengo por…") como acceso inmediato sin necesidad de scrollear, para usuarios mobile.
+### 3. Blindaje del botón en el frontend (`src/pages/Pago.tsx`)
+- Generar `external_reference` **una sola vez** por sesión de pago (al montar el Brick con `debouncedAmount`), no dentro de `onSubmit`. Guardarlo en un `useRef`. Así reintentos del mismo formulario reusan la misma key → MP deduplica.
+- En `onSubmit`, cortar inmediatamente si `processing` ya es `true` (guard con `useRef` para evitar el gap del `setState` async).
+- Mantener el overlay "Procesando pago..." y además desmontar el Brick apenas se dispare el submit, para que un segundo tap no llegue nunca al iframe.
+- Al recibir respuesta (aprobado o rechazado), regenerar un nuevo `external_reference` sólo si el usuario toca "Reintentar".
 
-## 4 Landings dedicadas
+## Cambios técnicos por archivo
 
-Crear `/alojamiento/trabajo`, `/alojamiento/torneo`, `/alojamiento/ruta-9`, `/alojamiento/familia` (rutas amigables para SEO y para usar como destino de Ads).
+- `supabase/migrations/<timestamp>_pagos_unique_external_ref.sql` — nuevo, agrega el UNIQUE. Antes de aplicarlo, limpiar posibles `external_reference` NULL/duplicados existentes (backfill con `id::text` para filas viejas).
+- `supabase/functions/process-mp-payment/index.ts` — external_reference obligatorio; pre-check en `pagos`; `X-Idempotency-Key = external_reference`; manejar `23505` devolviendo la fila existente.
+- `src/pages/Pago.tsx` — `externalRefRef = useRef<string>()`, `processingRef = useRef(false)`, generar la ref al montar el Brick, guard sincrónico en `onSubmit`, resetear ref en `reset()`.
 
-Cada landing reutiliza componentes existentes (Navbar, FloatingBookingBar, WhatsAppButton, Footer) y suma 1 archivo `PersonaLanding.tsx` parametrizado por config. Estructura común:
+## Qué NO cambia
 
-1. **Hero específico**: foto contextual + headline + sub-headline + 2 CTA (Reservar / WhatsApp con mensaje pre-cargado por persona).
-2. **3 beneficios clave** del perfil (ej. Trabajo: factura, WiFi para Zoom, check-in 24 h).
-3. **Prueba social**: 2-3 testimonios reales del perfil + logos/menciones.
-4. **FAQ filtrada** (3-4 preguntas relevantes al perfil).
-5. **Bloque "Cómo reservar"** con foco en 1 paso (mensaje único, sin distracciones).
-6. **CTA final**.
+- Flujo de UI, textos, comprobante, envío por WhatsApp/email: idénticos.
+- Webhook de MP: sigue igual; ya hace `upsert` por `id`.
+- Estructura de la tabla `pagos` fuera de la nueva constraint.
 
-Contenido por persona (resumen):
+## Verificación
 
-| Landing | Headline | Beneficios destacados | WhatsApp prefijado |
-|---|---|---|---|
-| Trabajo | "Apart para viajantes en Marcos Juárez" | Factura A/B · WiFi premium · Cochera · Check-in 24 h | "Hola, vengo por trabajo, necesito disponibilidad…" |
-| Torneo | "Tu base para el torneo en Marcos Juárez" | Grupos · Cochera · Cerca de canchas · Late check-out | "Hola, vengo a un torneo, somos X personas…" |
-| Ruta 9 | "Parada estratégica sobre Au Ruta9" | Acceso rápido · Check-in 24 h · Estacionamiento seguro · 1 noche | "Hola, estoy viajando por Ruta 9 y necesito 1 noche…" |
-| Familia | "Departamento para visitar familia" | Pet friendly · Espacios amplios · Cocina equipada · Tranquilo | "Hola, vengo a visitar familia…" |
-
-## SEO
-
-- Cada landing con su propio `<Helmet>`: title, description, canonical, og y JSON-LD `LodgingBusiness` + `BreadcrumbList`.
-- Agregar las 4 URLs a `scripts/generate-sitemap.ts`.
-- Internal linking: Home → landings; cada landing → Home y Blog relacionado.
-
-## Medición (GTM / GA4 / Meta)
-
-Nuevos eventos en `src/lib/analytics.ts` que se empujan a `dataLayer` y `fbq`:
-
-- `funnel_intent_select` (parámetro `intent`) al clic en las 4 tarjetas de la Home.
-- `landing_view` (parámetro `persona`) al cargar cada landing.
-- Los eventos existentes (`whatsapp_click`, `check_availability`, `booking_start`, `booking_complete`) ya heredan automáticamente.
-
-Esto permite armar audiencias en Meta y conversiones en Google Ads por **persona**, no por sitio entero.
-
-## Campañas (recomendación, no se ejecuta acá)
-
-Cada landing es destino directo de:
-- Google Ads: campañas separadas por keyword cluster ("apart viajantes Marcos Juárez", "alojamiento torneo Marcos Juárez", "hotel ruta 9 cerca", "departamento familia Marcos Juárez").
-- Meta Ads: 4 conjuntos de anuncios con creatividades distintas pero misma landing matching.
-
-## Detalles técnicos
-
-- Nuevo componente `src/components/IntentSelector.tsx` (4 tarjetas + tracking).
-- Nuevo componente reutilizable `src/components/persona/PersonaLanding.tsx` que recibe `config: PersonaConfig`.
-- Nuevo archivo `src/content/personas.ts` con los 4 configs (textos, imágenes, FAQs, WhatsApp prefill, JSON-LD).
-- Nuevas páginas en `src/pages/personas/` (`Trabajo.tsx`, `Torneo.tsx`, `Ruta9.tsx`, `Familia.tsx`) — cada una importa `PersonaLanding` con su config.
-- Rutas agregadas en `src/App.tsx`.
-- `src/lib/analytics.ts`: helpers `trackIntentSelect(intent)` y `trackLandingView(persona)`.
-- Sitemap: agregar 4 entradas.
-
-## Fuera de alcance
-
-- No se crean campañas en Google/Meta (sólo se deja la infra y el tracking listos).
-- No se rediseña el Hero existente; se le suman chips de intención y un bloque selector debajo.
-- Las imágenes contextuales por persona usarán las que ya existen en `/images/`; si querés fotos específicas (ej. cancha, ruta, viajante con notebook) las generamos después.
+- Reproducir doble clic con Playwright sobre `/posnet` en modo test de MP: debe crearse **un solo** registro en `pagos` y el segundo request debe devolver el mismo `payment.id`.
+- Revisar `pagos` para confirmar que no aparecen dos filas con el mismo `external_reference`.
