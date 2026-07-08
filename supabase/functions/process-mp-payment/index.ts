@@ -9,7 +9,7 @@ const BodySchema = z.object({
   payment_method_id: z.string().min(1),
   installments: z.number().int().positive(),
   transaction_amount: z.number().positive().max(100000000),
-  external_reference: z.string().min(1).max(120).optional(),
+  external_reference: z.string().min(8).max(120),
   payer: z.object({
     email: z.string().email(),
     identification: z.object({
