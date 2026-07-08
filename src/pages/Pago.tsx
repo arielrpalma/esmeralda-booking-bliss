@@ -232,6 +232,7 @@ const Pago = () => {
                 throw err;
               } finally {
                 setProcessing(false);
+                submittingRef.current = false;
               }
             },
 
