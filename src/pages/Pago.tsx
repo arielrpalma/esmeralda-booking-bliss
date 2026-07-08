@@ -190,11 +190,19 @@ const Pago = () => {
               if (!cancelled) setMountingBrick(false);
             },
             onSubmit: async ({ formData }: { formData: Record<string, unknown> }) => {
+              // Hard guard against double-submit: second click is a no-op.
+              if (submittingRef.current) return;
+              submittingRef.current = true;
               setProcessing(true);
               try {
-                const externalRef = (typeof crypto !== "undefined" && "randomUUID" in crypto)
-                  ? crypto.randomUUID()
-                  : `esm-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+                // Reuse the same external_reference for this attempt so MP's
+                // X-Idempotency-Key and our DB unique constraint dedupe retries.
+                if (!externalRefRef.current) {
+                  externalRefRef.current = (typeof crypto !== "undefined" && "randomUUID" in crypto)
+                    ? crypto.randomUUID()
+                    : `esm-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+                }
+                const externalRef = externalRefRef.current;
                 const { data, error } = await supabase.functions.invoke("process-mp-payment", {
                   body: {
                     ...formData,
