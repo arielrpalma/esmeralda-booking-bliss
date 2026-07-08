@@ -108,6 +108,11 @@ const Pago = () => {
   const receiptRef = useRef<HTMLDivElement>(null);
   // Brick controller used to safely unmount on re-render
   const brickControllerRef = useRef<{ unmount: () => void } | null>(null);
+  // Stable idempotency key for this payment attempt — reused across double-clicks
+  // and Brick internal retries so MP + backend can dedupe.
+  const externalRefRef = useRef<string | null>(null);
+  // Sync guard: setState is async, so a fast second click can race past `processing`.
+  const submittingRef = useRef(false);
 
   const importeNum = parseARS(importe);
   const isValid = importeNum >= 100;
@@ -185,11 +190,19 @@ const Pago = () => {
               if (!cancelled) setMountingBrick(false);
             },
             onSubmit: async ({ formData }: { formData: Record<string, unknown> }) => {
+              // Hard guard against double-submit: second click is a no-op.
+              if (submittingRef.current) return;
+              submittingRef.current = true;
               setProcessing(true);
               try {
-                const externalRef = (typeof crypto !== "undefined" && "randomUUID" in crypto)
-                  ? crypto.randomUUID()
-                  : `esm-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+                // Reuse the same external_reference for this attempt so MP's
+                // X-Idempotency-Key and our DB unique constraint dedupe retries.
+                if (!externalRefRef.current) {
+                  externalRefRef.current = (typeof crypto !== "undefined" && "randomUUID" in crypto)
+                    ? crypto.randomUUID()
+                    : `esm-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+                }
+                const externalRef = externalRefRef.current;
                 const { data, error } = await supabase.functions.invoke("process-mp-payment", {
                   body: {
                     ...formData,
@@ -219,6 +232,7 @@ const Pago = () => {
                 throw err;
               } finally {
                 setProcessing(false);
+                submittingRef.current = false;
               }
             },
 
@@ -260,6 +274,9 @@ const Pago = () => {
     setReceiptDate(null);
     setErrorMsg(null);
     setImporte("");
+    // New attempt → new idempotency key.
+    externalRefRef.current = null;
+    submittingRef.current = false;
   };
 
   const downloadReceipt = async () => {
