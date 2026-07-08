@@ -274,6 +274,9 @@ const Pago = () => {
     setReceiptDate(null);
     setErrorMsg(null);
     setImporte("");
+    // New attempt → new idempotency key.
+    externalRefRef.current = null;
+    submittingRef.current = false;
   };
 
   const downloadReceipt = async () => {
