@@ -108,6 +108,11 @@ const Pago = () => {
   const receiptRef = useRef<HTMLDivElement>(null);
   // Brick controller used to safely unmount on re-render
   const brickControllerRef = useRef<{ unmount: () => void } | null>(null);
+  // Stable idempotency key for this payment attempt — reused across double-clicks
+  // and Brick internal retries so MP + backend can dedupe.
+  const externalRefRef = useRef<string | null>(null);
+  // Sync guard: setState is async, so a fast second click can race past `processing`.
+  const submittingRef = useRef(false);
 
   const importeNum = parseARS(importe);
   const isValid = importeNum >= 100;
