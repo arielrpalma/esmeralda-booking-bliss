@@ -38,7 +38,34 @@ Deno.serve(async (req) => {
       });
     }
     const d = parsed.data;
-    const externalRef = d.external_reference ?? crypto.randomUUID();
+    const externalRef = d.external_reference;
+
+    // Idempotency short-circuit: if a payment for this external_reference already exists,
+    // return it instead of hitting MP again (protects against double-clicks / retries).
+    const supaUrl = Deno.env.get('SUPABASE_URL');
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const supabase = supaUrl && serviceKey
+      ? createClient(supaUrl, serviceKey, { auth: { persistSession: false } })
+      : null;
+
+    if (supabase) {
+      const { data: existing } = await supabase
+        .from('pagos')
+        .select('id, status, status_detail, amount, payment_method_id, external_reference')
+        .eq('external_reference', externalRef)
+        .maybeSingle();
+      if (existing) {
+        return new Response(JSON.stringify({
+          id: existing.id,
+          status: existing.status,
+          status_detail: existing.status_detail,
+          transaction_amount: existing.amount,
+          payment_method_id: existing.payment_method_id,
+          external_reference: existing.external_reference,
+          deduped: true,
+        }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+    }
 
     const payment = {
       transaction_amount: Number(d.transaction_amount.toFixed(2)),
@@ -61,7 +88,8 @@ Deno.serve(async (req) => {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
-        'X-Idempotency-Key': `${d.token}-${Date.now()}`,
+        // Stable idempotency key: MP returns the same payment on retries.
+        'X-Idempotency-Key': externalRef,
       },
       body: JSON.stringify(payment),
     });
