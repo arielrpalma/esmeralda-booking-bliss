@@ -231,8 +231,8 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
       </div>
       <div className="border-t border-border" />
       <CounterRow label="Adultos" sublabel="+4 años" value={adults} onDecrement={() => adults > 1 && setAdults(adults - 1)} onIncrement={() => canAddMore && setAdults(adults + 1)} min={1} />
-      <CounterRow label="Menores" sublabel="1 a 4 años" value={children} onDecrement={() => children > 0 && setChildren(children - 1)} onIncrement={() => canAddMore && setChildren(children + 1)} min={0} />
-      <CounterRow label="Bebés" sublabel="< 1 año" value={babies} onDecrement={() => babies > 0 && setBabies(babies - 1)} onIncrement={() => canAddMore && setBabies(babies + 1)} min={0} />
+      <CounterRow label="Menores" sublabel={"1 a 3 años\n(sin cama adicional)"} value={children} onDecrement={() => children > 0 && setChildren(children - 1)} onIncrement={() => canAddMore && setChildren(children + 1)} min={0} />
+      <CounterRow label="Bebés" sublabel={"< 1 año\n(sin cama adicional)"} value={babies} onDecrement={() => babies > 0 && setBabies(babies - 1)} onIncrement={() => canAddMore && setBabies(babies + 1)} min={0} />
       <div className="flex justify-end pt-2 border-t border-border">
         <button onClick={() => setGuestsOpen(false)}
           className="px-6 py-2 bg-primary text-primary-foreground rounded-md text-sm font-semibold hover:bg-primary/90 transition-colors">
