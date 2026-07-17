@@ -280,7 +280,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="bg-section-dark/90 backdrop-blur-xl border-t border-border/20 shadow-[0_-4px_30px_rgba(0,0,0,0.3)]"
+            className="bg-section-dark/95 backdrop-blur-xl border-t-2 border-primary/70 shadow-[0_-8px_40px_-4px_hsl(var(--primary)/0.55)] ring-1 ring-primary/30"
           >
             <div className={cn("container mx-auto", isMobile ? "px-2.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))]" : "px-4 py-3")}>
               <div className={cn("flex items-center gap-2 sm:gap-3 max-w-5xl mx-auto", isMobile && "flex-col gap-1.5")}>
