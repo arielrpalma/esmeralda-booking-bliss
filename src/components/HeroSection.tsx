@@ -55,23 +55,15 @@ const HeroSection = () => {
               <Badge icon={MapPin} text="A min. de Au Ruta9" />
             </div>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+            {/* CTA hint pointing to the floating booking bar */}
+            <div className="flex justify-center lg:justify-start">
               <button
                 onClick={scrollToBooking}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-7 py-3.5 rounded-lg font-body font-semibold text-sm tracking-wider uppercase shadow-xl hover:shadow-2xl transition-all"
+                className="group inline-flex items-center gap-2 text-white/95 hover:text-white font-body text-sm tracking-wide [text-shadow:0_1px_10px_rgba(0,0,0,0.5)] transition-all"
               >
-                Reservar ahora
+                <span className="animate-bounce">↓</span>
+                Consultá disponibilidad en la barra inferior
               </button>
-              <a
-                href="https://wa.me/5493472433334"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-section-dark-foreground/10 hover:bg-section-dark-foreground/20 backdrop-blur-md border border-section-dark-foreground/25 text-section-dark-foreground px-7 py-3.5 rounded-lg font-body font-semibold text-sm tracking-wider uppercase transition-all inline-flex items-center justify-center gap-2"
-              >
-                <MessageCircle size={16} />
-                Consultar por WhatsApp
-              </a>
             </div>
           </motion.div>
 
