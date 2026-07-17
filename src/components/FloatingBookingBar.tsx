@@ -454,7 +454,7 @@ const CounterRow = ({ label, sublabel, value, onDecrement, onIncrement, min }: {
   <div className="flex items-center justify-between">
     <div>
       <span className="text-sm font-medium text-foreground">{label}</span>
-      {sublabel && <span className="block text-[11px] text-muted-foreground">{sublabel}</span>}
+      {sublabel && <span className="block text-[11px] text-muted-foreground whitespace-pre-line leading-tight">{sublabel}</span>}
     </div>
     <div className="flex items-center gap-3">
       <button onClick={onDecrement} disabled={value <= min} className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-accent transition-colors disabled:opacity-30 disabled:cursor-not-allowed"><Minus size={14} /></button>
