@@ -1,13 +1,38 @@
 # Esmeralda Apart
 
-> Departamentos temporarios de lujo en el centro de Marcos Juárez, Córdoba, Argentina. Diseño moderno, totalmente equipados, con la mejor ubicación para estadías cortas o prolongadas.
+> Apart inteligente en el centro de Marcos Juárez, Córdoba, Argentina: departamentos temporarios de diseño con check-in electrónico 24 h, sin recepción, a minutos de la Au Ruta9.
 
-Esmeralda Apart ofrece alojamiento de alta gama en Marcos Juárez. Las reservas se realizan a través de una barra inferior fija con verificación de disponibilidad en tiempo real conectada a Airbnb.
+Esmeralda Apart es un complejo de departamentos temporarios ubicado en 9 de Julio 262, Marcos Juárez, Córdoba. Está pensado para viajantes de negocios, equipos deportivos, familias de visita y viajeros de paso por la Autopista Ruta 9.
 
-## Pages
+Cada unidad está totalmente equipada (cocina, blackout, aire acondicionado frío/calor, WiFi de fibra) y se accede mediante cerradura electrónica con código, sin necesidad de recepción presencial. Emitimos factura A y B, coordinamos cochera privada según disponibilidad y recibimos mascotas pequeñas previa consulta. Somos pet friendly y LGBT friendly.
 
-- [Inicio](/): Información del complejo, departamentos, servicios, galería y reservas.
+Las reservas directas se realizan desde una barra flotante fija en la parte inferior del sitio, que consulta disponibilidad en tiempo real contra el calendario de Airbnb. Alternativamente se puede consultar por WhatsApp al +54 9 3472 43-3334. Redes: @esmeraldaapart en Instagram, Facebook y TikTok.
+
+## Landings por motivo de viaje
+
+- [Alojamiento para viajantes y empresas](/alojamiento/trabajo): Factura A/B, WiFi de fibra, cochera y check-in 24 h para viajes corporativos.
+- [Alojamiento para torneos y equipos deportivos](/alojamiento/torneo): Departamentos amplios, cocheras seguras y tarifa grupal para equipos visitantes.
+- [Parada sobre Au Ruta9](/alojamiento/ruta-9): Estadías de 1 noche con acceso 24 h para viajeros de paso por la autopista.
+- [Departamento para visitar familia](/alojamiento/familia): Espacio propio, cocina equipada y política pet friendly para visitas familiares.
+
+## Contenido principal
+
+- [Inicio](/): Presentación del apart, por qué reservar directo, check-in en 3 pasos, features, amenities, galería, ubicación sobre Au Ruta9 y preguntas frecuentes.
+- [Blog](/blog): Guías y artículos sobre alojamiento, turismo y estadías en Marcos Juárez.
+
+## Artículos destacados del blog
+
+- [Dónde alojarse en Marcos Juárez: guía completa 2026](/blog/donde-alojarse-en-marcos-juarez-guia-completa): Panorama de opciones de hospedaje en la ciudad.
+- [Departamentos por día vs hotel en Marcos Juárez](/blog/departamentos-por-dia-vs-hotel-en-marcos-juarez): Comparativa práctica de costos, servicios y comodidad.
+- [Alojamiento para empresas en Marcos Juárez](/blog/alojamiento-para-empresas-en-marcos-juarez): Factura, comodidad y logística para viajes corporativos.
+- [Alojamiento con cochera en Marcos Juárez](/blog/alojamiento-con-cochera-en-marcos-juarez): Por qué contar con estacionamiento privado marca la diferencia.
+- [Qué hacer en Marcos Juárez](/blog/que-hacer-en-marcos-juarez): Actividades, gastronomía y paseos recomendados.
+- [Guía para viajeros en Marcos Juárez, Córdoba](/blog/guia-para-viajeros-en-marcos-juarez-cordoba): Recomendaciones prácticas para una primera visita.
 
 ## Optional
 
-- [Gracias](/gracias): Página de agradecimiento posterior a una reserva.
+- [Gracias](/gracias): Página de confirmación posterior a una reserva.
+- [Departamentos amoblados en Marcos Juárez](/blog/departamentos-amoblados-en-marcos-juarez): Detalle del equipamiento típico de un apart amoblado.
+- [Alquiler temporario económico en Marcos Juárez](/blog/alquiler-temporario-economico-en-marcos-juarez): Consejos para ahorrar sin resignar comodidad.
+- [Dónde dormir barato en Marcos Juárez](/blog/donde-dormir-barato-en-marcos-juarez): Opciones económicas sin perder calidad.
+- [Mejores opciones de alojamiento en Marcos Juárez](/blog/mejores-opciones-de-alojamiento-en-marcos-juarez): Selección de alternativas por perfil de viajero.
