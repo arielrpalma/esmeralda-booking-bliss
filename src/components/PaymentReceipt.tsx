@@ -78,30 +78,34 @@ export const PaymentReceipt = forwardRef<HTMLDivElement, PaymentReceiptProps>(
 
         <div style={{ textAlign: "center", margin: "8px 0" }}>{sep}</div>
 
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span>FECHA:</span>
-          <span>{formatDateAR(date)}</span>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span>OPERACION:</span>
-          <span>#{operationId}</span>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span>MEDIO:</span>
-          <span>{pmLabel}</span>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span>PROCESADOR:</span>
-          <span>MERCADO PAGO</span>
-        </div>
-        {externalReference && (
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
-            <span>REF:</span>
-            <span style={{ fontSize: 10, wordBreak: "break-all", textAlign: "right" }}>
-              {externalReference}
-            </span>
-          </div>
-        )}
+        {/* Use a 2-column table so long values (e.g. "VISA DEBITO") never overlap the label when rendered via html-to-image */}
+        <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
+          <tbody>
+            {[
+              ["FECHA:", formatDateAR(date)],
+              ["OPERACION:", `#${operationId}`],
+              ["MEDIO:", pmLabel],
+              ["PROCESADOR:", "MERCADO PAGO"],
+              ...(externalReference ? [["REF:", externalReference]] : []),
+            ].map(([label, value], i) => (
+              <tr key={i}>
+                <td style={{ verticalAlign: "top", whiteSpace: "nowrap", paddingRight: 8, width: 110 }}>
+                  {label}
+                </td>
+                <td
+                  style={{
+                    verticalAlign: "top",
+                    textAlign: "right",
+                    wordBreak: "break-all",
+                    fontSize: label === "REF:" ? 10 : 13,
+                  }}
+                >
+                  {value}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
         <div style={{ textAlign: "center", margin: "8px 0" }}>{sep}</div>
 
