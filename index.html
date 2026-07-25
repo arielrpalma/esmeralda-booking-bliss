@@ -39,22 +39,37 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "LodgingBusiness",
+        "@type": ["Hotel", "LodgingBusiness", "LocalBusiness"],
         "@id": "https://esmeraldaapart.com.ar/#lodging",
         "name": "Esmeralda Apart",
-        "description": "Departamentos temporarios de lujo en el centro de Marcos Juárez, Córdoba. Check-in electrónico 24 h, cocheras y factura A/B.",
+        "alternateName": "Esmeralda Apart Marcos Juárez",
+        "description": "Apart hotel y departamentos temporarios por día en el centro de Marcos Juárez, Córdoba. Check-in automático 24 h, cochera, WiFi, cocina equipada y factura A/B para empresas y viajantes.",
+        "slogan": "Llegá cuando quieras: check-in automático 24 horas",
         "url": "https://esmeraldaapart.com.ar/",
         "telephone": "+5493472433334",
+        "email": "hola@esmeraldaapart.com.ar",
+        "hasMap": "https://www.google.com/maps/search/?api=1&query=Esmeralda+Apart+9+de+Julio+262+Marcos+Ju%C3%A1rez",
         "image": [
           "https://esmeraldaapart.com.ar/images/hero.jpg",
           "https://esmeraldaapart.com.ar/images/gallery1.jpg",
           "https://esmeraldaapart.com.ar/images/gallery2.jpg"
         ],
+        "logo": "https://esmeraldaapart.com.ar/images/esmeralda-logo-new.png",
         "priceRange": "$$",
         "currenciesAccepted": "ARS",
         "paymentAccepted": "Cash, Credit Card, Debit Card, Mercado Pago, Bank Transfer",
         "checkinTime": "14:00",
         "checkoutTime": "10:00",
+        "petsAllowed": true,
+        "numberOfRooms": 6,
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "opens": "00:00",
+            "closes": "23:59"
+          }
+        ],
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "9 de Julio 262",
@@ -68,18 +83,44 @@
           "latitude": -32.7000,
           "longitude": -62.1000
         },
+        "areaServed": [
+          { "@type": "City", "name": "Marcos Juárez" },
+          { "@type": "City", "name": "Leones" },
+          { "@type": "City", "name": "Bell Ville" },
+          { "@type": "City", "name": "Corral de Bustos" },
+          { "@type": "AdministrativeArea", "name": "Córdoba" }
+        ],
+        "makesOffer": [
+          {
+            "@type": "Offer",
+            "name": "Departamento por día en Marcos Juárez",
+            "priceCurrency": "ARS",
+            "availability": "https://schema.org/InStock",
+            "url": "https://esmeraldaapart.com.ar/"
+          },
+          {
+            "@type": "Offer",
+            "name": "Alojamiento para empresas y viajantes con factura A/B",
+            "priceCurrency": "ARS",
+            "availability": "https://schema.org/InStock",
+            "url": "https://esmeraldaapart.com.ar/alojamiento/trabajo"
+          }
+        ],
         "amenityFeature": [
           { "@type": "LocationFeatureSpecification", "name": "WiFi de alta velocidad", "value": true },
           { "@type": "LocationFeatureSpecification", "name": "Smart TV con streaming", "value": true },
           { "@type": "LocationFeatureSpecification", "name": "Cocina totalmente equipada", "value": true },
           { "@type": "LocationFeatureSpecification", "name": "Aire acondicionado frío/calor", "value": true },
           { "@type": "LocationFeatureSpecification", "name": "Cochera privada", "value": true },
-          { "@type": "LocationFeatureSpecification", "name": "Check-in 24 h", "value": true },
-          { "@type": "LocationFeatureSpecification", "name": "Pet friendly", "value": true }
+          { "@type": "LocationFeatureSpecification", "name": "Check-in automático 24 h", "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "Factura A y B", "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "Pet friendly", "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "LGBT friendly", "value": true }
         ],
         "sameAs": [
           "https://www.instagram.com/esmeraldaapart",
-          "https://www.facebook.com/esmeraldaapart"
+          "https://www.facebook.com/esmeraldaapart",
+          "https://www.tiktok.com/@esmeraldaapart"
         ]
       }
     </script>
@@ -93,6 +134,7 @@
         "publisher": { "@id": "https://esmeraldaapart.com.ar/#lodging" }
       }
     </script>
+
 
     <!-- Meta Pixel Code -->
     <script>
