@@ -197,6 +197,9 @@ const GallerySection = () => {
       {/* Lightbox */}
       {lightbox && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Foto ampliada de los departamentos"
           className="fixed inset-0 z-50 bg-section-dark/90 flex items-center justify-center p-6"
           onClick={() => setLightbox(null)}
         >
