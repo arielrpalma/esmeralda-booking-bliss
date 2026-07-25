@@ -41,6 +41,19 @@ const App = () => (
           <Route path="/alojamiento/torneo" element={<Torneo />} />
           <Route path="/alojamiento/ruta-9" element={<Ruta9 />} />
           <Route path="/alojamiento/familia" element={<Familia />} />
+          {/* Topic clusters: pillar page + entries */}
+          <Route path="/guias" element={<HubIndex />} />
+          {clusters.map((c) => (
+            <Route key={c.slug} path={`/${c.slug}`} element={<ClusterPage clusterSlug={c.slug} />} />
+          ))}
+          {clusters.map((c) => (
+            <Route
+              key={`${c.slug}-entry`}
+              path={`/${c.slug}/:slug`}
+              element={<HubEntryPage clusterSlug={c.slug} />}
+            />
+          ))}
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
