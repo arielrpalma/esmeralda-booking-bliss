@@ -103,6 +103,7 @@ const HubEntryPage = ({ clusterSlug }: { clusterSlug?: string }) => {
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         {faqJsonLd && <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>}
+        {placeJsonLd && <script type="application/ld+json">{JSON.stringify(placeJsonLd)}</script>}
       </Helmet>
 
       <Navbar />
