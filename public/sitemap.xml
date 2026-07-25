@@ -46,12 +46,32 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://esmeraldaapart.com.ar/gastronomia</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://esmeraldaapart.com.ar/empresas</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://esmeraldaapart.com.ar/eventos</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/deportes</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/educacion</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/servicios-en-marcos-juarez</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -144,6 +164,48 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://esmeraldaapart.com.ar/gastronomia/donde-comer-en-marcos-juarez</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/gastronomia/parrillas</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/gastronomia/pizzerias</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/gastronomia/cafeterias-de-especialidad</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/gastronomia/bares-y-cervecerias</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/gastronomia/panaderias-y-heladerias</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/gastronomia/comer-cerca-de-esmeralda-apart</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://esmeraldaapart.com.ar/empresas/agd-aceitera-general-deheza</loc>
     <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
@@ -230,6 +292,102 @@
   <url>
     <loc>https://esmeraldaapart.com.ar/eventos/eventos-empresariales</loc>
     <lastmod>2026-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/deportes/clubes-de-marcos-juarez</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/deportes/padel-y-tenis</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/deportes/futbol-basquet-y-hockey</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/deportes/gimnasios-y-actividad-fisica</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/deportes/torneos-y-delegaciones</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/educacion/escuelas-y-colegios</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/educacion/institutos-y-universidades</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/educacion/academias-y-cursos</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/educacion/alojamiento-para-estudiantes</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/servicios-en-marcos-juarez/hospitales-y-clinicas</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/servicios-en-marcos-juarez/farmacias</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/servicios-en-marcos-juarez/bancos-y-cajeros</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/servicios-en-marcos-juarez/estaciones-de-servicio</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/servicios-en-marcos-juarez/remises-y-taxis</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/servicios-en-marcos-juarez/supermercados</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esmeraldaapart.com.ar/servicios-en-marcos-juarez/tramites-utiles</loc>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

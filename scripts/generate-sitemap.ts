@@ -9,6 +9,10 @@ import { alojamiento } from "../src/content/hub/alojamiento";
 import { turismo } from "../src/content/hub/turismo";
 import { empresas } from "../src/content/hub/empresas";
 import { eventos } from "../src/content/hub/eventos";
+import { gastronomia } from "../src/content/hub/gastronomia";
+import { deportes } from "../src/content/hub/deportes";
+import { educacion } from "../src/content/hub/educacion";
+import { serviciosCiudad } from "../src/content/hub/servicios-ciudad";
 import { rutas } from "../src/content/hub/rutas";
 import { servicios } from "../src/content/hub/servicios";
 
@@ -32,7 +36,18 @@ const staticEntries: SitemapEntry[] = [
 ];
 
 // Topic-cluster pillar pages
-const clusterSlugs = ["alojamiento", "turismo", "empresas", "eventos", "rutas", "servicios"];
+const clusterSlugs = [
+  "alojamiento",
+  "turismo",
+  "gastronomia",
+  "empresas",
+  "eventos",
+  "deportes",
+  "educacion",
+  "servicios-en-marcos-juarez",
+  "rutas",
+  "servicios",
+];
 const clusterEntries: SitemapEntry[] = clusterSlugs.map((slug) => ({
   path: `/${slug}`,
   changefreq: "weekly",
@@ -40,7 +55,18 @@ const clusterEntries: SitemapEntry[] = clusterSlugs.map((slug) => ({
 }));
 
 // Topic-cluster detail pages
-const hubEntries = [...alojamiento, ...turismo, ...empresas, ...eventos, ...rutas, ...servicios];
+const hubEntries = [
+  ...alojamiento,
+  ...turismo,
+  ...gastronomia,
+  ...empresas,
+  ...eventos,
+  ...deportes,
+  ...educacion,
+  ...serviciosCiudad,
+  ...rutas,
+  ...servicios,
+];
 const hubPageEntries: SitemapEntry[] = hubEntries.map((e) => ({
   path: `/${e.cluster}/${e.slug}`,
   lastmod: e.updatedAt,
