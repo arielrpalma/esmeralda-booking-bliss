@@ -11,6 +11,7 @@ import AmenitiesSection from "@/components/AmenitiesSection";
 import GallerySection from "@/components/GallerySection";
 import Route9Section from "@/components/Route9Section";
 import FaqSection from "@/components/FaqSection";
+import InternalLinksSection from "@/components/InternalLinksSection";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -18,6 +19,15 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 const Index = () => {
   const [barHeight, setBarHeight] = useState(0);
   const handleHeightChange = useCallback((h: number) => setBarHeight(h), []);
+
+  // Breadcrumb for the home page (site root).
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://esmeraldaapart.com.ar/" },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -32,18 +42,22 @@ const Index = () => {
         <meta name="twitter:title" content="Apart inteligente en Marcos Juárez · Check-in 24 h" />
         <meta name="twitter:description" content="Reservá directo el mejor apart de Marcos Juárez: diseño, cochera, factura y check-in 24 h." />
         <meta name="twitter:image" content="https://esmeraldaapart.com.ar/images/hero.jpg" />
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
       <Navbar />
-      <HeroSection />
-      <IntentSelector />
-      <WhyDirectSection />
-      <CheckInStepsSection />
-      <AboutSection />
-      <FeaturesSection />
-      <AmenitiesSection />
-      <GallerySection />
-      <Route9Section />
-      <FaqSection />
+      <main>
+        <HeroSection />
+        <IntentSelector />
+        <WhyDirectSection />
+        <CheckInStepsSection />
+        <AboutSection />
+        <FeaturesSection />
+        <AmenitiesSection />
+        <GallerySection />
+        <Route9Section />
+        <FaqSection />
+        <InternalLinksSection />
+      </main>
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
       <WhatsAppButton barHeight={barHeight} />
