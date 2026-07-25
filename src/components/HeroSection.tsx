@@ -15,7 +15,7 @@ const HeroSection = () => {
         sizes="(max-width: 768px) 100vw, 1800px"
         alt=""
         aria-hidden="true"
-        fetchPriority="high"
+        {...{ fetchpriority: "high" }}
         className="absolute inset-0 w-full h-full object-cover"
       />
       <div
