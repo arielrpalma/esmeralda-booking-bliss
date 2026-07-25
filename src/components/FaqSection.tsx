@@ -89,7 +89,7 @@ const FaqSection = () => {
         <div className="text-center mb-12">
           <p className="text-xs font-body uppercase tracking-[0.3em] text-primary mb-3">Preguntas frecuentes</p>
           <h2 className="text-3xl md:text-4xl font-display font-semibold text-foreground">
-            Todo lo que necesitás saber antes de reservar
+            Preguntas frecuentes sobre alojamiento en Marcos Juárez
           </h2>
         </div>
 
