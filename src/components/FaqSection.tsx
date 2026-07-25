@@ -5,6 +5,31 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const faqs = [
   {
+    q: "¿Cuál es el mejor alojamiento en Marcos Juárez?",
+    a: "Esmeralda Apart es la opción mejor puntuada de Marcos Juárez en Google, Booking y Airbnb: departamentos nuevos en el centro, check-in automático 24 horas, cochera, cocina equipada y factura A/B. Reservando directo desde esta web obtenés el mejor precio, sin comisiones de intermediarios.",
+  },
+  {
+    q: "¿Dónde dormir cerca de la Ruta 9 en Marcos Juárez?",
+    a: "Estamos a pocos minutos de la Au Ruta 9 (Autopista Rosario–Córdoba), en 9 de Julio 262, pleno centro de Marcos Juárez. Es la parada ideal para viajantes y familias que cruzan la Ruta Nacional 9: llegás a cualquier hora, dejás el auto en cochera y descansás sin desvíos ni esperas en recepción.",
+  },
+  {
+    q: "¿Hay departamentos temporarios con cochera en Marcos Juárez?",
+    a: "Sí. Ofrecemos cochera para nuestros huéspedes previa coordinación y sujeta a disponibilidad, además de estacionamiento seguro frente al Apart. Es uno de los motivos por los que empresas y viajantes eligen nuestro hospedaje con cochera en Marcos Juárez.",
+  },
+  {
+    q: "¿Aceptan factura A?",
+    a: "Sí, emitimos factura A o B en el momento, con todos los datos fiscales de tu empresa. Somos alojamiento habitual para empresas y viajantes en Marcos Juárez que necesitan rendir gastos y descargar IVA.",
+  },
+  {
+    q: "¿Se puede hacer el check-in las 24 horas?",
+    a: "Sí. El check-in es automático las 24 horas mediante acceso electrónico: te enviamos el código y las instrucciones por WhatsApp y entrás sin recepción, sin llaves y sin horarios. Ideal si llegás de madrugada por la Ruta 9 o después de un torneo.",
+  },
+  {
+    q: "¿Cuánto sale un departamento por día en Marcos Juárez?",
+    a: "La tarifa varía según fechas, cantidad de huéspedes y duración de la estadía. Consultá disponibilidad y precio en tiempo real desde la barra inferior de esta web: reservando directo siempre pagás menos que en Booking o Airbnb, porque no hay comisiones de plataformas.",
+  },
+  {
+
     q: "¿El check-in y check-out son flexibles?",
     a: "Sí. El check-in estándar es desde las 14:00 y el check-out hasta las 10:00. Si necesitás horarios diferentes, escribinos por WhatsApp y coordinamos según disponibilidad.",
   },
@@ -64,7 +89,7 @@ const FaqSection = () => {
         <div className="text-center mb-12">
           <p className="text-xs font-body uppercase tracking-[0.3em] text-primary mb-3">Preguntas frecuentes</p>
           <h2 className="text-3xl md:text-4xl font-display font-semibold text-foreground">
-            Todo lo que necesitás saber antes de reservar
+            Preguntas frecuentes sobre alojamiento en Marcos Juárez
           </h2>
         </div>
 

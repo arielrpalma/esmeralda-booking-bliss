@@ -14,14 +14,14 @@ type GalleryItem = {
 
 const heroItem: GalleryItem = {
   src: "/images/gallery1.jpg",
-  alt: "Living principal del departamento",
+  alt: "Living principal de un departamento de Esmeralda Apart en Marcos Juárez",
   eyebrow: "Interior",
   caption: "Living Principal",
 };
 
 const tallItem: GalleryItem = {
   src: "/images/gallery5.jpg",
-  alt: "Dormitorio principal",
+  alt: "Dormitorio principal con cama king del apart hotel en Marcos Juárez",
   eyebrow: "Suite",
   caption: "Dormitorio Master",
 };
@@ -29,13 +29,13 @@ const tallItem: GalleryItem = {
 const squareItems: GalleryItem[] = [
   {
     src: "/images/gallery4.jpg",
-    alt: "Living moderno",
+    alt: "Ambiente social moderno del departamento temporario en Marcos Juárez",
     eyebrow: "Espacio",
     caption: "Ambiente Social",
   },
   {
     src: "/images/gallery3.jpg",
-    alt: "Cocina equipada",
+    alt: "Cocina totalmente equipada del departamento por día en Marcos Juárez",
     eyebrow: "Gourmet",
     caption: "Cocina Equipada",
   },
@@ -44,13 +44,13 @@ const squareItems: GalleryItem[] = [
 const secondaryItems: { small: GalleryItem; wide: GalleryItem } = {
   small: {
     src: "/images/gallery6.jpg",
-    alt: "Baño completo",
+    alt: "Baño en suite completo con amenities del apart en Marcos Juárez",
     eyebrow: "Wellness",
     caption: "Baño en Suite",
   },
   wide: {
     src: "/images/gallery2.jpg",
-    alt: "Detalles de diseño",
+    alt: "Detalles de diseño y terminaciones de Esmeralda Apart, Marcos Juárez",
     eyebrow: "Arquitectura",
     caption: "Detalles & Diseño",
   },
@@ -197,6 +197,9 @@ const GallerySection = () => {
       {/* Lightbox */}
       {lightbox && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Foto ampliada de los departamentos"
           className="fixed inset-0 z-50 bg-section-dark/90 flex items-center justify-center p-6"
           onClick={() => setLightbox(null)}
         >
@@ -209,7 +212,7 @@ const GallerySection = () => {
           </button>
           <img
             src={lightbox}
-            alt="Galería"
+            alt="Foto ampliada de los departamentos de Esmeralda Apart en Marcos Juárez"
             className="max-w-full max-h-[85vh] rounded-sm shadow-2xl"
           />
         </div>

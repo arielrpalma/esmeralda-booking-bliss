@@ -23,6 +23,15 @@ const Blog = () => {
     })),
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://esmeraldaapart.com.ar/" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://esmeraldaapart.com.ar/blog" },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-background pb-24">
       <Helmet>
@@ -37,6 +46,7 @@ const Blog = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="https://esmeraldaapart.com.ar/images/hero.jpg" />
         <script type="application/ld+json">{JSON.stringify(itemListJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
 
       <Navbar />

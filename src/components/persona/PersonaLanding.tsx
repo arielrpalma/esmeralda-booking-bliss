@@ -7,7 +7,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import { type PersonaConfig, whatsappLink } from "@/content/personas";
+import { personas, type PersonaConfig, whatsappLink } from "@/content/personas";
+import { posts } from "@/content/posts";
 import { trackLandingView, trackWhatsAppClick } from "@/lib/analytics";
 
 interface Props {
@@ -219,6 +220,44 @@ const PersonaLanding = ({ config }: Props) => {
               </details>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Internal linking: other travel intents + blog guides */}
+      <section className="py-16 px-6 bg-background" aria-labelledby="mas-opciones">
+        <div className="container mx-auto max-w-5xl">
+          <h2 id="mas-opciones" className="text-2xl md:text-3xl font-display font-semibold text-foreground text-center mb-8">
+            Otras opciones de alojamiento en Marcos Juárez
+          </h2>
+          <div className="grid gap-3 md:grid-cols-3 mb-10">
+            {Object.values(personas)
+              .filter((p) => p.key !== config.key)
+              .map((p) => (
+                <Link
+                  key={p.slug}
+                  to={`/alojamiento/${p.slug}`}
+                  className="flex items-center gap-3 p-4 rounded-xl bg-card border border-border hover:border-primary/60 transition-colors font-body text-sm text-foreground"
+                >
+                  <p.icon size={18} className="text-primary shrink-0" aria-hidden="true" />
+                  <span>{p.cardTitle}</span>
+                </Link>
+              ))}
+          </div>
+          <h3 className="text-lg font-display font-semibold text-foreground text-center mb-5">
+            Guías útiles antes de reservar
+          </h3>
+          <ul className="grid gap-3 md:grid-cols-2">
+            {posts.slice(0, 4).map((p) => (
+              <li key={p.slug}>
+                <Link
+                  to={`/blog/${p.slug}`}
+                  className="block p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors font-body text-sm text-foreground"
+                >
+                  {p.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
