@@ -15,7 +15,11 @@
     <meta name="geo.position" content="-32.7000;-62.1000" />
     <meta name="ICBM" content="-32.7000, -62.1000" />
 
+    <!-- Critical resource hints: speeds up LCP image + third-party tags -->
     <link rel="preload" as="image" href="/images/hero.jpg" imagesrcset="/images/hero-mobile.jpg 800w, /images/hero.jpg 1800w" imagesizes="(max-width: 768px) 100vw, 1800px" fetchpriority="high" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Esmeralda Apart" />
