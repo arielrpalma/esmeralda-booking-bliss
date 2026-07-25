@@ -35,7 +35,7 @@ Las reservas directas se realizan desde una barra flotante fija en la parte infe
 
 ## Guías de Marcos Juárez (hub de contenidos)
 
-- [Guía completa de Marcos Juárez](/guias): Índice de todas las guías locales sobre alojamiento, turismo, empresas, eventos, rutas y servicios.
+- [Guía completa de Marcos Juárez](/guias): Índice de todas las guías locales: alojamiento, turismo, gastronomía, empresas, eventos, deportes, educación, servicios de la ciudad y rutas.
 
 ### Alojamiento (/alojamiento)
 
@@ -55,6 +55,16 @@ Las reservas directas se realizan desde una barra flotante fija en la parte infe
 - [Vida nocturna en Marcos Juárez](/turismo/vida-nocturna): La vida nocturna de Marcos Juárez se mueve entre bares, cervecerías y clubes sociales, sobre todo los viernes y sábados. Todo está a pocas cuadras del centro, así que alojarse en la zona permite volver caminando sin usar el auto.
 - [Parques y espacios verdes en Marcos Juárez](/turismo/parques): Marcos Juárez tiene plazas arboladas y paseos verdes distribuidos por la ciudad, ideales para caminar, correr al atardecer o salir con chicos y mascotas. Los principales están a pocas cuadras del centro y del alojamiento.
 - [Compras en Marcos Juárez](/turismo/compras): La zona comercial de Marcos Juárez se concentra en el centro, con indumentaria, supermercados, farmacias y ferreterías. Los comercios abren de 8:30 a 12:30 y de 16:30 a 20:30, con corte al mediodía de lunes a sábado.
+
+### Gastronomía (/gastronomia)
+
+- [Dónde comer en Marcos Juárez](/gastronomia/donde-comer-en-marcos-juarez): La oferta gastronómica se concentra en el centro: parrillas, pizzerías, cocina casera, cafeterías y bares, con la cena arrancando alrededor de las 21.
+- [Parrillas en Marcos Juárez](/gastronomia/parrillas): Asado, tira, vacío, achuras y provoleta; formatos de salón, take away y reservas para grupos y delegaciones.
+- [Pizzerías en Marcos Juárez](/gastronomia/pizzerias): Pizza al molde y a la piedra con delivery al casco céntrico, la opción más disponible para cenar tarde llegando por la Au Ruta 9.
+- [Cafeterías en Marcos Juárez](/gastronomia/cafeterias-de-especialidad): Desayunos, meriendas y café de especialidad en el centro, con opciones para trabajar un rato con notebook.
+- [Bares y cervecerías en Marcos Juárez](/gastronomia/bares-y-cervecerias): Cerveza artesanal y picadas, con más movimiento de jueves a sábado, todo a distancia caminable del centro.
+- [Panaderías y heladerías en Marcos Juárez](/gastronomia/panaderias-y-heladerias): Facturas y pan por la mañana, heladerías por la tarde y la noche, con delivery en temporada de calor.
+- [Dónde comer cerca de Esmeralda Apart](/gastronomia/comer-cerca-de-esmeralda-apart): Qué hay a pocas cuadras de 9 de Julio 262: gastronomía, supermercados y delivery a la puerta del edificio.
 
 ### Empresas e instituciones (/empresas)
 
@@ -77,6 +87,31 @@ Las reservas directas se realizan desde una barra flotante fija en la parte infe
 - [Exposiciones en Marcos Juárez](/eventos/exposiciones): Las exposiciones de Marcos Juárez incluyen muestras rurales, presentaciones de maquinaria agrícola y eventos culturales. Se concentran en el predio de la Sociedad Rural y en el centro, ambos a minutos del alojamiento.
 - [Eventos empresariales en Marcos Juárez](/eventos/eventos-empresariales): Marcos Juárez recibe capacitaciones, lanzamientos de producto y reuniones regionales de empresas del agro. Para equipos de 4 a 10 personas conviene reservar varias unidades con factura A, WiFi de fibra y check-in digital 24 horas.
 
+### Deportes (/deportes)
+
+- [Clubes deportivos de Marcos Juárez](/deportes/clubes-de-marcos-juarez): Clubes tradicionales con fútbol, básquet, hockey, tenis y natación, y una agenda de torneos regionales durante casi todo el año.
+- [Pádel y tenis en Marcos Juárez](/deportes/padel-y-tenis): Complejos de pádel con canchas techadas e iluminadas y canchas de tenis de polvo de ladrillo; turnos por teléfono o WhatsApp.
+- [Fútbol, básquet y hockey en Marcos Juárez](/deportes/futbol-basquet-y-hockey): Ligas locales y regionales del sudeste cordobés, con categorías formativas y equipos visitantes cada fin de semana.
+- [Gimnasios y actividad física](/deportes/gimnasios-y-actividad-fisica): Gimnasios con pases diarios o semanales y circuitos para correr o caminar dentro del casco céntrico.
+- [Torneos y delegaciones](/deportes/torneos-y-delegaciones): Cómo organizar el alojamiento de un plantel: unidades múltiples, cocina, cocheras, horarios libres y factura a nombre del club.
+
+### Educación (/educacion)
+
+- [Escuelas y colegios en Marcos Juárez](/educacion/escuelas-y-colegios): Establecimientos públicos y privados de nivel inicial, primario y secundario, con orientaciones técnicas y agropecuarias.
+- [Institutos terciarios y universidades](/educacion/institutos-y-universidades): Formación docente, tecnicaturas y propuestas a distancia; Rosario a 185 km y Córdoba capital a 255 km.
+- [Academias y cursos](/educacion/academias-y-cursos): Idiomas, música, informática y capacitaciones profesionales, muchas vinculadas al agro y al comercio.
+- [Alojamiento para estudiantes](/educacion/alojamiento-para-estudiantes): Departamentos con WiFi de fibra, escritorio, cocina y acceso 24 horas para exámenes, cursillos e inscripciones.
+
+### Servicios de la ciudad (/servicios-en-marcos-juarez)
+
+- [Hospitales y clínicas](/servicios-en-marcos-juarez/hospitales-y-clinicas): Hospital Abel Ayerza con guardia 24 horas, clínicas y sanatorios privados y centros de diagnóstico.
+- [Farmacias y farmacia de turno](/servicios-en-marcos-juarez/farmacias): Cómo funciona el sistema rotativo de turnos que cubre noches, domingos y feriados.
+- [Bancos y cajeros automáticos](/servicios-en-marcos-juarez/bancos-y-cajeros): Zona bancaria en el centro, atención de mañana en días hábiles y cajeros Link y Banelco las 24 horas.
+- [Estaciones de servicio](/servicios-en-marcos-juarez/estaciones-de-servicio): Dónde cargar combustible y GNC en la ciudad y sobre la Au Ruta 9, a unos 3 km del centro.
+- [Remises y taxis](/servicios-en-marcos-juarez/remises-y-taxis): Cómo moverse sin auto: remises y taxis por teléfono o WhatsApp; el centro es plenamente caminable.
+- [Supermercados](/servicios-en-marcos-juarez/supermercados): Supermercados, autoservicios y despensas del casco céntrico, con corte de siesta y horario reducido los domingos.
+- [Trámites y servicios útiles](/servicios-en-marcos-juarez/tramites-utiles): Municipalidad, Tribunales, registro civil y correo, todos en el centro y con atención de mañana.
+
 ### Rutas y viajes (/rutas)
 
 - [Alojamiento sobre la Ruta Nacional 9](/rutas/alojamiento-ruta-nacional-9): Marcos Juárez está a pocos minutos de la Au Ruta Nacional 9, a mitad de camino entre Rosario y Córdoba. Esmeralda Apart es una parada segura sobre el corredor: check-in digital 24 horas, cochera, cocina equipada y salida rápida a la autopista.
@@ -84,7 +119,7 @@ Las reservas directas se realizan desde una barra flotante fija en la parte infe
 - [Dormir camino a Rosario](/rutas/dormir-camino-a-rosario): Marcos Juárez está a unos 185 km de Rosario, alrededor de 1 hora y 50 minutos por la Au Ruta 9. Es una parada práctica para quienes bajan de Córdoba y quieren llegar a Rosario temprano y descansados.
 - [Dónde descansar viajando por la Ruta 9](/rutas/donde-descansar-viajando-por-ruta-9): Se recomienda parar cada dos horas de manejo y dormir si el viaje supera las cinco. Sobre la Ruta 9, Marcos Juárez ofrece servicios, gastronomía y alojamiento con acceso digital 24 horas a solo 3 km de la autopista.
 
-### Servicios (/servicios)
+### Servicios del apart (/servicios)
 
 - [Factura A y B para empresas](/servicios/factura-a): Esmeralda Apart emite factura A o B a nombre de la empresa por cada estadía en Marcos Juárez. Solo hace falta CUIT, razón social y condición frente al IVA al momento de reservar; en convenios corporativos se factura de forma mensual consolidada.
 - [Cochera para tu vehículo](/servicios/cochera): Esmeralda Apart cuenta con cochera coordinada previamente para autos, camionetas y vehículos de trabajo. Es clave si viajás con herramientas, muestras o equipaje y no querés dejar el vehículo en la calle.

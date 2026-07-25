@@ -62,6 +62,29 @@ const HubEntryPage = ({ clusterSlug }: { clusterSlug?: string }) => {
       }
     : null;
 
+  // Local SEO: Place JSON-LD. Optional fields are emitted only when verified.
+  const placeJsonLd = entry.place
+    ? {
+        "@context": "https://schema.org",
+        "@type": entry.place.placeType ?? "Place",
+        name: entry.h1,
+        description: entry.description,
+        url,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: entry.place.address,
+          addressLocality: "Marcos Juárez",
+          addressRegion: "Córdoba",
+          addressCountry: "AR",
+        },
+        ...(entry.place.lat != null && entry.place.lng != null
+          ? { geo: { "@type": "GeoCoordinates", latitude: entry.place.lat, longitude: entry.place.lng } }
+          : {}),
+        ...(entry.place.hours?.length ? { openingHours: entry.place.hours } : {}),
+        ...(entry.place.phone ? { telephone: entry.place.phone } : {}),
+      }
+    : null;
+
   return (
     <div className="min-h-screen bg-background pb-24">
       <Helmet>
@@ -80,6 +103,7 @@ const HubEntryPage = ({ clusterSlug }: { clusterSlug?: string }) => {
         <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
         {faqJsonLd && <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>}
+        {placeJsonLd && <script type="application/ld+json">{JSON.stringify(placeJsonLd)}</script>}
       </Helmet>
 
       <Navbar />
@@ -137,6 +161,17 @@ const HubEntryPage = ({ clusterSlug }: { clusterSlug?: string }) => {
                   </li>
                 </ul>
                 <p className="font-body text-sm text-muted-foreground mb-4">{entry.place.address}</p>
+                {/* Verified data only: rendered when present, never with filler text. */}
+                {entry.place.hours?.length ? (
+                  <ul className="font-body text-sm text-muted-foreground mb-4 space-y-1">
+                    {entry.place.hours.map((h) => (
+                      <li key={h}>{h}</li>
+                    ))}
+                  </ul>
+                ) : null}
+                {entry.place.phone ? (
+                  <p className="font-body text-sm text-muted-foreground mb-4">Tel.: {entry.place.phone}</p>
+                ) : null}
                 <div className="aspect-[16/9] overflow-hidden rounded-2xl border border-border">
                   <iframe
                     title={`Mapa de ${entry.h1} en Marcos Juárez`}
