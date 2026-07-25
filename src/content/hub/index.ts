@@ -1,9 +1,25 @@
-import { Bed, MapPin, Building2, CalendarDays, Route, Sparkles, type LucideIcon } from "lucide-react";
+import {
+  Bed,
+  MapPin,
+  Building2,
+  CalendarDays,
+  Route,
+  Sparkles,
+  UtensilsCrossed,
+  Trophy,
+  GraduationCap,
+  LifeBuoy,
+  type LucideIcon,
+} from "lucide-react";
 import type { ClusterConfig, ClusterKey, HubEntry } from "./types";
 import { alojamiento } from "./alojamiento";
 import { turismo } from "./turismo";
+import { gastronomia } from "./gastronomia";
 import { empresas } from "./empresas";
 import { eventos } from "./eventos";
+import { deportes } from "./deportes";
+import { educacion } from "./educacion";
+import { serviciosCiudad } from "./servicios-ciudad";
 import { rutas } from "./rutas";
 import { servicios } from "./servicios";
 
