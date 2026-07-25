@@ -4,8 +4,12 @@
 export type ClusterKey =
   | "alojamiento"
   | "turismo"
+  | "gastronomia"
   | "empresas"
   | "eventos"
+  | "deportes"
+  | "educacion"
+  | "serviciosCiudad"
   | "rutas"
   | "servicios";
 
@@ -31,6 +35,29 @@ export interface HubPlace {
   distanceKm: string;
   driveMinutes: string;
   walkMinutes: string;
+  /** Only fill in when verified from a public source; rendered conditionally. */
+  lat?: number;
+  lng?: number;
+  /** Schema.org openingHours strings, e.g. "Mo-Fr 08:00-13:00". Verified data only. */
+  hours?: string[];
+  phone?: string;
+  /** Schema.org type used for the Place JSON-LD. */
+  placeType?:
+    | "LocalBusiness"
+    | "Restaurant"
+    | "CafeOrCoffeeShop"
+    | "BarOrPub"
+    | "Hospital"
+    | "Pharmacy"
+    | "BankOrCreditUnion"
+    | "GasStation"
+    | "SportsActivityLocation"
+    | "School"
+    | "CollegeOrUniversity"
+    | "Museum"
+    | "Park"
+    | "GovernmentOffice"
+    | "Place";
 }
 
 export interface HubEntry {
