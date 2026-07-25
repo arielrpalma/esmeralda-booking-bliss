@@ -42,6 +42,9 @@ const HeroSection = () => {
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-semibold text-white leading-tight mb-5 [text-shadow:0_2px_18px_rgba(0,0,0,0.55)]">
               Llegá <span className="italic font-light">cuando</span> quieras.
+              <span className="block mt-3 text-lg md:text-2xl lg:text-3xl font-body font-light text-white/90 tracking-wide">
+                Apart hotel y departamentos por día en Marcos Juárez
+              </span>
             </h1>
 
             <p className="text-base md:text-xl font-body font-light text-white/95 leading-relaxed mb-7 max-w-xl mx-auto lg:mx-0 [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]">
