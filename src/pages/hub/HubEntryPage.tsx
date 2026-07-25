@@ -161,6 +161,17 @@ const HubEntryPage = ({ clusterSlug }: { clusterSlug?: string }) => {
                   </li>
                 </ul>
                 <p className="font-body text-sm text-muted-foreground mb-4">{entry.place.address}</p>
+                {/* Verified data only: rendered when present, never with filler text. */}
+                {entry.place.hours?.length ? (
+                  <ul className="font-body text-sm text-muted-foreground mb-4 space-y-1">
+                    {entry.place.hours.map((h) => (
+                      <li key={h}>{h}</li>
+                    ))}
+                  </ul>
+                ) : null}
+                {entry.place.phone ? (
+                  <p className="font-body text-sm text-muted-foreground mb-4">Tel.: {entry.place.phone}</p>
+                ) : null}
                 <div className="aspect-[16/9] overflow-hidden rounded-2xl border border-border">
                   <iframe
                     title={`Mapa de ${entry.h1} en Marcos Juárez`}
