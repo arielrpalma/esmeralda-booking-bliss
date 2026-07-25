@@ -40,7 +40,7 @@ const AmenitiesSection = () => {
           >
             <img
               src="/images/amenities.jpg"
-              alt="Interior departamento"
+              alt="Interior del departamento amoblado de Esmeralda Apart en Marcos Juárez"
               className="w-full rounded-sm shadow-2xl"
               loading="lazy"
             />

@@ -48,7 +48,7 @@ const HeroSection = () => {
             </h1>
 
             <p className="text-base md:text-xl font-body font-light text-white/95 leading-relaxed mb-7 max-w-xl mx-auto lg:mx-0 [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]">
-              Check-in electrónico 24 h · Sin recepción · Reservá directo y pagá menos.
+              Alojamiento en Marcos Juárez con check-in electrónico 24 h, cochera y factura A/B. Sin recepción: reservá directo y pagá menos que en Booking o Airbnb.
             </p>
 
             {/* Trust badges */}

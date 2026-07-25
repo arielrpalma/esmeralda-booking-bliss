@@ -32,7 +32,7 @@ const AboutSection = () => {
           >
             <img
               src="/images/apartment.jpg"
-              alt="Departamento Esmeralda Apart"
+              alt="Departamento temporario de Esmeralda Apart en el centro de Marcos Juárez"
               className="w-full rounded-sm shadow-2xl"
               loading="lazy"
             />
