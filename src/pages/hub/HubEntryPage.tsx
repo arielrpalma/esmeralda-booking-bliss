@@ -62,6 +62,29 @@ const HubEntryPage = ({ clusterSlug }: { clusterSlug?: string }) => {
       }
     : null;
 
+  // Local SEO: Place JSON-LD. Optional fields are emitted only when verified.
+  const placeJsonLd = entry.place
+    ? {
+        "@context": "https://schema.org",
+        "@type": entry.place.placeType ?? "Place",
+        name: entry.h1,
+        description: entry.description,
+        url,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: entry.place.address,
+          addressLocality: "Marcos Juárez",
+          addressRegion: "Córdoba",
+          addressCountry: "AR",
+        },
+        ...(entry.place.lat != null && entry.place.lng != null
+          ? { geo: { "@type": "GeoCoordinates", latitude: entry.place.lat, longitude: entry.place.lng } }
+          : {}),
+        ...(entry.place.hours?.length ? { openingHours: entry.place.hours } : {}),
+        ...(entry.place.phone ? { telephone: entry.place.phone } : {}),
+      }
+    : null;
+
   return (
     <div className="min-h-screen bg-background pb-24">
       <Helmet>
