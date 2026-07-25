@@ -53,6 +53,58 @@ export const clusters: ClusterConfig[] = [
       "El turismo en Marcos Juárez combina el paseo por el casco histórico y la plaza principal, gastronomía de parrilla y pastas, cafeterías de especialidad, espacios verdes y compras en la zona comercial del centro.",
   },
   {
+    key: "gastronomia",
+    slug: "gastronomia",
+    name: "Gastronomía",
+    title: "Gastronomía en Marcos Juárez: dónde comer, parrillas y cafeterías",
+    description:
+      "Guía gastronómica de Marcos Juárez: parrillas, pizzerías, cafeterías, bares, panaderías y heladerías, con horarios típicos, delivery y qué hay cerca del centro.",
+    keywords: "donde comer en Marcos Juárez, gastronomía Marcos Juárez, parrillas Marcos Juárez, restaurantes Marcos Juárez",
+    intro:
+      "Toda la oferta gastronómica de la ciudad explicada por categoría, con horarios habituales y opciones a distancia caminable del centro.",
+    snippet:
+      "La gastronomía de Marcos Juárez se concentra en el centro: parrillas con cortes clásicos, pizzerías con delivery, restaurantes de cocina casera, cafeterías para desayuno y merienda, y bares y cervecerías de jueves a sábado.",
+  },
+  {
+    key: "deportes",
+    slug: "deportes",
+    name: "Deportes",
+    title: "Deportes en Marcos Juárez: clubes, canchas y torneos",
+    description:
+      "Deportes en Marcos Juárez: clubes tradicionales, fútbol, básquet, hockey, pádel, tenis, gimnasios y alojamiento para delegaciones que llegan a un torneo.",
+    keywords: "deportes Marcos Juárez, clubes de Marcos Juárez, canchas de padel Marcos Juárez, torneos Marcos Juárez",
+    intro:
+      "Qué se juega en la ciudad, cómo funcionan los clubes y complejos, y cómo organizar el viaje si llegás con una delegación.",
+    snippet:
+      "Marcos Juárez tiene clubes tradicionales con fútbol, básquet, hockey, tenis y natación, complejos privados de pádel y una agenda de torneos regionales que llena la ciudad de delegaciones varios fines de semana al año.",
+  },
+  {
+    key: "educacion",
+    slug: "educacion",
+    name: "Educación",
+    title: "Educación en Marcos Juárez: escuelas, institutos y academias",
+    description:
+      "Educación en Marcos Juárez: escuelas primarias y secundarias, institutos terciarios, universidades a distancia, academias y alojamiento para estudiantes.",
+    keywords: "escuelas Marcos Juárez, institutos terciarios Marcos Juárez, universidades Marcos Juárez, estudiar en Marcos Juárez",
+    intro:
+      "Cómo se organiza la oferta educativa de la ciudad, desde el nivel inicial hasta la formación superior y las capacitaciones profesionales.",
+    snippet:
+      "Marcos Juárez concentra escuelas públicas y privadas de todos los niveles, institutos terciarios con carreras docentes y técnicas, propuestas universitarias a distancia y academias de idiomas, música e informática.",
+  },
+  {
+    key: "servicios-en-marcos-juarez",
+    slug: "servicios-en-marcos-juarez",
+    name: "Servicios de la ciudad",
+    title: "Servicios en Marcos Juárez: salud, bancos, farmacias y transporte",
+    description:
+      "Servicios esenciales de Marcos Juárez: hospital y clínicas, farmacias de turno, bancos y cajeros, estaciones de servicio, remises, supermercados y trámites.",
+    keywords: "servicios Marcos Juárez, farmacia de turno Marcos Juárez, cajeros Marcos Juárez, remises Marcos Juárez",
+    intro:
+      "Todo lo práctico que necesitás resolver estando de viaje: salud, dinero, combustible, transporte, compras y trámites.",
+    snippet:
+      "Los servicios esenciales de Marcos Juárez están concentrados en el casco céntrico: el Hospital Abel Ayerza, farmacias con sistema de turno rotativo, bancos con cajeros de las redes Link y Banelco, supermercados, remises y estaciones de servicio.",
+  },
+  {
     key: "empresas",
     slug: "empresas",
     name: "Empresas e instituciones",
