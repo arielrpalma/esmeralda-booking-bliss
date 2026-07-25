@@ -13,7 +13,12 @@ import Trabajo from "./pages/personas/Trabajo";
 import Torneo from "./pages/personas/Torneo";
 import Ruta9 from "./pages/personas/Ruta9";
 import Familia from "./pages/personas/Familia";
+import HubIndex from "./pages/hub/HubIndex";
+import ClusterPage from "./pages/hub/ClusterPage";
+import HubEntryPage from "./pages/hub/HubEntryPage";
+import { clusters } from "./content/hub";
 import NotFound from "./pages/NotFound";
+
 
 const queryClient = new QueryClient();
 
