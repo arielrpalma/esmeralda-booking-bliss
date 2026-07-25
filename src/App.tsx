@@ -13,7 +13,12 @@ import Trabajo from "./pages/personas/Trabajo";
 import Torneo from "./pages/personas/Torneo";
 import Ruta9 from "./pages/personas/Ruta9";
 import Familia from "./pages/personas/Familia";
+import HubIndex from "./pages/hub/HubIndex";
+import ClusterPage from "./pages/hub/ClusterPage";
+import HubEntryPage from "./pages/hub/HubEntryPage";
+import { clusters } from "./content/hub";
 import NotFound from "./pages/NotFound";
+
 
 const queryClient = new QueryClient();
 
@@ -36,6 +41,19 @@ const App = () => (
           <Route path="/alojamiento/torneo" element={<Torneo />} />
           <Route path="/alojamiento/ruta-9" element={<Ruta9 />} />
           <Route path="/alojamiento/familia" element={<Familia />} />
+          {/* Topic clusters: pillar page + entries */}
+          <Route path="/guias" element={<HubIndex />} />
+          {clusters.map((c) => (
+            <Route key={c.slug} path={`/${c.slug}`} element={<ClusterPage clusterSlug={c.slug} />} />
+          ))}
+          {clusters.map((c) => (
+            <Route
+              key={`${c.slug}-entry`}
+              path={`/${c.slug}/:slug`}
+              element={<HubEntryPage clusterSlug={c.slug} />}
+            />
+          ))}
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

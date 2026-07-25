@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Briefcase, Trophy, MapPinned, Heart, BookOpen } from "lucide-react";
 import { posts } from "@/content/posts";
+import { clusters } from "@/content/hub";
+
 
 // SEO internal-linking hub: connects the home page with the persona landings
 // and the most relevant blog articles (topical clusters around Marcos Juárez).
@@ -49,11 +51,41 @@ const InternalLinksSection = () => {
           ))}
         </div>
 
+        {/* Topic-cluster pillar pages */}
+        <div className="mb-14">
+          <div className="text-center mb-6">
+            <h3 className="text-2xl font-display font-semibold text-foreground">
+              Guía completa de Marcos Juárez
+            </h3>
+            <p className="font-body text-sm text-muted-foreground mt-2">
+              Alojamiento, turismo, empresas, eventos, la Au Ruta 9 y servicios, explicados en detalle.
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3">
+            {clusters.map((c) => (
+              <Link
+                key={c.slug}
+                to={`/${c.slug}`}
+                className="rounded-full border border-border bg-card px-4 py-2 font-body text-sm text-foreground hover:border-primary hover:text-primary transition-colors"
+              >
+                {c.name}
+              </Link>
+            ))}
+            <Link
+              to="/guias"
+              className="rounded-full bg-primary px-4 py-2 font-body text-sm text-primary-foreground hover:opacity-90 transition-opacity"
+            >
+              Ver todas las guías
+            </Link>
+          </div>
+        </div>
+
         <div className="text-center mb-8">
           <h3 className="text-2xl font-display font-semibold text-foreground">
             Guías sobre hospedaje en Marcos Juárez
           </h3>
         </div>
+
 
         <ul className="grid gap-3 md:grid-cols-2">
           {featured.map((p) => (
