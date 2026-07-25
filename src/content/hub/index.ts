@@ -146,7 +146,7 @@ export const clusters: ClusterConfig[] = [
   {
     key: "servicios",
     slug: "servicios",
-    name: "Servicios",
+    name: "Servicios del apart",
     title: "Servicios del alojamiento: factura A, cochera, check-in 24 h y más",
     description:
       "Servicios de Esmeralda Apart en Marcos Juárez: factura A, cochera, check-in digital 24 h, WiFi de fibra, cocina equipada, aire, Smart TV y seguridad.",
