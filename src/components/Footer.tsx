@@ -1,4 +1,12 @@
 import { MapPin, Phone, Instagram, Facebook } from "lucide-react";
+import { Link } from "react-router-dom";
+import { clusters } from "@/content/hub";
+
+const guideLinks = [
+  { label: "Todas las guías", href: "/guias" },
+  ...clusters.map((c) => ({ label: c.name, href: `/${c.slug}` })),
+  { label: "Blog", href: "/blog" },
+];
 
 const Footer = () => {
   return (
@@ -58,7 +66,26 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-section-dark-foreground/10 flex flex-col items-center gap-3">
+        {/* Guide categories: internal linking from every page of the site */}
+        <nav aria-label="Guía de Marcos Juárez" className="mt-12 pt-8 border-t border-section-dark-foreground/10">
+          <p className="font-body text-xs uppercase tracking-[0.25em] text-primary mb-4 text-center md:text-left">
+            Guía de Marcos Juárez
+          </p>
+          <ul className="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-3">
+            {guideLinks.map((l) => (
+              <li key={l.href}>
+                <Link
+                  to={l.href}
+                  className="font-body text-sm text-section-dark-foreground/60 hover:text-primary transition-colors duration-300"
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="mt-10 pt-8 border-t border-section-dark-foreground/10 flex flex-col items-center gap-3">
 
           <p className="font-body text-xs text-section-dark-foreground/70">
             © {new Date().getFullYear()} Esmeralda Desarrollos. Todos los derechos reservados.
