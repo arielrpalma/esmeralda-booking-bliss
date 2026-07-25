@@ -3,6 +3,14 @@
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 import { posts } from "../src/content/posts";
+// Cluster content files are imported directly (not through src/content/hub/index.ts)
+// to keep this Node script free of React/lucide imports.
+import { alojamiento } from "../src/content/hub/alojamiento";
+import { turismo } from "../src/content/hub/turismo";
+import { empresas } from "../src/content/hub/empresas";
+import { eventos } from "../src/content/hub/eventos";
+import { rutas } from "../src/content/hub/rutas";
+import { servicios } from "../src/content/hub/servicios";
 
 const BASE_URL = "https://esmeraldaapart.com.ar";
 
@@ -16,11 +24,29 @@ interface SitemapEntry {
 const staticEntries: SitemapEntry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/blog", changefreq: "weekly", priority: "0.8" },
+  { path: "/guias", changefreq: "weekly", priority: "0.9" },
   { path: "/alojamiento/trabajo", changefreq: "monthly", priority: "0.9" },
   { path: "/alojamiento/torneo", changefreq: "monthly", priority: "0.9" },
   { path: "/alojamiento/ruta-9", changefreq: "monthly", priority: "0.9" },
   { path: "/alojamiento/familia", changefreq: "monthly", priority: "0.9" },
 ];
+
+// Topic-cluster pillar pages
+const clusterSlugs = ["alojamiento", "turismo", "empresas", "eventos", "rutas", "servicios"];
+const clusterEntries: SitemapEntry[] = clusterSlugs.map((slug) => ({
+  path: `/${slug}`,
+  changefreq: "weekly",
+  priority: "0.9",
+}));
+
+// Topic-cluster detail pages
+const hubEntries = [...alojamiento, ...turismo, ...empresas, ...eventos, ...rutas, ...servicios];
+const hubPageEntries: SitemapEntry[] = hubEntries.map((e) => ({
+  path: `/${e.cluster}/${e.slug}`,
+  lastmod: e.updatedAt,
+  changefreq: "monthly",
+  priority: "0.8",
+}));
 
 const postEntries: SitemapEntry[] = posts.map((p) => ({
   path: `/blog/${p.slug}`,
@@ -29,7 +55,8 @@ const postEntries: SitemapEntry[] = posts.map((p) => ({
   priority: "0.7",
 }));
 
-const entries: SitemapEntry[] = [...staticEntries, ...postEntries];
+const entries: SitemapEntry[] = [...staticEntries, ...clusterEntries, ...hubPageEntries, ...postEntries];
+
 
 function generateSitemap(entries: SitemapEntry[]) {
   const urls = entries.map((e) =>
