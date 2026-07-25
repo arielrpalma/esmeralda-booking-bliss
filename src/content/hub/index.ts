@@ -109,8 +109,12 @@ export const clusters: ClusterConfig[] = [
 export const clusterIcons: Record<ClusterKey, LucideIcon> = {
   alojamiento: Bed,
   turismo: MapPin,
+  gastronomia: UtensilsCrossed,
   empresas: Building2,
   eventos: CalendarDays,
+  deportes: Trophy,
+  educacion: GraduationCap,
+  "servicios-en-marcos-juarez": LifeBuoy,
   rutas: Route,
   servicios: Sparkles,
 };
@@ -118,8 +122,12 @@ export const clusterIcons: Record<ClusterKey, LucideIcon> = {
 export const hubEntries: HubEntry[] = [
   ...alojamiento,
   ...turismo,
+  ...gastronomia,
   ...empresas,
   ...eventos,
+  ...deportes,
+  ...educacion,
+  ...serviciosCiudad,
   ...rutas,
   ...servicios,
 ];

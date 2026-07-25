@@ -9,7 +9,7 @@ export type ClusterKey =
   | "eventos"
   | "deportes"
   | "educacion"
-  | "serviciosCiudad"
+  | "servicios-en-marcos-juarez"
   | "rutas"
   | "servicios";
 
