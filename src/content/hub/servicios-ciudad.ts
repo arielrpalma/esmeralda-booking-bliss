@@ -5,7 +5,7 @@ import type { HubEntry } from "./types";
 
 export const serviciosCiudad: HubEntry[] = [
   {
-    cluster: "serviciosCiudad",
+    cluster: "servicios-en-marcos-juarez",
     slug: "hospitales-y-clinicas",
     title: "Hospitales y clínicas en Marcos Juárez",
     h1: "Hospitales y clínicas en Marcos Juárez",
@@ -38,10 +38,10 @@ export const serviciosCiudad: HubEntry[] = [
       { q: "¿Hay clínicas privadas?", a: "Sí, la ciudad cuenta con clínicas y sanatorios privados y centros de diagnóstico. Conviene verificar en la cartilla de tu obra social o prepaga qué prestador te corresponde." },
       { q: "¿Puedo hospedarme si acompaño a un paciente internado?", a: "Sí. Es un caso frecuente: el acceso electrónico 24 horas permite entrar y salir a cualquier hora, y podemos coordinar estadías largas por WhatsApp." },
     ],
-    related: ["empresas/hospital-abel-ayerza", "serviciosCiudad/farmacias", "serviciosCiudad/remises-y-taxis"],
+    related: ["empresas/hospital-abel-ayerza", "servicios-en-marcos-juarez/farmacias", "servicios-en-marcos-juarez/remises-y-taxis"],
   },
   {
-    cluster: "serviciosCiudad",
+    cluster: "servicios-en-marcos-juarez",
     slug: "farmacias",
     title: "Farmacias en Marcos Juárez y farmacia de turno",
     h1: "Farmacias en Marcos Juárez",
@@ -71,10 +71,10 @@ export const serviciosCiudad: HubEntry[] = [
       { q: "¿Cómo averiguo la farmacia de turno?", a: "El turno se publica en las vidrieras de las farmacias del centro y en medios locales. También podés escribirnos por WhatsApp y te orientamos." },
       { q: "¿Las farmacias están cerca del apart?", a: "Sí, hay farmacias dentro del casco céntrico, a distancia caminable desde 9 de Julio 262." },
     ],
-    related: ["serviciosCiudad/hospitales-y-clinicas", "serviciosCiudad/supermercados", "rutas/donde-descansar-viajando-por-ruta-9"],
+    related: ["servicios-en-marcos-juarez/hospitales-y-clinicas", "servicios-en-marcos-juarez/supermercados", "rutas/donde-descansar-viajando-por-ruta-9"],
   },
   {
-    cluster: "serviciosCiudad",
+    cluster: "servicios-en-marcos-juarez",
     slug: "bancos-y-cajeros",
     title: "Bancos y cajeros automáticos en Marcos Juárez",
     h1: "Bancos y cajeros automáticos en Marcos Juárez",
@@ -104,10 +104,10 @@ export const serviciosCiudad: HubEntry[] = [
       { q: "¿Cuál es el horario de los bancos?", a: "La atención al público es en horario bancario de mañana, de lunes a viernes hábiles. Los cajeros funcionan siempre." },
       { q: "¿Puedo pagar el alojamiento con tarjeta?", a: "Sí. Aceptamos tarjeta mediante posnet virtual, transferencia bancaria y efectivo, y emitimos factura A o B." },
     ],
-    related: ["empresas/bancos", "servicios/factura-a", "serviciosCiudad/tramites-utiles"],
+    related: ["empresas/bancos", "servicios/factura-a", "servicios-en-marcos-juarez/tramites-utiles"],
   },
   {
-    cluster: "serviciosCiudad",
+    cluster: "servicios-en-marcos-juarez",
     slug: "estaciones-de-servicio",
     title: "Estaciones de servicio en Marcos Juárez y Ruta 9",
     h1: "Estaciones de servicio en Marcos Juárez",
@@ -140,7 +140,7 @@ export const serviciosCiudad: HubEntry[] = [
     related: ["rutas/alojamiento-ruta-nacional-9", "servicios/cochera", "rutas/dormir-camino-a-cordoba"],
   },
   {
-    cluster: "serviciosCiudad",
+    cluster: "servicios-en-marcos-juarez",
     slug: "remises-y-taxis",
     title: "Remises y taxis en Marcos Juárez",
     h1: "Remises y taxis en Marcos Juárez",
@@ -171,10 +171,10 @@ export const serviciosCiudad: HubEntry[] = [
       { q: "¿Cómo llego desde la terminal de ómnibus al apart?", a: "La terminal está dentro de la ciudad, a corta distancia del centro: podés llegar en remis o caminando si viajás liviano. Escribinos y te orientamos." },
       { q: "¿Necesito auto para alojarme en el centro?", a: "No. El casco céntrico concentra los servicios y se recorre a pie. Si venís en auto, coordinamos cochera." },
     ],
-    related: ["empresas/terminal-de-omnibus", "serviciosCiudad/estaciones-de-servicio", "gastronomia/comer-cerca-de-esmeralda-apart"],
+    related: ["empresas/terminal-de-omnibus", "servicios-en-marcos-juarez/estaciones-de-servicio", "gastronomia/comer-cerca-de-esmeralda-apart"],
   },
   {
-    cluster: "serviciosCiudad",
+    cluster: "servicios-en-marcos-juarez",
     slug: "supermercados",
     title: "Supermercados en Marcos Juárez: dónde hacer las compras",
     h1: "Supermercados en Marcos Juárez",
@@ -208,7 +208,7 @@ export const serviciosCiudad: HubEntry[] = [
     related: ["servicios/cocina-equipada", "gastronomia/comer-cerca-de-esmeralda-apart", "alojamiento/hospedaje-para-familias"],
   },
   {
-    cluster: "serviciosCiudad",
+    cluster: "servicios-en-marcos-juarez",
     slug: "tramites-utiles",
     title: "Trámites y servicios útiles en Marcos Juárez",
     h1: "Trámites y servicios útiles en Marcos Juárez",

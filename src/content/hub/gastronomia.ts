@@ -263,6 +263,6 @@ export const gastronomia: HubEntry[] = [
       walkMinutes: "Punto de partida",
       placeType: "LocalBusiness",
     },
-    related: ["gastronomia/donde-comer-en-marcos-juarez", "serviciosCiudad/supermercados", "servicios/cochera"],
+    related: ["gastronomia/donde-comer-en-marcos-juarez", "servicios-en-marcos-juarez/supermercados", "servicios/cochera"],
   },
 ];

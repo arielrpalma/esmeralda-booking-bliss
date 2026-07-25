@@ -35,7 +35,7 @@ export const educacion: HubEntry[] = [
       { q: "¿Cuándo empieza el ciclo lectivo?", a: "Sigue el calendario de la provincia de Córdoba: el inicio suele ubicarse entre fines de febrero y los primeros días de marzo." },
       { q: "¿Se puede alojar una familia por unos días?", a: "Sí. Los departamentos tienen cocina equipada y coordinamos cochera, lo que hace más cómoda una estadía familiar corta." },
     ],
-    related: ["educacion/institutos-y-universidades", "alojamiento/hospedaje-para-familias", "serviciosCiudad/tramites-utiles"],
+    related: ["educacion/institutos-y-universidades", "alojamiento/hospedaje-para-familias", "servicios-en-marcos-juarez/tramites-utiles"],
   },
   {
     cluster: "educacion",
