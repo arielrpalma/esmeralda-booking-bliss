@@ -148,9 +148,11 @@ const Pago = () => {
   useEffect(() => {
     const t = setTimeout(() => {
       setDebouncedAmount(isValid && docOk ? importeNum : 0);
+      setDebouncedDoc(docOk ? `${docType}:${docDigits}` : "");
     }, 500);
     return () => clearTimeout(t);
-  }, [importeNum, isValid, docOk]);
+  }, [importeNum, isValid, docOk, docType, docDigits]);
+
 
 
   // Mount Payment Brick whenever we have a valid amount and no result yet
