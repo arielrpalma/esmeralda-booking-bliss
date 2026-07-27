@@ -231,13 +231,23 @@ const Pago = () => {
                     : `esm-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
                 }
                 const externalRef = externalRefRef.current;
+                // Always attach the holder's identification: the Brick may omit it,
+                // and Amex Argentina / corporate cards require it.
+                const doc = docRef.current;
+                const formPayer = (formData as { payer?: Record<string, unknown> }).payer ?? {};
+                const payer = {
+                  ...formPayer,
+                  identification: { type: doc.type, number: doc.number },
+                };
                 const { data, error } = await supabase.functions.invoke("process-mp-payment", {
                   body: {
                     ...formData,
+                    payer,
                     transaction_amount: debouncedAmount,
                     external_reference: externalRef,
                   },
                 });
+
                 if (error) throw error;
                 const res = data as PaymentResult;
                 setResult(res);
