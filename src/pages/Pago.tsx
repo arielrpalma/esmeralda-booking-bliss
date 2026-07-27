@@ -312,6 +312,8 @@ const Pago = () => {
     setReceiptDate(null);
     setErrorMsg(null);
     setImporte("");
+    setDocNumber("");
+
     // New attempt → new idempotency key.
     externalRefRef.current = null;
     submittingRef.current = false;
