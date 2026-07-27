@@ -53,27 +53,43 @@ const parseARS = (value: string) => {
   return Number.isFinite(n) ? n : 0;
 };
 
+// Accepted identification types for Argentina (Amex/corporate cards usually require CUIT)
+const DOC_TYPES = ["DNI", "CUIT", "CUIL"] as const;
+type DocType = (typeof DOC_TYPES)[number];
+
+// Expected digit length per document type
+const DOC_LENGTHS: Record<DocType, number[]> = {
+  DNI: [7, 8],
+  CUIT: [11],
+  CUIL: [11],
+};
+
+const isDocValid = (type: DocType, digits: string) => DOC_LENGTHS[type].includes(digits.length);
+
 // Friendly Spanish messages for the most common MP status_detail codes
 const MP_STATUS_MESSAGES: Record<string, string> = {
   cc_rejected_insufficient_amount: "Tu tarjeta no tiene fondos suficientes.",
-  cc_rejected_bad_filled_security_code: "Revisá el código de seguridad de la tarjeta.",
+  cc_rejected_bad_filled_security_code: "Revisá el código de seguridad de la tarjeta (en Amex son 4 dígitos al frente).",
   cc_rejected_bad_filled_date: "Revisá la fecha de vencimiento de la tarjeta.",
-  cc_rejected_bad_filled_other: "Revisá los datos de la tarjeta e intentá nuevamente.",
+  cc_rejected_bad_filled_other: "Revisá los datos de la tarjeta y el documento del titular e intentá nuevamente.",
   cc_rejected_bad_filled_card_number: "Revisá el número de tarjeta.",
   cc_rejected_call_for_authorize: "Llamá a tu banco para autorizar el pago e intentá de nuevo.",
-  cc_rejected_high_risk: "Pago rechazado por seguridad. Probá con otra tarjeta.",
+  cc_rejected_high_risk: "Pago rechazado por seguridad del emisor. Probá con otra tarjeta.",
   cc_rejected_card_disabled: "La tarjeta está inhabilitada. Contactá a tu banco.",
   cc_rejected_duplicated_payment: "Ya hiciste un pago por el mismo monto. Esperá unos minutos antes de reintentar.",
   cc_rejected_card_error: "No pudimos procesar la tarjeta. Probá con otra.",
   cc_rejected_invalid_installments: "El número de cuotas no es válido para esta tarjeta.",
   cc_rejected_max_attempts: "Alcanzaste el máximo de intentos. Probá con otra tarjeta.",
-  cc_rejected_other_reason: "El banco rechazó el pago. Probá con otra tarjeta.",
+  cc_rejected_other_reason:
+    "El banco emisor rechazó la operación (no es un error de los datos cargados). Suele pasar con tarjetas corporativas con restricciones para compras online: comunicate con el emisor para habilitarla o pagá con otra tarjeta.",
+  cc_rejected_blacklist: "El emisor rechazó la operación. Contactá a tu banco.",
 };
 
 const friendlyError = (statusDetail?: string, fallback?: string) => {
   if (statusDetail && MP_STATUS_MESSAGES[statusDetail]) return MP_STATUS_MESSAGES[statusDetail];
   return fallback ?? "Intentá nuevamente o probá con otra tarjeta.";
 };
+
 
 
 // Lazy-load the MP SDK once
