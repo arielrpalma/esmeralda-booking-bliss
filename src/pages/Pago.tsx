@@ -116,6 +116,8 @@ const Pago = () => {
   const [docType, setDocType] = useState<DocType>("DNI");
   const [docNumber, setDocNumber] = useState("");
   const [debouncedAmount, setDebouncedAmount] = useState(0);
+  const [debouncedDoc, setDebouncedDoc] = useState("");
+
   const [mountingBrick, setMountingBrick] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState<PaymentResult | null>(null);
