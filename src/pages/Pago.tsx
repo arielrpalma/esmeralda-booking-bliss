@@ -113,6 +113,8 @@ const loadMpSdk = () => {
 
 const Pago = () => {
   const [importe, setImporte] = useState("");
+  const [docType, setDocType] = useState<DocType>("DNI");
+  const [docNumber, setDocNumber] = useState("");
   const [debouncedAmount, setDebouncedAmount] = useState(0);
   const [mountingBrick, setMountingBrick] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -129,17 +131,27 @@ const Pago = () => {
   const externalRefRef = useRef<string | null>(null);
   // Sync guard: setState is async, so a fast second click can race past `processing`.
   const submittingRef = useRef(false);
+  // Latest document data, readable inside the Brick's onSubmit closure
+  const docRef = useRef<{ type: DocType; number: string }>({ type: "DNI", number: "" });
 
   const importeNum = parseARS(importe);
   const isValid = importeNum >= 100;
+  const docDigits = docNumber.replace(/\D/g, "");
+  const docOk = isDocValid(docType, docDigits);
+
+  // Keep the ref in sync so the Brick callback always sends the current document
+  useEffect(() => {
+    docRef.current = { type: docType, number: docDigits };
+  }, [docType, docDigits]);
 
   // Debounce so the Brick is not remounted on every keystroke
   useEffect(() => {
     const t = setTimeout(() => {
-      setDebouncedAmount(isValid ? importeNum : 0);
+      setDebouncedAmount(isValid && docOk ? importeNum : 0);
     }, 500);
     return () => clearTimeout(t);
-  }, [importeNum, isValid]);
+  }, [importeNum, isValid, docOk]);
+
 
   // Mount Payment Brick whenever we have a valid amount and no result yet
   useEffect(() => {
