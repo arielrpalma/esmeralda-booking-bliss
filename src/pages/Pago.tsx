@@ -310,7 +310,7 @@ const Pago = () => {
       brickControllerRef.current?.unmount();
       brickControllerRef.current = null;
     };
-  }, [debouncedAmount, result]);
+  }, [debouncedAmount, debouncedDoc, result]);
 
   // Capture receipt timestamp the moment a payment gets approved
   useEffect(() => {
