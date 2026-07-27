@@ -111,8 +111,21 @@ Deno.serve(async (req) => {
     });
 
     const mpData = await mpRes.json();
+
+    // Diagnostic log: reason only, never card token or full document number.
+    console.log('MP result', JSON.stringify({
+      http: mpRes.status,
+      status: mpData?.status,
+      status_detail: mpData?.status_detail,
+      message: mpData?.message,
+      cause: mpData?.cause,
+      payment_method_id: mpData?.payment_method_id ?? d.payment_method_id,
+      identification_type: d.payer.identification.type,
+      identification_len: d.payer.identification.number.length,
+      external_reference: externalRef,
+    }));
+
     if (!mpRes.ok) {
-      console.error('MP error', JSON.stringify(mpData));
       return new Response(JSON.stringify({
         error: mpData?.message || 'Error procesando el pago',
         status_detail: mpData?.status_detail,
@@ -121,6 +134,7 @@ Deno.serve(async (req) => {
         status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
 
     // Persist initial record (webhook will keep it updated). Upsert by external_reference
     // so a rare race between two edge invocations collapses into a single row.
