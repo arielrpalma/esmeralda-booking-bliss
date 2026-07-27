@@ -1,37 +1,106 @@
-## Diagnóstico confirmado
 
-Consulté los pagos reales. Los dos intentos de hace minutos (21:06 y 21:08, $82.000, `amex`) quedaron en `rejected` con `status_detail = cc_rejected_other_reason`, y un tercero igual el 12/07. Todas las operaciones con Visa, Cabal y débito Mastercard fueron aprobadas.
+# Guía de Marcos Juárez — expansión a autoridad local, con política de datos verificables
 
-Dos hechos verificados en el registro del pago:
+Sin tocar diseño ni identidad visual: se reutilizan los componentes de hub existentes (`HubBlocks`, `HubFaqs`, `HubBreadcrumbs`, `HubCta`) y se amplía contenido, categorías, menú y SEO local.
 
-1. **El documento no viajó.** En el pago guardado, `payer.identification` llegó con `type` y `number` en `null`. El CUIT que cargó el cliente no se envió a Mercado Pago. Amex Argentina suele exigir identificación del titular y, sin ella, el emisor rechaza.
-2. **El rechazo es del emisor, no una validación de formato.** `cc_rejected_other_reason` es el rechazo genérico de la tarjeta/emisor. Mercado Pago no devolvió "parámetro inválido"; el mensaje "operación inválida" que ve el cliente es nuestro texto genérico, que no refleja el motivo real.
+## Regla que gobierna todo el trabajo (nueva)
 
-Con esto, la causa más probable es (1): falta el documento en el request. No está 100 % confirmado que agregarlo haga aprobar la Amex corporativa (el emisor puede rechazar igual por política de la tarjeta), por eso el plan incluye instrumentación para verlo con certeza en el próximo intento.
+- **Cero invención.** Nombres propios, direcciones exactas, teléfonos, horarios, fechas de eventos y precios sólo se publican si se verifican en fuente pública (sitio oficial, Google Maps, Municipalidad, redes del comercio).
+- Lo no verificable **no se completa**: el campo queda vacío y la página no lo muestra (renderizado condicional, sin "Consultar" de relleno).
+- Cada dato dudoso se registra en un archivo nuevo `docs/revision-manual.md` con página, campo, fuente buscada y qué hace falta confirmar. Te lo entrego como checklist al final.
+- El contenido se escribe **evergreen**: se evita "en 2026", "actualmente cuesta", "este fin de semana". Los eventos usan URL perenne + bloque "edición actual" acotado y fácil de actualizar.
+- Nada de párrafos de relleno: si una categoría no da para una página con valor real, se fusiona con otra en lugar de inflar el conteo.
 
-## Plan
+## Estado actual verificado
 
-### 1. Asegurar que el documento se envíe siempre
-- Configurar el Payment Brick para que el campo de identificación del titular esté visible y sea obligatorio, con selector de tipo que incluya **DNI, CUIT y CUIL**.
-- Verificar en el envío que `payer.identification.type` y `.number` lleguen completos; si faltan, bloquear el envío con un aviso claro en vez de mandar el pago incompleto.
+- Hub operativo en `/guias` con 6 clusters y 41 guías: alojamiento (6), turismo (7), empresas (10), eventos (5), rutas (4), servicios del apart (9).
+- `HubEntryPage.tsx` ya emite title, description, canonical, OG, Twitter Card, Article + BreadcrumbList + FAQPage, mapa embebido y bloque distancia/auto/caminando.
+- `src/components/Navbar.tsx` **no** enlaza la guía hoy (Inicio, Departamentos, Servicios, Galería, Blog).
+- `HubPlace` tiene dirección, mapQuery y distancias, pero **no** coordenadas, horarios ni tipo de lugar.
 
-### 2. Validar coherencia tipo/número en el backend
-- En `process-mp-payment`, hacer obligatorio `identification` y validar longitudes: DNI 7-8 dígitos, CUIT/CUIL 11 dígitos. Si no coincide, devolver un error explícito indicando qué corregir.
+## Árbol del nuevo contenido
 
-### 3. Mostrar el motivo real del rechazo
-- Reemplazar "operación inválida" por mensajes específicos según `status_detail`: para `cc_rejected_other_reason` indicar que el rechazo lo hizo el banco emisor y sugerir contactar al emisor o usar otra tarjeta; cubrir también `cc_rejected_bad_filled_*`, `cc_rejected_insufficient_amount`, `cc_rejected_high_risk`.
+```text
+/guias  (índice existente → 9 categorías)
+├── /empresas                    10 actuales + hasta 8 nuevas (sólo empresas verificables)
+├── /gastronomia                 NUEVA — hasta 12
+│     donde-comer, parrillas, pizzerias, restaurantes-familiares,
+│     cafeterias, bares, cervecerias, heladerias, panaderias,
+│     delivery, desayunos, comer-cerca-del-apart
+├── /turismo                     7 actuales + hasta 7 nuevas
+│     plaza-principal, museos, circuitos-turisticos, paseos-a-pie,
+│     fin-de-semana, con-ninos, pueblos-cercanos
+├── /servicios-en-marcos-juarez  NUEVA — hasta 9
+│     hospitales, clinicas, farmacias, bancos-y-cajeros,
+│     estaciones-de-servicio, remises-y-taxis, supermercados,
+│     gomerias-y-lavaderos, tramites-utiles
+├── /eventos                     5 actuales + hasta 4 (URL perenne, actualización anual)
+├── /deportes                    NUEVA — hasta 9
+│     clubes, padel, tenis, futbol, rugby, basquet, gimnasios,
+│     torneos-y-delegaciones, natacion
+├── /educacion                   NUEVA — hasta 6
+├── /rutas                       4 actuales + 2 (distancias, como-llegar)
+└── /servicios (del apart)       9 actuales, renombrado "Servicios del apart"
+```
 
-### 4. Instrumentar para el próximo intento
-- Loguear en la función de pago el `message`, `status_detail` y `cause` que devuelve Mercado Pago (sin token de tarjeta ni número de documento completo), para poder confirmar en el próximo intento con la Amex si el rechazo desaparece o es política del emisor.
+## Cantidad estimada
 
-### 5. Verificación
-- Probar el flujo en el navegador: confirmar que aparece el selector con CUIT y que el pago se envía con `identification.type: "CUIT"` y 11 dígitos.
-- Tras un intento real con la tarjeta corporativa, revisar el registro del pago para comprobar que la identificación quedó guardada y ver el motivo definitivo.
+| Bloque | Ahora | Nuevas (techo) | Total |
+|---|---|---|---|
+| Páginas pilar | 6 | 3 | 9 |
+| Guías internas | 41 | ~55 | ~96 |
+| Índice /guias | 1 | 0 | 1 |
+| **Hub indexable** | **48** | **~58** | **~106** |
+
+El techo es orientativo: si la verificación no alcanza para sostener una página, se publica una menos. La cifra final se informa al cierre.
+
+## Prioridad de implementación
+
+1. **Fase 1 — Estructura y menú**: nuevos `ClusterKey`, 3 clusters, rutas, "Guía de Marcos Juárez" en Navbar (desktop + mobile) y Footer, `/guias` reorganizado en 9 tarjetas.
+2. **Fase 2 — Gastronomía**: mayor volumen turístico local; páginas por categoría (parrillas, cafeterías) que no dependen de horarios de un único local.
+3. **Fase 3 — Servicios de la ciudad + Deportes**.
+4. **Fase 4 — Empresas + Turismo**.
+5. **Fase 5 — Educación, Eventos, Rutas**.
+6. **Fase 6 — SEO técnico**: coordenadas, Schema por tipo de lugar, enlazado automático, sitemap, `llms.txt`, verificación con navegador y entrega de `docs/revision-manual.md`.
+
+## Palabras clave objetivo (muestra)
+
+- Gastronomía: "donde comer en Marcos Juárez", "parrillas Marcos Juárez", "pizzerías Marcos Juárez", "cafeterías Marcos Juárez", "delivery Marcos Juárez".
+- Servicios: "farmacia de turno Marcos Juárez", "cajeros automáticos Marcos Juárez", "remises Marcos Juárez", "supermercados Marcos Juárez", "hospital Marcos Juárez".
+- Deportes: "clubes de Marcos Juárez", "canchas de pádel Marcos Juárez", "torneos Marcos Juárez", "gimnasios Marcos Juárez".
+- Educación: "escuelas Marcos Juárez", "institutos terciarios Marcos Juárez", "alojamiento para estudiantes Marcos Juárez".
+- Empresas: "parque industrial Marcos Juárez", "acopios Marcos Juárez", "concesionarias Marcos Juárez".
+- Turismo: "museos Marcos Juárez", "qué hacer un fin de semana en Marcos Juárez", "pueblos cercanos a Marcos Juárez".
+- Eventos: "Expo Marcos Juárez", "fiesta patronal Marcos Juárez", "maratón Marcos Juárez".
+
+Más long-tail: "cerca de Esmeralda Apart", "a cuántas cuadras", "cómo llegar", "horarios".
+
+## Impacto SEO esperado
+
+- Cobertura: de ~62 a ~124 URLs indexables (hub + blog + landings).
+- Autoridad temática: 9 clusters con enlazado bidireccional pilar↔guía↔blog↔reserva.
+- AI Overview / ChatGPT / Gemini / Perplexity: cada página abre con respuesta directa de 40-55 palabras + FAQ estructurada; al no inventar datos, se reduce el riesgo de que un motor detecte imprecisiones y descarte la fuente.
+- Conversión: ~58 puertas de entrada nuevas que terminan en el CTA de reserva directa.
+- Plazos: indexación 2-4 semanas, movimiento de posiciones 2-4 meses.
 
 ## Detalles técnicos
-- `src/pages/Pago.tsx`: configuración de `customization` del Brick para el campo de identificación y propagación del `status_detail` al mensaje de error.
-- `supabase/functions/process-mp-payment/index.ts`: esquema Zod con `identification` obligatorio y enum de tipos, validación de longitud y logging del error de Mercado Pago.
-- No se toca el diseño, la lógica de idempotencia ni el resto del flujo de cobro.
 
-## Nota importante
-Si con el documento correcto la Amex sigue rechazando con `cc_rejected_other_reason`, el bloqueo es del emisor (habitual en corporativas con restricciones de rubro o de comercio online) y se resuelve llamando al banco emisor, no desde el sitio. La diferencia es que ahí el cliente va a ver el motivo real en pantalla en vez de un mensaje genérico.
+- `src/content/hub/types.ts`: `ClusterKey` suma `gastronomia | deportes | educacion | serviciosCiudad`. `HubPlace` suma `lat?`, `lng?`, `hours?`, `phone?`, `placeType?`, `verified: boolean`. Todos los campos nuevos son opcionales y sólo se renderizan si existen.
+- Nuevos archivos: `gastronomia.ts`, `deportes.ts`, `educacion.ts`, `servicios-ciudad.ts`, más ampliación de los actuales. Redacción manual, sin plantillas repetidas entre páginas.
+- `HubEntryPage.tsx`: agrega JSON-LD `Place`/`LocalBusiness` con `@type` según `placeType` (`Restaurant`, `Hospital`, `Pharmacy`, `BankOrCreditUnion`, `GasStation`, `SportsActivityLocation`, `School`, `Museum`, `Park`), `geo` sólo si hay coordenadas y `openingHours` sólo si están verificadas.
+- Enlazado automático: helper `getAutoRelated(entry)` (cercanía geográfica + cluster complementario) y componente `HubRelated` con los estilos actuales. Cadena empresa → gastronomía cercana → alojamiento → turismo → reserva.
+- Investigación de datos: búsquedas web por lote (fuentes oficiales y Google Maps) antes de escribir cada página; lo que no se confirma va al archivo de revisión manual.
+- Fotos: se reutilizan las imágenes existentes de `public/images` con `loading="lazy"`. No se generan fotos ficticias de comercios de terceros.
+- `scripts/generate-sitemap.ts` y `public/llms.txt` se regeneran con las 9 categorías.
+- Navbar: un único ítem "Guía MJ" para no romper el layout de 360 px.
+- Verificación final con Playwright: una página por cluster, H1 único, JSON-LD válido, sin errores de consola.
+
+## Entregables finales
+
+1. Sitio con las nuevas categorías navegables e indexables.
+2. `docs/revision-manual.md` con los datos pendientes de confirmar.
+3. Resumen de páginas publicadas por categoría y keywords asignadas.
+
+## Fuera de alcance
+
+No se cambian colores, tipografías, Hero, galería, barra flotante de reservas ni flujo de pago.

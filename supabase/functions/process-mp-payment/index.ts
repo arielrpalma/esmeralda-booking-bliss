@@ -3,23 +3,6 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 import { z } from 'npm:zod@3.23.8';
 
 // Payload coming from MP Payment Brick after card tokenization
-const DOC_LENGTHS: Record<string, number[]> = {
-  DNI: [7, 8],
-  CUIT: [11],
-  CUIL: [11],
-  CI: [6, 7, 8],
-  LC: [6, 7, 8],
-  LE: [6, 7, 8],
-};
-
-const IdentificationSchema = z.object({
-  type: z.enum(['DNI', 'CUIT', 'CUIL', 'CI', 'LC', 'LE', 'Otro']),
-  number: z.string().trim().regex(/^\d+$/, 'El documento debe contener solo números'),
-}).refine(
-  (v) => v.type === 'Otro' || (DOC_LENGTHS[v.type] ?? []).includes(v.number.length),
-  { message: 'La cantidad de dígitos no coincide con el tipo de documento' },
-);
-
 const BodySchema = z.object({
   token: z.string().min(1),
   issuer_id: z.union([z.string(), z.number()]).optional(),
@@ -29,11 +12,12 @@ const BodySchema = z.object({
   external_reference: z.string().min(8).max(120),
   payer: z.object({
     email: z.string().email(),
-    // Required: Amex Argentina and corporate cards are rejected without it.
-    identification: IdentificationSchema,
+    identification: z.object({
+      type: z.string().min(1),
+      number: z.string().min(1),
+    }).optional(),
   }),
 });
-
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
@@ -111,21 +95,8 @@ Deno.serve(async (req) => {
     });
 
     const mpData = await mpRes.json();
-
-    // Diagnostic log: reason only, never card token or full document number.
-    console.log('MP result', JSON.stringify({
-      http: mpRes.status,
-      status: mpData?.status,
-      status_detail: mpData?.status_detail,
-      message: mpData?.message,
-      cause: mpData?.cause,
-      payment_method_id: mpData?.payment_method_id ?? d.payment_method_id,
-      identification_type: d.payer.identification.type,
-      identification_len: d.payer.identification.number.length,
-      external_reference: externalRef,
-    }));
-
     if (!mpRes.ok) {
+      console.error('MP error', JSON.stringify(mpData));
       return new Response(JSON.stringify({
         error: mpData?.message || 'Error procesando el pago',
         status_detail: mpData?.status_detail,
@@ -134,7 +105,6 @@ Deno.serve(async (req) => {
         status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-
 
     // Persist initial record (webhook will keep it updated). Upsert by external_reference
     // so a rare race between two edge invocations collapses into a single row.
