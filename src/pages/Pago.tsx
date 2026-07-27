@@ -516,7 +516,7 @@ const Pago = () => {
                   </p>
                 )}
                 <p className="text-xs text-muted-foreground font-body">
-                  Para tarjetas corporativas o American Express, usá CUIT de la empresa.
+                  Para tarjetas corporativas o American Express, usá el CUIT de la empresa. Este es el documento que se envía al banco; si el formulario de la tarjeta vuelve a pedir uno, repetí el mismo número.
                 </p>
 
                 <div className="flex items-center gap-2 text-xs text-muted-foreground font-body">
