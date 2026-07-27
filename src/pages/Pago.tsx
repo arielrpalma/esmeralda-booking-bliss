@@ -53,27 +53,43 @@ const parseARS = (value: string) => {
   return Number.isFinite(n) ? n : 0;
 };
 
+// Accepted identification types for Argentina (Amex/corporate cards usually require CUIT)
+const DOC_TYPES = ["DNI", "CUIT", "CUIL"] as const;
+type DocType = (typeof DOC_TYPES)[number];
+
+// Expected digit length per document type
+const DOC_LENGTHS: Record<DocType, number[]> = {
+  DNI: [7, 8],
+  CUIT: [11],
+  CUIL: [11],
+};
+
+const isDocValid = (type: DocType, digits: string) => DOC_LENGTHS[type].includes(digits.length);
+
 // Friendly Spanish messages for the most common MP status_detail codes
 const MP_STATUS_MESSAGES: Record<string, string> = {
   cc_rejected_insufficient_amount: "Tu tarjeta no tiene fondos suficientes.",
-  cc_rejected_bad_filled_security_code: "Revisá el código de seguridad de la tarjeta.",
+  cc_rejected_bad_filled_security_code: "Revisá el código de seguridad de la tarjeta (en Amex son 4 dígitos al frente).",
   cc_rejected_bad_filled_date: "Revisá la fecha de vencimiento de la tarjeta.",
-  cc_rejected_bad_filled_other: "Revisá los datos de la tarjeta e intentá nuevamente.",
+  cc_rejected_bad_filled_other: "Revisá los datos de la tarjeta y el documento del titular e intentá nuevamente.",
   cc_rejected_bad_filled_card_number: "Revisá el número de tarjeta.",
   cc_rejected_call_for_authorize: "Llamá a tu banco para autorizar el pago e intentá de nuevo.",
-  cc_rejected_high_risk: "Pago rechazado por seguridad. Probá con otra tarjeta.",
+  cc_rejected_high_risk: "Pago rechazado por seguridad del emisor. Probá con otra tarjeta.",
   cc_rejected_card_disabled: "La tarjeta está inhabilitada. Contactá a tu banco.",
   cc_rejected_duplicated_payment: "Ya hiciste un pago por el mismo monto. Esperá unos minutos antes de reintentar.",
   cc_rejected_card_error: "No pudimos procesar la tarjeta. Probá con otra.",
   cc_rejected_invalid_installments: "El número de cuotas no es válido para esta tarjeta.",
   cc_rejected_max_attempts: "Alcanzaste el máximo de intentos. Probá con otra tarjeta.",
-  cc_rejected_other_reason: "El banco rechazó el pago. Probá con otra tarjeta.",
+  cc_rejected_other_reason:
+    "El banco emisor rechazó la operación (no es un error de los datos cargados). Suele pasar con tarjetas corporativas con restricciones para compras online: comunicate con el emisor para habilitarla o pagá con otra tarjeta.",
+  cc_rejected_blacklist: "El emisor rechazó la operación. Contactá a tu banco.",
 };
 
 const friendlyError = (statusDetail?: string, fallback?: string) => {
   if (statusDetail && MP_STATUS_MESSAGES[statusDetail]) return MP_STATUS_MESSAGES[statusDetail];
   return fallback ?? "Intentá nuevamente o probá con otra tarjeta.";
 };
+
 
 
 // Lazy-load the MP SDK once
@@ -97,7 +113,11 @@ const loadMpSdk = () => {
 
 const Pago = () => {
   const [importe, setImporte] = useState("");
+  const [docType, setDocType] = useState<DocType>("DNI");
+  const [docNumber, setDocNumber] = useState("");
   const [debouncedAmount, setDebouncedAmount] = useState(0);
+  const [debouncedDoc, setDebouncedDoc] = useState("");
+
   const [mountingBrick, setMountingBrick] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState<PaymentResult | null>(null);
@@ -113,17 +133,29 @@ const Pago = () => {
   const externalRefRef = useRef<string | null>(null);
   // Sync guard: setState is async, so a fast second click can race past `processing`.
   const submittingRef = useRef(false);
+  // Latest document data, readable inside the Brick's onSubmit closure
+  const docRef = useRef<{ type: DocType; number: string }>({ type: "DNI", number: "" });
 
   const importeNum = parseARS(importe);
   const isValid = importeNum >= 100;
+  const docDigits = docNumber.replace(/\D/g, "");
+  const docOk = isDocValid(docType, docDigits);
+
+  // Keep the ref in sync so the Brick callback always sends the current document
+  useEffect(() => {
+    docRef.current = { type: docType, number: docDigits };
+  }, [docType, docDigits]);
 
   // Debounce so the Brick is not remounted on every keystroke
   useEffect(() => {
     const t = setTimeout(() => {
-      setDebouncedAmount(isValid ? importeNum : 0);
+      setDebouncedAmount(isValid && docOk ? importeNum : 0);
+      setDebouncedDoc(docOk ? `${docType}:${docDigits}` : "");
     }, 500);
     return () => clearTimeout(t);
-  }, [importeNum, isValid]);
+  }, [importeNum, isValid, docOk, docType, docDigits]);
+
+
 
   // Mount Payment Brick whenever we have a valid amount and no result yet
   useEffect(() => {
@@ -154,10 +186,18 @@ const Pago = () => {
         if (brickContainerRef.current) brickContainerRef.current.innerHTML = "";
         brickControllerRef.current?.unmount();
 
+        const [initDocType, initDocNumber] = debouncedDoc.split(":");
+
         const controller = await bricksBuilder.create("payment", "mp-brick-container", {
           initialization: {
             amount: debouncedAmount,
+            // Prefill the holder's identification so the Brick validates it with the
+            // right type (CUIT for corporate / Amex cards) and sends it to MP.
+            payer: initDocNumber
+              ? { identification: { type: initDocType, number: initDocNumber } }
+              : undefined,
           },
+
           customization: {
             paymentMethods: {
               creditCard: "all",
@@ -203,13 +243,23 @@ const Pago = () => {
                     : `esm-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
                 }
                 const externalRef = externalRefRef.current;
+                // Always attach the holder's identification: the Brick may omit it,
+                // and Amex Argentina / corporate cards require it.
+                const doc = docRef.current;
+                const formPayer = (formData as { payer?: Record<string, unknown> }).payer ?? {};
+                const payer = {
+                  ...formPayer,
+                  identification: { type: doc.type, number: doc.number },
+                };
                 const { data, error } = await supabase.functions.invoke("process-mp-payment", {
                   body: {
                     ...formData,
+                    payer,
                     transaction_amount: debouncedAmount,
                     external_reference: externalRef,
                   },
                 });
+
                 if (error) throw error;
                 const res = data as PaymentResult;
                 setResult(res);
@@ -260,7 +310,7 @@ const Pago = () => {
       brickControllerRef.current?.unmount();
       brickControllerRef.current = null;
     };
-  }, [debouncedAmount, result]);
+  }, [debouncedAmount, debouncedDoc, result]);
 
   // Capture receipt timestamp the moment a payment gets approved
   useEffect(() => {
@@ -274,6 +324,8 @@ const Pago = () => {
     setReceiptDate(null);
     setErrorMsg(null);
     setImporte("");
+    setDocNumber("");
+
     // New attempt → new idempotency key.
     externalRefRef.current = null;
     submittingRef.current = false;
@@ -432,12 +484,48 @@ const Pago = () => {
                   )}
                 </div>
 
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="space-y-2 col-span-1">
+                    <Label htmlFor="docType" className="font-body">Documento</Label>
+                    <select
+                      id="docType"
+                      value={docType}
+                      onChange={(e) => setDocType(e.target.value as DocType)}
+                      className="h-12 w-full rounded-md border border-input bg-background px-3 text-base font-body focus:outline-none focus:ring-2 focus:ring-ring"
+                    >
+                      {DOC_TYPES.map((t) => (
+                        <option key={t} value={t}>{t}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-2 col-span-2">
+                    <Label htmlFor="docNumber" className="font-body">Número del titular</Label>
+                    <Input
+                      id="docNumber"
+                      inputMode="numeric"
+                      className="h-12 text-lg"
+                      value={docNumber}
+                      onChange={(e) => setDocNumber(e.target.value.replace(/\D/g, "").slice(0, 11))}
+                      placeholder={docType === "DNI" ? "12345678" : "30123456789"}
+                    />
+                  </div>
+                </div>
+                {docNumber && !docOk && (
+                  <p className="text-xs text-destructive">
+                    {docType === "DNI" ? "El DNI debe tener 7 u 8 dígitos." : `El ${docType} debe tener 11 dígitos.`}
+                  </p>
+                )}
+                <p className="text-xs text-muted-foreground font-body">
+                  Para tarjetas corporativas o American Express, usá el CUIT de la empresa. Este es el documento que se envía al banco; si el formulario de la tarjeta vuelve a pedir uno, repetí el mismo número.
+                </p>
+
                 <div className="flex items-center gap-2 text-xs text-muted-foreground font-body">
                   <ShieldCheck size={14} className="text-primary" />
                   Los datos de tu tarjeta viajan cifrados directo a Mercado Pago.
                 </div>
 
-                {isValid && (
+                {isValid && docOk && (
+
                   <div className="border-t border-border pt-4 relative">
                     {/* Hide Mercado Pago Brick "Medios de pago" header and tighten its top spacing */}
                     <style>{`
