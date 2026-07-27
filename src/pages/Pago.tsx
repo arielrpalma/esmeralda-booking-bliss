@@ -470,12 +470,48 @@ const Pago = () => {
                   )}
                 </div>
 
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="space-y-2 col-span-1">
+                    <Label htmlFor="docType" className="font-body">Documento</Label>
+                    <select
+                      id="docType"
+                      value={docType}
+                      onChange={(e) => setDocType(e.target.value as DocType)}
+                      className="h-12 w-full rounded-md border border-input bg-background px-3 text-base font-body focus:outline-none focus:ring-2 focus:ring-ring"
+                    >
+                      {DOC_TYPES.map((t) => (
+                        <option key={t} value={t}>{t}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-2 col-span-2">
+                    <Label htmlFor="docNumber" className="font-body">Número del titular</Label>
+                    <Input
+                      id="docNumber"
+                      inputMode="numeric"
+                      className="h-12 text-lg"
+                      value={docNumber}
+                      onChange={(e) => setDocNumber(e.target.value.replace(/\D/g, "").slice(0, 11))}
+                      placeholder={docType === "DNI" ? "12345678" : "30123456789"}
+                    />
+                  </div>
+                </div>
+                {docNumber && !docOk && (
+                  <p className="text-xs text-destructive">
+                    {docType === "DNI" ? "El DNI debe tener 7 u 8 dígitos." : `El ${docType} debe tener 11 dígitos.`}
+                  </p>
+                )}
+                <p className="text-xs text-muted-foreground font-body">
+                  Para tarjetas corporativas o American Express, usá CUIT de la empresa.
+                </p>
+
                 <div className="flex items-center gap-2 text-xs text-muted-foreground font-body">
                   <ShieldCheck size={14} className="text-primary" />
                   Los datos de tu tarjeta viajan cifrados directo a Mercado Pago.
                 </div>
 
-                {isValid && (
+                {isValid && docOk && (
+
                   <div className="border-t border-border pt-4 relative">
                     {/* Hide Mercado Pago Brick "Medios de pago" header and tighten its top spacing */}
                     <style>{`
