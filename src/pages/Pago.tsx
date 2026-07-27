@@ -186,10 +186,18 @@ const Pago = () => {
         if (brickContainerRef.current) brickContainerRef.current.innerHTML = "";
         brickControllerRef.current?.unmount();
 
+        const [initDocType, initDocNumber] = debouncedDoc.split(":");
+
         const controller = await bricksBuilder.create("payment", "mp-brick-container", {
           initialization: {
             amount: debouncedAmount,
+            // Prefill the holder's identification so the Brick validates it with the
+            // right type (CUIT for corporate / Amex cards) and sends it to MP.
+            payer: initDocNumber
+              ? { identification: { type: initDocType, number: initDocNumber } }
+              : undefined,
           },
+
           customization: {
             paymentMethods: {
               creditCard: "all",
