@@ -132,7 +132,7 @@ Las reservas directas se realizan desde una barra flotante fija en la parte infe
 
 ## Optional
 
-- [Gracias](/gracias): Página de confirmación posterior a una reserva.
+
 - [Departamentos amoblados en Marcos Juárez](/blog/departamentos-amoblados-en-marcos-juarez): Detalle del equipamiento típico de un apart amoblado.
 - [Alquiler temporario económico en Marcos Juárez](/blog/alquiler-temporario-economico-en-marcos-juarez): Consejos para ahorrar sin resignar comodidad.
 - [Dónde dormir barato en Marcos Juárez](/blog/donde-dormir-barato-en-marcos-juarez): Opciones económicas sin perder calidad.
