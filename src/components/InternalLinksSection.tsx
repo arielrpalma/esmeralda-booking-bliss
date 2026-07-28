@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Briefcase, Trophy, MapPinned, Heart, BookOpen } from "lucide-react";
 import { posts } from "@/content/posts";
-import { clusters } from "@/content/hub";
+import { clusters, getEntriesByCluster } from "@/content/hub";
 
 
 // SEO internal-linking hub: connects the home page with the persona landings
