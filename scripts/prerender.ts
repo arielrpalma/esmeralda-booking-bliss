@@ -160,10 +160,8 @@ function withHead(html: string, page: Page) {
       /<meta\s+name="description"\s+content="[\s\S]*?"\s*\/?>/i,
       `<meta name="description" content="${esc(page.description)}" />`,
     )
-    .replace(
-      /<link\s+rel="canonical"\s+href="[\s\S]*?"\s*\/?>/i,
-      `<link rel="canonical" href="${url}" />`,
-    )
+    .replace(/<link\s+rel="canonical"\s+href="[\s\S]*?"\s*\/?>/i, "")
+
     .replace(
       /<meta\s+property="og:title"\s+content="[\s\S]*?"\s*\/?>/i,
       `<meta property="og:title" content="${esc(page.title)}" />`,
