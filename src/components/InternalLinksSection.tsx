@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Briefcase, Trophy, MapPinned, Heart, BookOpen } from "lucide-react";
 import { posts } from "@/content/posts";
-import { clusters } from "@/content/hub";
+import { clusters, getEntriesByCluster } from "@/content/hub";
 
 
 // SEO internal-linking hub: connects the home page with the persona landings
@@ -51,34 +51,53 @@ const InternalLinksSection = () => {
           ))}
         </div>
 
-        {/* Topic-cluster pillar pages */}
+        {/* Topic-cluster pillar pages + their main child pages (deep internal linking) */}
         <div className="mb-14">
-          <div className="text-center mb-6">
+          <div className="text-center mb-8">
             <h3 className="text-2xl font-display font-semibold text-foreground">
               Guía completa de Marcos Juárez
             </h3>
             <p className="font-body text-sm text-muted-foreground mt-2">
-              Alojamiento, turismo, empresas, eventos, la Au Ruta 9 y servicios, explicados en detalle.
+              Alojamiento, turismo, gastronomía, empresas, eventos, deportes, educación, servicios y la Au Ruta 9.
             </p>
           </div>
-          <div className="flex flex-wrap justify-center gap-3">
-            {clusters.map((c) => (
-              <Link
-                key={c.slug}
-                to={`/${c.slug}`}
-                className="rounded-full border border-border bg-card px-4 py-2 font-body text-sm text-foreground hover:border-primary hover:text-primary transition-colors"
-              >
-                {c.name}
-              </Link>
-            ))}
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {clusters.map((c) => {
+              const entries = getEntriesByCluster(c.key).slice(0, 3);
+              return (
+                <div key={c.slug} className="rounded-2xl bg-card border border-border p-5">
+                  <Link
+                    to={`/${c.slug}`}
+                    className="font-display text-base text-foreground hover:text-primary transition-colors"
+                  >
+                    {c.name}
+                  </Link>
+                  <ul className="mt-3 space-y-1.5">
+                    {entries.map((e) => (
+                      <li key={e.slug}>
+                        <Link
+                          to={`/${e.cluster}/${e.slug}`}
+                          className="font-body text-sm text-muted-foreground hover:text-primary transition-colors"
+                        >
+                          {e.h1}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+          <div className="text-center mt-8">
             <Link
               to="/guias"
-              className="rounded-full bg-primary px-4 py-2 font-body text-sm text-primary-foreground hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 font-body text-sm text-primary-foreground hover:opacity-90 transition-opacity"
             >
-              Ver todas las guías
+              Ver todas las guías <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>
         </div>
+
 
         <div className="text-center mb-8">
           <h3 className="text-2xl font-display font-semibold text-foreground">
