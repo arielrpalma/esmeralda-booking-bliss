@@ -184,6 +184,9 @@ function withHead(html: string, page: Page) {
       : out.replace(/<\/head>/i, `  <meta name="keywords" content="${esc(page.keywords)}" />\n</head>`);
   }
 
+  // index.html ships without a canonical (Helmet owns it per route); always inject one.
+  out = out.replace(/<\/head>/i, `  <link rel="canonical" href="${url}" />\n</head>`);
+
   return out.replace(/<div id="root"><\/div>/, `<div id="root">${page.content}</div>`);
 }
 
