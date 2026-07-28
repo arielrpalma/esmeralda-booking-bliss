@@ -12,5 +12,8 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /gracias
+Disallow: /posnet
+Disallow: /pago/
 
 Sitemap: https://esmeraldaapart.com.ar/sitemap.xml
