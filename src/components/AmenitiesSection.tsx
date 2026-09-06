@@ -17,7 +17,7 @@ const amenities = [
   {
     icon: BedDouble,
     title: "Dormitorio",
-    items: ["Habitación privada", "Ropa blanca premium", "Aire acondicionado", "Vestidor", "Baño principal completo"],
+    items: ["Habitación privada", "Capacidad hasta 4 personas", "Ropa blanca premium", "Aire acondicionado", "Vestidor", "Baño principal completo"],
   },
 ];
 

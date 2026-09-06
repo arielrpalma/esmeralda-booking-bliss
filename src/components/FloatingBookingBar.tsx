@@ -95,9 +95,12 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     setCalendarOpenRaw(open);
   };
 
-  const MAX_GUESTS = 3;
+  // Capacity: up to 4 guests occupying a bed (adults + children). Babies (<1) don't count.
+  const MAX_GUESTS = 4;
+  const MAX_BABIES = 2;
   const totalGuests = adults + children + babies;
-  const canAddMore = totalGuests < MAX_GUESTS;
+  const bedGuests = adults + children;
+  const canAddMore = bedGuests < MAX_GUESTS;
 
   const checkAvailability = async (checkin: string, checkout: string) => {
     setLoading(true);
@@ -232,7 +235,10 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
       <div className="border-t border-border" />
       <CounterRow label="Adultos" sublabel="+4 años" value={adults} onDecrement={() => adults > 1 && setAdults(adults - 1)} onIncrement={() => canAddMore && setAdults(adults + 1)} min={1} />
       <CounterRow label="Menores" sublabel={"1 a 3 años\n(sin cama adicional)"} value={children} onDecrement={() => children > 0 && setChildren(children - 1)} onIncrement={() => canAddMore && setChildren(children + 1)} min={0} />
-      <CounterRow label="Bebés" sublabel={"< 1 año\n(sin cama adicional)"} value={babies} onDecrement={() => babies > 0 && setBabies(babies - 1)} onIncrement={() => canAddMore && setBabies(babies + 1)} min={0} />
+      <CounterRow label="Bebés" sublabel={"< 1 año\n(no ocupan plaza)"} value={babies} onDecrement={() => babies > 0 && setBabies(babies - 1)} onIncrement={() => babies < MAX_BABIES && setBabies(babies + 1)} min={0} />
+      {!canAddMore && (
+        <p className="text-[11px] text-muted-foreground text-center">Máximo 4 huéspedes por departamento</p>
+      )}
       <div className="flex justify-end pt-2 border-t border-border">
         <button onClick={() => setGuestsOpen(false)}
           className="px-6 py-2 bg-primary text-primary-foreground rounded-md text-sm font-semibold hover:bg-primary/90 transition-colors">

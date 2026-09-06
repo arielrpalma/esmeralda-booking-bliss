@@ -102,7 +102,7 @@ export const personas: Record<PersonaKey, PersonaConfig> = {
     whatsappMessage:
       "Hola, venimos a un torneo a Marcos Juárez. Somos un grupo y queremos consultar disponibilidad y tarifa.",
     benefits: [
-      { icon: Users, title: "Espacios para grupos", text: "Departamentos cómodos para equipos. Coordinamos varias unidades juntas." },
+      { icon: Users, title: "Espacios para grupos", text: "Departamentos para hasta 4 personas. Coordinamos varias unidades juntas." },
       { icon: Bed, title: "Descanso real entre partidos", text: "Camas premium, blackout, AC frío/calor. Te despertás como nuevo." },
       { icon: Car, title: "Cocheras seguras", text: "Estacionamiento privado para autos y combis. Equipamiento deportivo protegido." },
       { icon: Clock, title: "Check-in y check-out flexibles", text: "Si tu partido es temprano o tarde, lo coordinamos. Sin penalidades absurdas." },
@@ -174,7 +174,7 @@ export const personas: Record<PersonaKey, PersonaConfig> = {
     whatsappMessage:
       "Hola, vengo a visitar familia a Marcos Juárez y quiero consultar disponibilidad en Esmeralda Apart.",
     benefits: [
-      { icon: Home, title: "Tu propio espacio", text: "Independencia total. Vas y venís sin horarios, sin molestar a nadie." },
+      { icon: Home, title: "Tu propio espacio", text: "Departamentos para hasta 4 personas. Vas y venís sin horarios, sin molestar a nadie." },
       { icon: PawPrint, title: "Pet friendly", text: "Tu mascota es parte de la familia. Recibimos mascotas pequeñas previa consulta." },
       { icon: Utensils, title: "Cocina equipada", text: "Heladera, anafe, microondas y vajilla completa. Comés cuando querés." },
       { icon: Coffee, title: "Cómodo y tranquilo", text: "Ambiente silencioso, blackout, AC y todo lo que necesitás para descansar de verdad." },
@@ -185,7 +185,7 @@ export const personas: Record<PersonaKey, PersonaConfig> = {
     ],
     faqs: [
       { q: "¿Aceptan mascotas?", a: "Sí, recibimos mascotas pequeñas previa consulta. Avisanos al reservar para coordinar el ingreso." },
-      { q: "¿Cuántas personas entran cómodas?", a: "Depende del departamento. Tenemos unidades para 2, 4 y hasta más personas. Consultanos según tu grupo." },
+      { q: "¿Cuántas personas entran cómodas?", a: "Hasta 4 personas por departamento. Si son más, coordinamos varias unidades según disponibilidad." },
       { q: "¿Está cerca del centro?", a: "Sí, en pleno centro de Marcos Juárez. A pocas cuadras de comercios, restaurantes y zonas residenciales." },
       { q: "¿Puedo recibir visitas?", a: "Sí, dentro del departamento. Pedimos respetar el descanso de los demás huéspedes." },
     ],
