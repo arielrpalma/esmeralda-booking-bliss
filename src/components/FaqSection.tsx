@@ -5,6 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const faqs = [
   {
+    q: "¿Para cuántas personas es el departamento?",
+    a: "Cada departamento recibe hasta 4 personas. Los menores de 1 a 3 años y los bebés menores de 1 año no ocupan plaza, siempre que no necesiten cama adicional. Elegí la cantidad de huéspedes en la barra de disponibilidad de esta web.",
+  },
+  {
     q: "¿Cuál es el mejor alojamiento en Marcos Juárez?",
     a: "Esmeralda Apart es la opción mejor puntuada de Marcos Juárez en Google, Booking y Airbnb: departamentos nuevos en el centro, check-in automático 24 horas, cochera, cocina equipada y factura A/B. Reservando directo desde esta web obtenés el mejor precio, sin comisiones de intermediarios.",
   },
