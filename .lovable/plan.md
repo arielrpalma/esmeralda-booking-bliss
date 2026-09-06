@@ -1,35 +1,37 @@
-## Diagnóstico (verificado con Search Console)
+# Ampliar la capacidad a 4 huéspedes
 
-Consulté la API de Search Console para la propiedad `https://esmeraldaapart.com.ar/`:
+Desde el 1 de septiembre los departamentos admiten hasta 4 personas. Hoy la web tiene un tope fijo de 3 y varios textos escritos para 2-3 personas.
 
-- **La página con "noindex" es `/gracias`** — `coverageState: Excluded by 'noindex' tag`, `indexingState: BLOCKED_BY_META_TAG`. Esa etiqueta está puesta a propósito (página de agradecimiento post-reserva). **El aviso es correcto y no perjudica al sitio.**
-- La home está bien: `Submitted and indexed`.
-- El problema real: el sitemap tiene **94 URLs enviadas con "indexed: 0"**. Google descargó el sitemap el 27/07, pero `/guias`, `/blog` y las páginas de clusters aparecen como *"URL desconocida"* o *"Descubierta: actualmente sin indexar"*. Son páginas nuevas y el sitio es una SPA (contenido renderizado por JavaScript), lo que retrasa el rastreo.
+## Qué cambia para el visitante
 
-## Punto 1 — Cerrar el aviso de noindex
+1. **Barra de reservas (abajo de todo)**
+   - El selector de huéspedes permite llegar a 4 (adultos + menores).
+   - Los bebés menores de 1 año siguen sin ocupar plaza y no cuentan para ese tope.
+   - Al superar el máximo, el botón "+" queda deshabilitado y se muestra el aviso "Máximo 4 huéspedes por departamento".
+   - Se sigue enviando la cantidad elegida al motor de reservas igual que hoy.
 
-- Mantener `noindex` en `/gracias`, `/posnet` y `/pago/*` (es lo correcto).
-- Quitar enlaces internos hacia `/gracias` para que Google deje de descubrirla.
-- Agregar en `robots.txt` un bloque `Disallow` para `/gracias`, `/posnet` y `/pago/` de modo que el aviso no reaparezca (la página ya está desindexada, así que bloquear el rastreo ahora es seguro).
-- Confirmar que ninguna de esas rutas figure en el sitemap ni en `llms.txt`.
+2. **Textos de la web**
+   - Home, secciones de servicios y guías: donde se sugiere una capacidad, pasa a decir "hasta 4 personas", sin detallar la distribución de camas.
+   - Preguntas frecuentes: se agrega "¿Para cuántas personas es el departamento?" con la respuesta de hasta 4, y se mantiene que menores de 1 a 3 años y bebés no ocupan plaza.
+   - Página de la guía sobre cómo contamos a los huéspedes: se actualiza la tabla para reflejar el tope de 4 con cama.
 
-## Punto 2 — Acelerar la indexación de las 94 páginas
+3. **Landings por motivo de viaje** (trabajo, torneo, Ruta 9, familia)
+   - Se ajustan los mensajes para que familia y equipos deportivos mencionen la opción de 4 personas, que es el uso más probable del cuarto lugar.
 
-- Bloque visible en la home con acceso a la "Guía de Marcos Juárez" y enlaces a los 10 clusters (hoy el enlazado hacia el hub es débil desde la página más indexada del sitio).
-- Revisar `InternalLinksSection` para que cada cluster enlace a sus fichas principales y las fichas enlacen entre sí (Google indexa mucho más rápido lo enlazado que lo que sólo está en el sitemap).
-- Higiene del sitemap: dejar `lastmod` sólo donde hay fecha real de contenido y quitar prioridades/valores no específicos.
-- Auditar títulos y descripciones de las páginas nuevas para detectar duplicados y diferenciarlos.
-
-## Punto 3 — Prerenderizado estático
-
-- Generar HTML completo en el build para todas las rutas públicas (home, blog, landings, 10 clusters y fichas del hub), de modo que Google reciba el contenido en la primera respuesta en lugar de tener que ejecutar JavaScript.
-- Implementación: script de prerender post-build que recorre las rutas del sitemap y escribe un `index.html` por ruta en `dist/`.
-- **Tope de seguridad**: constante `MAX_PRERENDER_PAGES` (por ejemplo 500, configurable por env) muy por debajo del límite de publicación, para que el crecimiento de contenido nunca rompa el deploy.
-- Excluir del prerender las rutas `noindex` (`/gracias`, `/posnet`, `/pago/*`).
-- No cambia el diseño, el contenido ni la lógica de reservas o pagos; sólo la salida del build.
+4. **Mensajes de WhatsApp**
+   - Los textos precargados siguen igual; solo se revisa que ninguno mencione un límite de personas.
 
 ## Detalles técnicos
 
-- Archivos: `public/robots.txt`, `public/llms.txt`, `scripts/generate-sitemap.ts`, nuevo `scripts/prerender.ts`, `package.json` (hook `postbuild`), `src/components/InternalLinksSection.tsx`, `src/pages/Index.tsx`, contenido del hub para metadatos duplicados.
-- Verificación: build local + revisión del HTML generado de varias rutas y chequeo de que el conteo de archivos quede dentro del tope.
-- La indexación depende de Google: los cambios aceleran el rastreo, pero los resultados se ven en días o semanas.
+- `src/components/FloatingBookingBar.tsx`: `MAX_GUESTS` de 3 a 4 y el cálculo del tope pasa a contar solo `adults + children` (los bebés quedan fuera, con un límite propio razonable de 2 para evitar valores absurdos). Sublabels actualizados. Aviso de máximo alcanzado dentro del panel de huéspedes.
+- `index.html`: en el bloque de datos estructurados del alojamiento se agrega `occupancy` (`QuantitativeValue`, máximo 4) al Hotel, manteniendo el resto igual.
+- `src/components/FaqSection.tsx`: nueva pregunta de capacidad (también entra en el JSON-LD de FAQ existente).
+- `src/content/hub/alojamiento.ts`: tabla de conteo de huéspedes y FAQ relacionadas actualizadas a 4.
+- `src/content/personas.ts` y textos de secciones (`AmenitiesSection`, `WhyDirectSection` si corresponde): menciones de capacidad ajustadas.
+- `public/llms.txt`: se refleja la capacidad de hasta 4 personas en la descripción del alojamiento.
+- No hay cambios de base de datos ni en las funciones de disponibilidad y pagos.
+
+## Fuera de alcance
+
+- No se cambia el motor de reservas (ya tiene cargadas las unidades para 4).
+- No se agregan fotos ni descripciones de camas por unidad.
