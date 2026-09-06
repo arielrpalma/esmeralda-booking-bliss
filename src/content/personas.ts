@@ -185,7 +185,7 @@ export const personas: Record<PersonaKey, PersonaConfig> = {
     ],
     faqs: [
       { q: "¿Aceptan mascotas?", a: "Sí, recibimos mascotas pequeñas previa consulta. Avisanos al reservar para coordinar el ingreso." },
-      { q: "¿Cuántas personas entran cómodas?", a: "Depende del departamento. Tenemos unidades para 2, 4 y hasta más personas. Consultanos según tu grupo." },
+      { q: "¿Cuántas personas entran cómodas?", a: "Hasta 4 personas por departamento. Si son más, coordinamos varias unidades según disponibilidad." },
       { q: "¿Está cerca del centro?", a: "Sí, en pleno centro de Marcos Juárez. A pocas cuadras de comercios, restaurantes y zonas residenciales." },
       { q: "¿Puedo recibir visitas?", a: "Sí, dentro del departamento. Pedimos respetar el descanso de los demás huéspedes." },
     ],

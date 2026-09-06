@@ -161,11 +161,12 @@ export const alojamiento: HubEntry[] = [
         "Política de mascotas: en Esmeralda Apart somos pet friendly.",
       ]},
       { type: "h2", text: "Cómo contamos a los huéspedes" },
+      { type: "p", text: "Cada departamento admite hasta 4 huéspedes que ocupan plaza. Los bebés menores de 1 año no suman a ese total." },
       {
         type: "table",
         headers: ["Categoría", "Edad", "Ocupa plaza"],
         rows: [
-          ["Adultos", "+4 años", "Sí"],
+          ["Adultos", "+4 años", "Sí (hasta 4 en total)"],
           ["Menores", "1 a 3 años", "No (sin cama adicional)"],
           ["Bebés", "Menos de 1 año", "No (sin cama adicional)"],
         ],
@@ -177,7 +178,7 @@ export const alojamiento: HubEntry[] = [
     faqs: [
       { q: "¿Los chicos pagan?", a: "Los menores de 1 a 3 años y los bebés menores de 1 año no ocupan plaza ni abonan, siempre que no requieran cama adicional." },
       { q: "¿Aceptan mascotas?", a: "Sí, somos pet friendly. Avisanos al reservar el tamaño de la mascota para asignarte la unidad más cómoda." },
-      { q: "¿Cuántas personas entran en un departamento?", a: "Según la unidad, hasta 4 o 5 personas. En la barra de disponibilidad podés indicar adultos, menores y bebés y ver las opciones disponibles." },
+      { q: "¿Cuántas personas entran en un departamento?", a: "Hasta 4 personas por departamento. En la barra de disponibilidad podés indicar adultos, menores y bebés y ver las opciones disponibles." },
     ],
     related: ["turismo/que-hacer-en-marcos-juarez", "turismo/parques", "servicios/cocina-equipada"],
   },
