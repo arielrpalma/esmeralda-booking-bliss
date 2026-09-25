@@ -111,6 +111,8 @@ export const posts: BlogPost[] = [
       ]},
       { type: "h2", text: "Por qué Esmeralda Apart es de las mejores opciones" },
       { type: "p", text: "En Esmeralda Apart combinamos el confort de un hotel premium con la libertad de un departamento. Estamos en el centro de Marcos Juárez, tenemos cochera, WiFi de alta velocidad, Smart TV, cocina totalmente equipada y atención personalizada. Y como reservás directo, no pagás comisiones de intermediarios." },
+      { type: "plink", before: "Conocé nuestro ", anchor: "apart hotel en Marcos Juárez", to: "/", after: " y reservá tu departamento por día al mejor precio, sin intermediarios." },
+
       cta,
     ],
   },
