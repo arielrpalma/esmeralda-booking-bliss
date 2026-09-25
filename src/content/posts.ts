@@ -68,6 +68,8 @@ export const posts: BlogPost[] = [
       ]},
       { type: "h2", text: "Esmeralda Apart: alojamiento premium en Marcos Juárez" },
       { type: "p", text: "Esmeralda Apart es una propuesta de departamentos amoblados en Marcos Juárez pensada para combinar diseño, comodidad y precio justo. Las unidades cuentan con WiFi de alta velocidad, Smart TV con streaming, cocina totalmente equipada, aire acondicionado frío/calor, cochera privada y atención personalizada por WhatsApp. Emitimos factura para viajantes y empresas, y garantizamos el mejor precio cuando reservás directo." },
+      { type: "plink", before: "Si buscás un ", anchor: "hotel en Marcos Juárez", to: "/", after: " con disponibilidad en tiempo real, consultá fechas y precios directamente en nuestra página principal." },
+
       cta,
     ],
   },
