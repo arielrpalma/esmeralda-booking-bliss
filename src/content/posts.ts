@@ -393,6 +393,8 @@ export const posts: BlogPost[] = [
       ]},
       { type: "h2", text: "Esmeralda Apart, el apart hotel mejor puntuado de Marcos Juárez" },
       { type: "p", text: "Esmeralda Apart reúne todo eso en el centro de Marcos Juárez: departamentos nuevos y totalmente equipados, check-in automático 24 horas, cochera previa coordinación, factura A/B y atención por WhatsApp. Podés ver disponibilidad en tiempo real y reservar directo desde la web, siempre al mejor precio." },
+      { type: "plink", before: "Entrá a nuestro ", anchor: "apart hotel en Marcos Juárez", to: "/", after: " para ver disponibilidad y reservar en minutos." },
+
       cta,
     ],
   },
