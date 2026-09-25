@@ -34,7 +34,18 @@ const renderBlock = (block: Block, i: number) => {
           {block.text}
         </blockquote>
       );
+    case "plink":
+      return (
+        <p key={i} className="font-body text-foreground/85 leading-relaxed mb-4">
+          {block.before}
+          <Link to={block.to} className="text-primary font-semibold underline underline-offset-4 hover:text-primary/80">
+            {block.anchor}
+          </Link>
+          {block.after}
+        </p>
+      );
   }
+
 };
 
 const BlogPost = () => {

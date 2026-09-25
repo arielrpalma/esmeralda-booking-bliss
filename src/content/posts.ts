@@ -18,7 +18,10 @@ export type Block =
   | { type: "h3"; text: string }
   | { type: "ul"; items: string[] }
   | { type: "ol"; items: string[] }
-  | { type: "quote"; text: string };
+  | { type: "quote"; text: string }
+  // Internal link paragraph: sends authority to the target page with an exact anchor.
+  | { type: "plink"; before?: string; anchor: string; to: string; after?: string };
+
 
 const cta: Block = {
   type: "quote",
