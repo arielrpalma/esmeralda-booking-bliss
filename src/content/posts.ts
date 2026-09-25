@@ -143,6 +143,8 @@ export const posts: BlogPost[] = [
       { type: "p", text: "Si viajás por trabajo, te conviene un alquiler temporario para empresas en Marcos Juárez que te emita factura A o B y te garantice una unidad con escritorio, WiFi profesional y cochera. Esmeralda Apart cumple los tres requisitos." },
       { type: "h2", text: "Veredicto" },
       { type: "p", text: "Para estadías de dos o más noches, viajes en pareja, familia o por trabajo prolongado, los departamentos por día Marcos Juárez ganan en precio, espacio y comodidad. El hotel sigue siendo una alternativa solo para escalas muy cortas o cuando necesitás desayuno servido." },
+      { type: "plink", before: "Compará vos mismo: mirá las fotos, servicios y precios de nuestro ", anchor: "hotel en Marcos Juárez", to: "/", after: " y reservá directo." },
+
       cta,
     ],
   },
