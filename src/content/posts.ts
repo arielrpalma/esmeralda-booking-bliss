@@ -18,7 +18,10 @@ export type Block =
   | { type: "h3"; text: string }
   | { type: "ul"; items: string[] }
   | { type: "ol"; items: string[] }
-  | { type: "quote"; text: string };
+  | { type: "quote"; text: string }
+  // Internal link paragraph: sends authority to the target page with an exact anchor.
+  | { type: "plink"; before?: string; anchor: string; to: string; after?: string };
+
 
 const cta: Block = {
   type: "quote",
@@ -65,6 +68,8 @@ export const posts: BlogPost[] = [
       ]},
       { type: "h2", text: "Esmeralda Apart: alojamiento premium en Marcos Juárez" },
       { type: "p", text: "Esmeralda Apart es una propuesta de departamentos amoblados en Marcos Juárez pensada para combinar diseño, comodidad y precio justo. Las unidades cuentan con WiFi de alta velocidad, Smart TV con streaming, cocina totalmente equipada, aire acondicionado frío/calor, cochera privada y atención personalizada por WhatsApp. Emitimos factura para viajantes y empresas, y garantizamos el mejor precio cuando reservás directo." },
+      { type: "plink", before: "Si buscás un ", anchor: "hotel en Marcos Juárez", to: "/", after: " con disponibilidad en tiempo real, consultá fechas y precios directamente en nuestra página principal." },
+
       cta,
     ],
   },
@@ -106,6 +111,8 @@ export const posts: BlogPost[] = [
       ]},
       { type: "h2", text: "Por qué Esmeralda Apart es de las mejores opciones" },
       { type: "p", text: "En Esmeralda Apart combinamos el confort de un hotel premium con la libertad de un departamento. Estamos en el centro de Marcos Juárez, tenemos cochera, WiFi de alta velocidad, Smart TV, cocina totalmente equipada y atención personalizada. Y como reservás directo, no pagás comisiones de intermediarios." },
+      { type: "plink", before: "Conocé nuestro ", anchor: "apart hotel en Marcos Juárez", to: "/", after: " y reservá tu departamento por día al mejor precio, sin intermediarios." },
+
       cta,
     ],
   },
@@ -136,6 +143,8 @@ export const posts: BlogPost[] = [
       { type: "p", text: "Si viajás por trabajo, te conviene un alquiler temporario para empresas en Marcos Juárez que te emita factura A o B y te garantice una unidad con escritorio, WiFi profesional y cochera. Esmeralda Apart cumple los tres requisitos." },
       { type: "h2", text: "Veredicto" },
       { type: "p", text: "Para estadías de dos o más noches, viajes en pareja, familia o por trabajo prolongado, los departamentos por día Marcos Juárez ganan en precio, espacio y comodidad. El hotel sigue siendo una alternativa solo para escalas muy cortas o cuando necesitás desayuno servido." },
+      { type: "plink", before: "Compará vos mismo: mirá las fotos, servicios y precios de nuestro ", anchor: "hotel en Marcos Juárez", to: "/", after: " y reservá directo." },
+
       cta,
     ],
   },
@@ -384,6 +393,8 @@ export const posts: BlogPost[] = [
       ]},
       { type: "h2", text: "Esmeralda Apart, el apart hotel mejor puntuado de Marcos Juárez" },
       { type: "p", text: "Esmeralda Apart reúne todo eso en el centro de Marcos Juárez: departamentos nuevos y totalmente equipados, check-in automático 24 horas, cochera previa coordinación, factura A/B y atención por WhatsApp. Podés ver disponibilidad en tiempo real y reservar directo desde la web, siempre al mejor precio." },
+      { type: "plink", before: "Entrá a nuestro ", anchor: "apart hotel en Marcos Juárez", to: "/", after: " para ver disponibilidad y reservar en minutos." },
+
       cta,
     ],
   },
