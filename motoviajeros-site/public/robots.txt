@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://motoviajeros.esmeraldaapart.com.ar/sitemap.xml

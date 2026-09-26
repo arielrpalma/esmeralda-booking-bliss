@@ -1,0 +1,79 @@
+import { useCallback, useState } from "react";
+import { ArrowRight, BedDouble, Bike, ChefHat, ChevronDown, Coffee, Compass, MapPin, Menu, ShieldCheck, Utensils, Wifi, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import FloatingBookingBar from "@/components/FloatingBookingBar";
+import { faqs, itineraries, restaurants } from "./content";
+import hero from "./assets/hero-bmw.jpg";
+import route from "./assets/route.jpg";
+import coffee from "./assets/coffee.jpg";
+
+const whatsapp = (message: string) => `https://wa.me/5493472433334?text=${encodeURIComponent(message)}`;
+const bookingScroll = () => window.dispatchEvent(new Event("motoviajeros:open-booking"));
+const benefits = [
+  { icon: Bike, text: "Cochera para motos" }, { icon: BedDouble, text: "Apartamentos confortables" },
+  { icon: ChefHat, text: "Cocina equipada" }, { icon: Utensils, text: "Gastronomía cerca" },
+  { icon: MapPin, text: "Ubicación estratégica" },
+];
+const realGallery = ["gallery1.jpg", "gallery5.jpg", "gallery4.jpg", "gallery3.jpg"];
+
+function MotoInquiry() {
+  const [travel, setTravel] = useState("una moto");
+  const [count, setCount] = useState("1");
+  const message = travel === "no" ? "Hola, quiero consultar una estadía en Esmeralda Apart." : `Hola, viajo en moto a Marcos Juárez. Somos ${travel === "varias motos" ? "varios motoviajeros" : "motoviajeros"} y llevamos ${count} ${count === "1" ? "moto" : "motos"}. Quisiera consultar disponibilidad de alojamiento y coordinar espacio de cochera.`;
+  return <div className="mt-8 flex flex-wrap items-end gap-3 border-t border-section-dark-foreground/20 pt-6">
+    <label className="flex flex-col gap-2 text-xs uppercase text-section-dark-foreground/70">¿Viajás en moto?
+      <select className="min-w-48 rounded-md border border-section-dark-foreground/30 bg-section-dark text-section-dark-foreground p-3 text-sm normal-case" value={travel} onChange={e => {setTravel(e.target.value); setCount(e.target.value === "varias motos" ? "2" : "1");}}>
+        <option value="una moto">Sí, viajo en moto</option><option value="varias motos">Sí, viajamos en varias motos</option><option value="no">No</option>
+      </select>
+    </label>
+    {travel !== "no" && <label className="flex flex-col gap-2 text-xs uppercase text-section-dark-foreground/70">¿Cuántas motos?
+      <select className="min-w-36 rounded-md border border-section-dark-foreground/30 bg-section-dark text-section-dark-foreground p-3 text-sm normal-case" value={count} onChange={e => setCount(e.target.value)}>
+        {["1", "2", "3", "4+"].map(n => <option key={n} value={n}>{n}</option>)}
+      </select>
+    </label>}
+    <Button asChild size="lg" variant="secondary"><a href={whatsapp(message)} target="_blank" rel="noopener noreferrer">Consultar por WhatsApp <ArrowRight /></a></Button>
+  </div>;
+}
+
+export default function App() {
+  const [barHeight, setBarHeight] = useState(84);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const onHeightChange = useCallback((height: number) => setBarHeight(height), []);
+  return <>
+    <header className="absolute inset-x-0 top-0 z-30 border-b border-section-dark-foreground/20 text-section-dark-foreground">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-10">
+        <a href="https://esmeraldaapart.com.ar/" aria-label="Esmeralda Apart, sitio principal"><img src="/images/esmeralda-logo-new.png" alt="Esmeralda Apart" className="h-9 w-auto max-w-40 object-contain brightness-0 invert" /></a>
+        <nav className="hidden items-center gap-8 text-xs font-semibold uppercase tracking-widest md:flex"><a href="#experiencia" className="hover:text-gold">La parada</a><a href="#apartamentos" className="hover:text-gold">Apartamentos</a><a href="#ruta" className="hover:text-gold">La ruta</a><a href="#preguntas" className="hover:text-gold">Preguntas</a></nav>
+        <Button variant="ghost" size="icon" className="text-section-dark-foreground md:hidden" aria-label="Abrir menú" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</Button>
+      </div>
+      {menuOpen && <nav className="flex flex-col gap-4 bg-section-dark px-6 py-5 text-sm md:hidden" onClick={() => setMenuOpen(false)}><a href="#experiencia">La parada</a><a href="#apartamentos">Apartamentos</a><a href="#ruta">La ruta</a><a href="#preguntas">Preguntas</a></nav>}
+    </header>
+    <main>
+      <section className="relative flex min-h-[660px] items-end overflow-hidden bg-section-dark text-section-dark-foreground md:min-h-[min(86vh,900px)]">
+        <img src={hero} alt="Motoviajero adulto junto a una moto BMW de turismo al llegar a su parada" className="absolute inset-0 h-full w-full object-cover object-[65%_center]" width="1600" height="1056" fetchPriority="high" />
+        <div className="absolute inset-0 bg-[image:var(--hero-overlay)]" />
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 pt-40 md:px-10 md:pb-24">
+          <p className="mb-5 text-xs font-bold uppercase tracking-[0.28em] text-gold">Esmeralda Apart · Marcos Juárez</p>
+          <h1 className="max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl md:text-7xl lg:text-8xl">MOTOVIAJEROS</h1>
+          <p className="mt-3 font-display text-2xl italic text-gold md:text-4xl">Tu parada en Marcos Juárez.</p>
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-section-dark-foreground/90 md:text-lg">Después de un día de ruta, encontrá un lugar donde vos y tu moto puedan descansar.</p>
+          <div className="mt-8 flex flex-wrap gap-3"><Button size="lg" onClick={bookingScroll}>RESERVAR <ArrowRight /></Button><Button size="lg" variant="outline" className="border-section-dark-foreground/70 bg-transparent text-section-dark-foreground hover:bg-section-dark hover:text-section-dark-foreground" asChild><a href="#apartamentos">VER LOS APARTAMENTOS</a></Button></div>
+          <div className="mt-10 flex max-w-4xl flex-wrap gap-x-6 gap-y-3 border-t border-section-dark-foreground/30 pt-6">{benefits.map(({icon: Icon,text}) => <span key={text} className="flex items-center gap-2 text-xs font-medium md:text-sm"><Icon size={17} className="text-gold" />{text}</span>)}</div>
+        </div>
+      </section>
+      <section className="border-b border-border bg-background py-12"><div className="mx-auto grid max-w-6xl gap-7 px-6 md:grid-cols-3">{[[ShieldCheck,"Tu moto, en su lugar","Espacio de cochera a coordinar antes de llegar."],[BedDouble,"Tu descanso, en serio","Apartamentos equipados para recuperar energías."],[Compass,"Mañana, otra ruta","Una pausa práctica para continuar tu recorrido."]].map(([Icon,title,copy]) => { const Symbol = Icon as typeof ShieldCheck; return <div key={title} className="flex gap-4"><Symbol className="mt-1 shrink-0 text-primary" size={25}/><div><h2 className="font-display text-xl">{title as string}</h2><p className="mt-2 text-sm leading-relaxed text-muted-foreground">{copy as string}</p></div></div>; })}</div></section>
+      <section id="experiencia" className="grid md:grid-cols-2"><div className="min-h-80 overflow-hidden"><img src={route} loading="lazy" width="1408" height="912" alt="Pareja adulta de motoviajeros haciendo una pausa en la ruta" className="h-full w-full object-cover" /></div><div className="flex flex-col justify-center bg-secondary px-7 py-16 md:px-16"><p className="mb-5 text-xs font-bold uppercase tracking-widest text-primary">La experiencia completa</p><h2 className="max-w-xl text-3xl leading-snug md:text-5xl">Después de cientos de kilómetros, lo que necesitás es simple.</h2><ul className="mt-8 grid gap-3 text-sm md:grid-cols-2">{["Guardar la moto", "Descansar bien", "Comer rico", "Tomarte un tiempo", "Seguir viaje al día siguiente"].map((item,i) => <li className="flex items-center gap-3" key={item}><span className="font-display text-lg text-primary">0{i+1}</span>{item}</li>)}</ul><p className="mt-10 font-display text-2xl italic text-primary">Vos descansás. Tu moto también.</p></div></section>
+      <section className="bg-section-dark py-20 text-section-dark-foreground"><div className="mx-auto grid max-w-6xl gap-8 px-6 md:grid-cols-[1fr_1.3fr] md:items-center"><div className="flex size-32 items-center justify-center rounded-full border border-gold/50 text-gold"><Bike size={62} strokeWidth={1} /></div><div><p className="text-xs font-bold uppercase tracking-widest text-gold">Cochera para motos</p><h2 className="mt-4 text-3xl md:text-5xl">Tu moto también tiene lugar.</h2><p className="mt-6 max-w-2xl leading-relaxed text-section-dark-foreground/80">Sabemos que para un motoviajero su moto es parte fundamental del viaje. Por eso contamos con espacio de cochera para que puedas dejarla mientras descansás. Coordiná previamente: el espacio está sujeto a disponibilidad.</p></div></div></section>
+      <section id="apartamentos" className="mx-auto grid max-w-7xl gap-10 px-6 py-20 md:grid-cols-2 md:items-center md:gap-16"><div><p className="text-xs font-bold uppercase tracking-widest text-primary">Esmeralda Apart</p><h2 className="mt-4 text-3xl md:text-5xl">Un buen descanso cambia el viaje.</h2><p className="mt-6 leading-relaxed text-muted-foreground">Después de la ruta, un espacio propio para bajar el ritmo. Departamentos con baño privado, aire acondicionado frío/calor, Wi-Fi, Smart TV y cocina equipada. Check-in automático las 24 horas.</p><div className="mt-6 flex flex-wrap gap-4 text-sm text-primary"><span className="flex items-center gap-2"><Wifi size={18}/> Wi-Fi</span><span className="flex items-center gap-2"><ChefHat size={18}/> Cocina equipada</span><span className="flex items-center gap-2"><BedDouble size={18}/> Hasta 4 huéspedes</span></div><Button className="mt-8" asChild><a href="https://esmeraldaapart.com.ar/#galeria" target="_blank" rel="noopener noreferrer">CONOCER LOS APARTAMENTOS <ArrowRight /></a></Button></div><img src="/images/gallery1.jpg" width="600" height="800" loading="lazy" alt="Fotografía real de un departamento de Esmeralda Apart" className="aspect-[4/3] w-full object-cover md:aspect-square" /></section>
+      <section className="bg-secondary py-20"><div className="mx-auto max-w-7xl px-6"><p className="text-xs font-bold uppercase tracking-widest text-primary">Libertad para elegir</p><h2 className="mt-4 text-3xl md:text-5xl">Comé como quieras.</h2><p className="mt-4 text-muted-foreground">Después de un día de ruta, vos elegís.</p><div className="mt-10 grid gap-6 md:grid-cols-3">{[[Utensils,"Salir a comer","Encontrá opciones gastronómicas cerca de Esmeralda."],[ChefHat,"Cocinar en el departamento","Si preferís quedarte descansando, contás con cocina equipada para preparar tu propia comida."],[Coffee,"Pedir comida","También podés pedir comida y disfrutarla tranquilamente en tu departamento."]].map(([Icon,title,copy]) => {const Symbol = Icon as typeof Utensils;return <article key={title} className="border-t-2 border-primary bg-card p-7"><Symbol className="text-primary" size={29}/><h3 className="mt-7 text-xl">{title as string}</h3><p className="mt-3 text-sm leading-relaxed text-muted-foreground">{copy as string}</p></article>;})}</div></div></section>
+      <section className="mx-auto max-w-7xl px-6 py-20"><div className="grid gap-10 md:grid-cols-2 md:items-center"><div><p className="text-xs font-bold uppercase tracking-widest text-primary">Gastronomía cercana</p><h2 className="mt-4 text-3xl md:text-5xl">Después de la ruta, no busques dónde comer.</h2><p className="mt-5 leading-relaxed text-muted-foreground">Estamos preparando una selección de lugares para disfrutar Marcos Juárez. Mientras tanto, explorá la guía gastronómica local.</p><Button variant="outline" className="mt-7" asChild><a href="https://esmeraldaapart.com.ar/gastronomia" target="_blank" rel="noopener noreferrer">Explorar la guía <ArrowRight /></a></Button>{restaurants.map(r => <article key={r.name}><h3>{r.name}</h3><p>{r.cuisine} · {r.distance} · {r.travelTime} · {r.hours} · {r.priceRange}</p><a href={r.mapsUrl} target="_blank" rel="noopener noreferrer">Cómo llegar</a></article>)}</div><img src={coffee} loading="lazy" width="1200" height="912" alt="Una pausa para desayunar durante un viaje en moto" className="aspect-[4/3] w-full object-cover" /></div></section>
+      <section id="ruta" className="bg-section-dark py-20 text-section-dark-foreground"><div className="mx-auto max-w-7xl px-6"><p className="text-xs font-bold uppercase tracking-widest text-gold">Marcos Juárez · Córdoba</p><h2 className="mt-4 text-3xl md:text-5xl">Una parada estratégica en tu viaje.</h2><p className="mt-5 max-w-2xl text-section-dark-foreground/75">Si viajás hacia el norte o hacia el sur, una noche de descanso puede cambiar cómo se siente el resto del camino.</p><div className="mt-10 space-y-4">{itineraries.map((path,i) => <div key={i} className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-section-dark-foreground/20 py-4 text-sm md:text-base">{path.map((place,j) => <span key={j} className="inline-flex items-center gap-3">{j > 0 && <ArrowRight size={16} className="text-gold" />}<span className={place === "Marcos Juárez" ? "font-bold text-gold" : "text-section-dark-foreground/80"}>{place}</span></span>)}</div>)}</div></div></section>
+      <section id="galeria" className="mx-auto max-w-7xl px-6 py-20"><p className="text-xs font-bold uppercase tracking-widest text-primary">Momentos de la parada</p><h2 className="mt-4 text-3xl md:text-5xl">La ruta también tiene pausas.</h2><div className="mt-9 grid grid-cols-2 gap-3 md:grid-cols-4">{realGallery.map((name,i) => <img key={name} src={`/images/${name}`} loading="lazy" alt={`Fotografía real del departamento Esmeralda Apart ${i+1}`} className="aspect-square w-full object-cover" width="600" height="800" />)}</div><p className="mt-3 text-xs text-muted-foreground">Departamentos Esmeralda Apart · fotografías reales</p></section>
+      <section id="preguntas" className="bg-secondary py-20"><div className="mx-auto max-w-3xl px-6"><p className="text-xs font-bold uppercase tracking-widest text-primary">Antes de seguir viaje</p><h2 className="mt-4 text-3xl md:text-5xl">Preguntas frecuentes.</h2><div className="mt-9 border-t border-border">{faqs.map(({question,answer}) => <details key={question} className="group border-b border-border py-5"><summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg">{question}<ChevronDown size={18} className="shrink-0 text-primary transition-transform group-open:rotate-180" /></summary><p className="max-w-2xl pt-3 text-sm leading-relaxed text-muted-foreground">{answer}</p></details>)}</div></div></section>
+      <section className="bg-section-dark py-20 text-section-dark-foreground"><div className="mx-auto max-w-6xl px-6"><p className="text-xs font-bold uppercase tracking-widest text-gold">La próxima parada</p><h2 className="mt-4 max-w-2xl text-3xl md:text-5xl">Llegás. Guardás la moto. Comés bien. Descansás. Mañana seguís ruta.</h2><div className="mt-8"><Button size="lg" onClick={bookingScroll}>RESERVAR MI ESTADÍA <ArrowRight /></Button></div><MotoInquiry /></div></section>
+    </main>
+    <footer className="bg-section-dark pb-36 pt-9 text-center text-xs text-section-dark-foreground/70"><p>Esmeralda Apart · Marcos Juárez, Córdoba</p><a className="mt-2 inline-block underline" href="https://esmeraldaapart.com.ar/">Visitar Esmeralda Apart</a></footer>
+    <div id="booking"><FloatingBookingBar onHeightChange={onHeightChange} /></div>
+    <a href={whatsapp("Hola, soy motoviajero y quisiera consultar alojamiento y espacio de cochera en Esmeralda Apart.")} target="_blank" rel="noopener noreferrer" aria-label="Consultar por WhatsApp" className="fixed right-4 z-40 flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg" style={{ bottom: `${barHeight+16}px` }}><Bike size={22} /></a>
+  </>;
+}
