@@ -65,6 +65,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const [calendarOpen, setCalendarOpenRaw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AvailabilityResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [retryCalendarOpen, setRetryCalendarOpen] = useState(false);
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -91,7 +92,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   }, [result, loading, onHeightChange]);
 
   const setCalendarOpen = (open: boolean) => {
-    if (open) { setDateRange(undefined); setResult(null); }
+    if (open) { setDateRange(undefined); setResult(null); setError(null); }
     setCalendarOpenRaw(open);
   };
 
@@ -105,6 +106,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const checkAvailability = async (checkin: string, checkout: string) => {
     setLoading(true);
     setResult(null);
+    setError(null);
     trackCheckAvailability(checkin, checkout, totalGuests);
     try {
       const { data, error } = await supabase.functions.invoke("check-availability", {
@@ -114,6 +116,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
       setResult(data as AvailabilityResult);
     } catch (err) {
       console.error("Availability check failed:", err);
+      setError("No pudimos consultar la disponibilidad. Intentá de nuevo en unos minutos.");
     } finally {
       setLoading(false);
     }
@@ -155,7 +158,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     openBookingEngine(s.checkin, s.checkout, s.nights);
   };
 
-  const dismissResult = () => { setResult(null); setRetryCalendarOpen(false); };
+  const dismissResult = () => { setResult(null); setError(null); setRetryCalendarOpen(false); };
 
   const [retryDateRange, setRetryDateRange] = useState<DateRange | undefined>();
 
@@ -272,7 +275,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const hasAfter = result?.after && result.after.length > 0;
   const hasNoAlternatives = result && !result.available && !hasBefore && !hasAfter;
 
-  const showResults = !!(result || loading);
+  const showResults = !!(result || loading || error);
 
   return (
     <motion.div ref={containerRef} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
@@ -442,6 +445,25 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                         <PopoverContent className="w-auto p-0" align="end" side="top" sideOffset={8}>{retryCalendarContent}</PopoverContent>
                       </Popover>
                     )}
+                  </div>
+                </div>
+              ) : error ? (
+                /* ===== ERROR ===== */
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-destructive/15 flex items-center justify-center shrink-0">
+                      <X size={14} className="text-destructive" />
+                    </div>
+                    <span className="text-xs sm:text-sm font-body text-muted-foreground">{error}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button onClick={handleSearch}
+                      className={cn("bg-primary text-primary-foreground rounded-lg font-body font-semibold hover:bg-primary/90 transition-all shadow-md", isMobile ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm")}>
+                      Reintentar
+                    </button>
+                    <button onClick={dismissResult} aria-label="Cerrar mensaje de error" className="p-1 rounded-full hover:bg-muted transition-colors shrink-0">
+                      <X size={14} className="text-muted-foreground" />
+                    </button>
                   </div>
                 </div>
               ) : null}

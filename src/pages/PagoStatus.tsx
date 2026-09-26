@@ -90,7 +90,7 @@ const PagoStatus = ({ status }: Props) => {
         >
           {status !== "success" && (
             <Link
-              to="/pago"
+              to="/posnet"
               className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-body text-sm font-medium transition-colors"
             >
               Reintentar pago
