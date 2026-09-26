@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+ :root { --background: 30 20% 97%; --foreground: 200 15% 15%; --card: 0 0% 100%; --card-foreground: 200 15% 15%; --popover: 0 0% 100%; --popover-foreground: 200 15% 15%; --primary: 174 100% 27%; --primary-foreground: 0 0% 100%; --secondary: 40 30% 95%; --secondary-foreground: 200 15% 15%; --muted: 30 15% 93%; --muted-foreground: 200 10% 45%; --accent: 38 70% 55%; --accent-foreground: 0 0% 100%; --destructive: 0 84% 60%; --destructive-foreground: 0 0% 100%; --border: 30 15% 88%; --input: 30 15% 88%; --ring: 174 100% 27%; --radius: 0.5rem; --section-dark: 200 15% 10%; --section-dark-foreground: 30 20% 95%; --gold: 38 70% 55%; --hero-overlay: linear-gradient(90deg, hsl(200 15% 10% / .85), hsl(200 15% 10% / .28) 70%); --shadow-hero: 0 18px 60px hsl(200 15% 10% / .3); }
+ .dark { --background: 200 15% 10%; --foreground: 30 20% 95%; --card: 200 15% 13%; --card-foreground: 30 20% 95%; --popover: 200 15% 13%; --popover-foreground: 30 20% 95%; --muted: 200 15% 18%; --muted-foreground: 200 10% 65%; --border: 200 15% 20%; --primary: 174 100% 35%; --ring: 174 100% 35%; }
+ * { @apply border-border; }
+ body { @apply bg-background text-foreground font-body antialiased; }
+ h1,h2,h3,h4,h5,h6 { @apply font-display; }
+}
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

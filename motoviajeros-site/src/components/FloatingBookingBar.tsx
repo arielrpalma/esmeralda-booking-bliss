@@ -7,7 +7,7 @@ import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { supabase } from "@/integrations/supabase/client";
+import { checkAvailabilityRequest } from "@/lib/availability";
 import { trackCheckAvailability, trackBookingStart } from "@/lib/analytics";
 import {
   Popover,
@@ -64,6 +64,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const [guestsOpen, setGuestsOpen] = useState(false);
   const [calendarOpen, setCalendarOpenRaw] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AvailabilityResult | null>(null);
   const [retryCalendarOpen, setRetryCalendarOpen] = useState(false);
   const isMobile = useIsMobile();
@@ -104,16 +105,15 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
 
   const checkAvailability = async (checkin: string, checkout: string) => {
     setLoading(true);
+    setError(null);
     setResult(null);
     trackCheckAvailability(checkin, checkout, totalGuests);
     try {
-      const { data, error } = await supabase.functions.invoke("check-availability", {
-        body: { checkin, checkout },
-      });
-      if (error) throw error;
+      const data = await checkAvailabilityRequest(checkin, checkout);
       setResult(data as AvailabilityResult);
     } catch (err) {
       console.error("Availability check failed:", err);
+      setError("No pudimos consultar la disponibilidad. Intentá de nuevo en unos minutos.");
     } finally {
       setLoading(false);
     }
@@ -155,7 +155,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     openBookingEngine(s.checkin, s.checkout, s.nights);
   };
 
-  const dismissResult = () => { setResult(null); setRetryCalendarOpen(false); };
+  const dismissResult = () => { setResult(null); setError(null); setRetryCalendarOpen(false); };
 
   const [retryDateRange, setRetryDateRange] = useState<DateRange | undefined>();
 
@@ -272,7 +272,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const hasAfter = result?.after && result.after.length > 0;
   const hasNoAlternatives = result && !result.available && !hasBefore && !hasAfter;
 
-  const showResults = !!(result || loading);
+  const showResults = !!(result || loading || error);
 
   return (
     <motion.div ref={containerRef} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
@@ -330,10 +330,12 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
         {showResults && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3 }}
-            className="bg-card/95 backdrop-blur-xl border-t border-border/30 shadow-[0_-8px_30px_rgba(0,0,0,0.15)]">
+            className="bg-card/95 backdrop-blur-xl border-t border-border/30 shadow-lg">
             <div className={cn("container mx-auto max-w-5xl", isMobile ? "px-3 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom,0px))]" : "px-4 py-3")}>
 
-              {loading ? (
+              {error ? (
+                <div className="flex items-center justify-between gap-4 py-2 text-sm text-destructive"><span>{error}</span><button aria-label="Cerrar error" onClick={dismissResult}><X size={16} /></button></div>
+              ) : loading ? (
                 <div className="flex items-center justify-center gap-3 py-2">
                   <Loader2 size={20} className="text-primary animate-spin" />
                   <span className="text-sm font-body text-muted-foreground">Consultando disponibilidad…</span>
@@ -424,7 +426,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                     {isMobile ? (
                       <Drawer open={retryCalendarOpen} onOpenChange={(open) => { if (open) setRetryDateRange(undefined); setRetryCalendarOpen(open); }}>
                         <DrawerTrigger asChild>
-                          <button className={cn("flex items-center gap-1.5 bg-[hsl(142,71%,45%)] hover:bg-[hsl(142,71%,40%)] text-white rounded-lg font-body font-semibold transition-all shadow-md whitespace-nowrap", isMobile ? "px-3 py-2 text-xs" : "px-4 py-2 text-sm")}>
+                          <button className={cn("flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-body font-semibold transition-all shadow-md whitespace-nowrap", isMobile ? "px-3 py-2 text-xs" : "px-4 py-2 text-sm")}>
                             <CalendarPlus size={14} />
                             <span>Otras fechas</span>
                           </button>
@@ -434,7 +436,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                     ) : (
                       <Popover open={retryCalendarOpen} onOpenChange={(open) => { if (open) setRetryDateRange(undefined); setRetryCalendarOpen(open); }}>
                         <PopoverTrigger asChild>
-                          <button className="flex items-center gap-1.5 bg-[hsl(142,71%,45%)] hover:bg-[hsl(142,71%,40%)] text-white rounded-lg font-body font-semibold transition-all shadow-md whitespace-nowrap px-4 py-2 text-sm">
+                          <button className="flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-body font-semibold transition-all shadow-md whitespace-nowrap px-4 py-2 text-sm">
                             <CalendarPlus size={14} />
                             <span>Otras fechas</span>
                           </button>

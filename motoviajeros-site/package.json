@@ -1,18 +1,12 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "esmeralda-motoviajeros",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "predev": "tsx scripts/generate-sitemap.ts",
     "dev": "vite",
-    "prebuild": "tsx scripts/generate-sitemap.ts",
-    "build": "vite build && tsx scripts/prerender.ts",
-    "build:dev": "vite build --mode development",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
