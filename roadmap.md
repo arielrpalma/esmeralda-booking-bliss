@@ -1,0 +1,4 @@
+- [x] Prepare separate premium Motoviajeros site and preserve the original Esmeralda Apart site.
+- [x] Copy the existing floating booking footer with date, guest, availability, alternatives, and PMS flow.
+- [ ] Verify the booking footer end to end from the independent site on mobile and desktop.
+- [ ] Create the second Lovable project, connect motoviajeros.esmeraldaapart.com.ar, and publish it (requires separate project provision and DNS/publish approval).

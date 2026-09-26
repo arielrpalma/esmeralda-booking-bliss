@@ -1,0 +1,2 @@
+- Keep the Motoviajeros frontend under `motoviajeros-site/` as a separate deployable project, because its subdomain must not change Esmeralda Apart's current routes or primary-domain behavior.
+- Reuse a local copy of the existing booking footer with the public availability endpoint and existing HotelPMS parameters, because both sites must provide the same reservation flow without changing the original.
