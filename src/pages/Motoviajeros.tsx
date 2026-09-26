@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { ArrowRight, BedDouble, Bike, ChefHat, ChevronDown, Coffee, Compass, MapPin, Menu, ShieldCheck, Utensils, Wifi, X } from "lucide-react";
+import { ArrowRight, BedDouble, Bike, ChefHat, ChevronDown, Coffee, Compass, Heart, MapPin, Menu, ShieldCheck, Users, Utensils, Wifi, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import { faqs, itineraries, restaurants } from "@/content/motoviajeros";
@@ -220,6 +220,49 @@ export default function Motoviajeros() {
                   ))}
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-6 py-20">
+          <div className="grid gap-10 md:grid-cols-2 md:items-center">
+            <div className="order-2 md:order-1">
+              <p className="text-xs font-bold uppercase tracking-widest text-primary">Marcos Juárez · Córdoba</p>
+              <h2 className="mt-4 text-3xl md:text-5xl">Una ciudad chica donde se vive tranquilo.</h2>
+              <p className="mt-5 leading-relaxed text-muted-foreground">Marcos Juárez es una ciudad del interior donde la tranquilidad es real. Llegás, bajás de la moto y sentís que el ritmo cambia: calles que se vacían de noche, vecinos que te saludan, un centro que se recorre a pie sin apuro.</p>
+              <div className="mt-8 grid gap-5 sm:grid-cols-2">
+                <div className="flex gap-3">
+                  <ShieldCheck className="mt-1 shrink-0 text-primary" size={24} />
+                  <div>
+                    <h3 className="font-display text-lg">Seguridad de pueblo</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">Una ciudad tranquila donde dejar la moto y dormir sin preocupaciones.</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <Users className="mt-1 shrink-0 text-primary" size={24} />
+                  <div>
+                    <h3 className="font-display text-lg">Gente amable</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">Vecinos que te orientan, te recomiendan dónde comer y te hacen sentir en casa.</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <Heart className="mt-1 shrink-0 text-primary" size={24} />
+                  <div>
+                    <h3 className="font-display text-lg">Tranquilidad real</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">El silencio de una ciudad chica después de cientos de kilómetros de ruta.</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <Compass className="mt-1 shrink-0 text-primary" size={24} />
+                  <div>
+                    <h3 className="font-display text-lg">Todo a mano</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">Plaza, gastronomía y supermercados a pocas cuadras, sin necesidad de mover el auto.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="order-1 md:order-2">
+              <p className="font-display text-2xl italic text-primary md:text-3xl">"Llegás a una ciudad que se apaga temprano, te reciben con amabilidad y al otro día seguís descansado."</p>
             </div>
           </div>
         </section>
