@@ -158,7 +158,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     openBookingEngine(s.checkin, s.checkout, s.nights);
   };
 
-  const dismissResult = () => { setResult(null); setRetryCalendarOpen(false); };
+  const dismissResult = () => { setResult(null); setError(null); setRetryCalendarOpen(false); };
 
   const [retryDateRange, setRetryDateRange] = useState<DateRange | undefined>();
 
