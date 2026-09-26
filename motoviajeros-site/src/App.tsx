@@ -54,7 +54,7 @@ export default function App() {
         <div className="absolute inset-0 bg-[image:var(--hero-overlay)]" />
         <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 pt-40 md:px-10 md:pb-24">
           <p className="mb-5 text-xs font-bold uppercase tracking-[0.28em] text-gold">Esmeralda Apart · Marcos Juárez</p>
-          <h1 className="max-w-3xl font-display text-5xl font-semibold leading-tight md:text-7xl lg:text-8xl">MOTOVIAJEROS</h1>
+          <h1 className="max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl md:text-7xl lg:text-8xl">MOTOVIAJEROS</h1>
           <p className="mt-3 font-display text-2xl italic text-gold md:text-4xl">Tu parada en Marcos Juárez.</p>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-section-dark-foreground/90 md:text-lg">Después de un día de ruta, encontrá un lugar donde vos y tu moto puedan descansar.</p>
           <div className="mt-8 flex flex-wrap gap-3"><Button size="lg" onClick={bookingScroll}>RESERVAR <ArrowRight /></Button><Button size="lg" variant="outline" className="border-section-dark-foreground/70 bg-transparent text-section-dark-foreground hover:bg-section-dark hover:text-section-dark-foreground" asChild><a href="#apartamentos">VER LOS APARTAMENTOS</a></Button></div>
