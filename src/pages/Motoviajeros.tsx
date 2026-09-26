@@ -4,10 +4,12 @@ import { ArrowRight, BedDouble, Bike, ChefHat, ChevronDown, Coffee, Compass, Hea
 import { Button } from "@/components/ui/button";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import { faqs, itineraries, restaurants } from "@/content/motoviajeros";
-import hero from "@/assets/motoviajeros/hero-bmw.jpg";
-import route from "@/assets/motoviajeros/route.jpg";
-import coffee from "@/assets/motoviajeros/coffee.jpg";
-import gastronomyFriends from "@/assets/motoviajeros/gastronomy-friends.jpg";
+// Optimized images: WebP with responsive widths for fast mobile loading
+import heroMobile from "@/assets/motoviajeros/hero-bmw.jpg?format=webp&w=800&quality=72";
+import heroDesktop from "@/assets/motoviajeros/hero-bmw.jpg?format=webp&w=1600&quality=75";
+import route from "@/assets/motoviajeros/route.jpg?format=webp&w=900&quality=72";
+import coffee from "@/assets/motoviajeros/coffee.jpg?format=webp&w=900&quality=72";
+import gastronomyFriends from "@/assets/motoviajeros/gastronomy-friends.jpg?format=webp&w=900&quality=72";
 
 const whatsapp = (message: string) => `https://wa.me/5493472433334?text=${encodeURIComponent(message)}`;
 const bookingScroll = () => window.dispatchEvent(new Event("motoviajeros:open-booking"));
@@ -62,6 +64,7 @@ export default function Motoviajeros() {
         <title>Motoviajeros | Alojamiento con cochera para motos en Marcos Juárez</title>
         <meta name="description" content="Esmeralda Apart en Marcos Juárez: alojamiento confortable para motoviajeros, cochera para motos, cocina equipada y gastronomía cercana. Una parada ideal para descansar y seguir ruta." />
         <link rel="canonical" href="https://esmeraldaapart.com.ar/motoviajeros" />
+        <link rel="preload" as="image" href={heroMobile} imageSrcSet={`${heroMobile} 800w, ${heroDesktop} 1600w`} imageSizes="100vw" fetchPriority="high" />
         <meta property="og:title" content="Motoviajeros | Alojamiento con cochera para motos en Marcos Juárez" />
         <meta property="og:description" content="Tu parada en Marcos Juárez: cochera para motos, apartamentos confortables y gastronomía cerca." />
         <meta property="og:type" content="website" />
@@ -96,7 +99,7 @@ export default function Motoviajeros() {
 
       <main>
         <section className="relative flex min-h-[660px] items-end overflow-hidden bg-section-dark text-section-dark-foreground md:min-h-[min(86vh,900px)]">
-          <img src={hero} alt="Motoviajero adulto junto a una moto BMW de turismo al llegar a su parada" className="absolute inset-0 h-full w-full object-cover object-center md:object-[65%_center]" width="1600" height="1056" fetchPriority="high" />
+          <img src={heroMobile} srcSet={`${heroMobile} 800w, ${heroDesktop} 1600w`} sizes="100vw" alt="Motoviajero adulto junto a una moto BMW de turismo al llegar a su parada" className="absolute inset-0 h-full w-full object-cover object-center md:object-[65%_center]" width="1600" height="1056" fetchPriority="high" decoding="async" />
           <div className="absolute inset-0 bg-[image:var(--hero-overlay)]" />
           <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 pt-40 md:px-10 md:pb-24">
             <p className="mb-5 text-xs font-bold uppercase tracking-[0.28em] text-gold">Esmeralda Apart · Marcos Juárez</p>
@@ -128,7 +131,7 @@ export default function Motoviajeros() {
         </section>
 
         <section id="experiencia" className="grid md:grid-cols-2">
-          <div className="min-h-80 overflow-hidden"><img src={route} loading="lazy" width="1408" height="912" alt="Pareja adulta de motoviajeros haciendo una pausa en la ruta" className="h-full w-full object-cover" /></div>
+          <div className="min-h-80 overflow-hidden"><img src={route} loading="lazy" decoding="async" width="1408" height="912" alt="Pareja adulta de motoviajeros haciendo una pausa en la ruta" className="h-full w-full object-cover" /></div>
           <div className="flex flex-col justify-center bg-secondary px-7 py-16 md:px-16">
             <p className="mb-5 text-xs font-bold uppercase tracking-widest text-primary">La experiencia completa</p>
             <h2 className="max-w-xl text-3xl leading-snug md:text-5xl">Después de cientos de kilómetros, lo que necesitás es simple.</h2>
@@ -162,7 +165,7 @@ export default function Motoviajeros() {
             </div>
             <Button className="mt-8" asChild><a href="/#galeria">CONOCER LOS APARTAMENTOS <ArrowRight /></a></Button>
           </div>
-          <img src="/images/gallery1.jpg" width="600" height="800" loading="lazy" alt="Fotografía real de un departamento de Esmeralda Apart" className="aspect-[4/3] w-full object-cover md:aspect-square" />
+          <img src="/images/gallery1.jpg" width="600" height="800" loading="lazy" decoding="async" alt="Fotografía real de un departamento de Esmeralda Apart" className="aspect-[4/3] w-full object-cover md:aspect-square" />
         </section>
 
         <section className="bg-secondary py-20">
@@ -200,7 +203,7 @@ export default function Motoviajeros() {
                 </article>
               ))}
             </div>
-            <img src={gastronomyFriends} loading="lazy" width="1200" height="912" alt="Grupo de amigos motoviajeros juntos tras la ruta" className="aspect-[4/3] w-full object-cover" />
+            <img src={gastronomyFriends} loading="lazy" decoding="async" width="1200" height="912" alt="Grupo de amigos motoviajeros juntos tras la ruta" className="aspect-[4/3] w-full object-cover" />
           </div>
         </section>
 
@@ -271,7 +274,7 @@ export default function Motoviajeros() {
           <p className="text-xs font-bold uppercase tracking-widest text-primary">Momentos de la parada</p>
           <h2 className="mt-4 text-3xl md:text-5xl">La ruta también tiene pausas.</h2>
           <div className="mt-9 grid grid-cols-2 gap-3 md:grid-cols-4">
-            {realGallery.map((name, i) => <img key={name} src={`/images/${name}`} loading="lazy" alt={`Fotografía real del departamento Esmeralda Apart ${i + 1}`} className="aspect-square w-full object-cover" width="600" height="800" />)}
+            {realGallery.map((name, i) => <img key={name} src={`/images/${name}`} loading="lazy" decoding="async" alt={`Fotografía real del departamento Esmeralda Apart ${i + 1}`} className="aspect-square w-full object-cover" width="600" height="800" />)}
           </div>
           <p className="mt-3 text-xs text-muted-foreground">Departamentos Esmeralda Apart · fotografías reales</p>
         </section>
