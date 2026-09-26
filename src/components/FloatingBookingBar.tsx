@@ -92,7 +92,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   }, [result, loading, onHeightChange]);
 
   const setCalendarOpen = (open: boolean) => {
-    if (open) { setDateRange(undefined); setResult(null); }
+    if (open) { setDateRange(undefined); setResult(null); setError(null); }
     setCalendarOpenRaw(open);
   };
 
