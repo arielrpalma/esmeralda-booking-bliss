@@ -275,7 +275,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const hasAfter = result?.after && result.after.length > 0;
   const hasNoAlternatives = result && !result.available && !hasBefore && !hasAfter;
 
-  const showResults = !!(result || loading);
+  const showResults = !!(result || loading || error);
 
   return (
     <motion.div ref={containerRef} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
