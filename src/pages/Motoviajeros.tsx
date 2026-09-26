@@ -7,6 +7,7 @@ import { faqs, itineraries, restaurants } from "@/content/motoviajeros";
 import hero from "@/assets/motoviajeros/hero-bmw.jpg";
 import route from "@/assets/motoviajeros/route.jpg";
 import coffee from "@/assets/motoviajeros/coffee.jpg";
+import gastronomyFriends from "@/assets/motoviajeros/gastronomy-friends.jpg";
 
 const whatsapp = (message: string) => `https://wa.me/5493472433334?text=${encodeURIComponent(message)}`;
 const bookingScroll = () => window.dispatchEvent(new Event("motoviajeros:open-booking"));
@@ -199,7 +200,7 @@ export default function Motoviajeros() {
                 </article>
               ))}
             </div>
-            <img src={coffee} loading="lazy" width="1200" height="912" alt="Una pausa para desayunar durante un viaje en moto" className="aspect-[4/3] w-full object-cover" />
+            <img src={gastronomyFriends} loading="lazy" width="1200" height="912" alt="Grupo de amigos motoviajeros juntos tras la ruta" className="aspect-[4/3] w-full object-cover" />
           </div>
         </section>
 
