@@ -96,6 +96,17 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     setCalendarOpenRaw(open);
   };
 
+  useEffect(() => {
+    const openBooking = () => {
+      setResult(null);
+      setError(null);
+      setDateRange(undefined);
+      setCalendarOpenRaw(true);
+    };
+    window.addEventListener("motoviajeros:open-booking", openBooking);
+    return () => window.removeEventListener("motoviajeros:open-booking", openBooking);
+  }, []);
+
   // Capacity: up to 4 guests occupying a bed (adults + children). Babies (<1) don't count.
   const MAX_GUESTS = 4;
   const MAX_BABIES = 2;

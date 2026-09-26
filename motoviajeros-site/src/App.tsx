@@ -8,7 +8,7 @@ import route from "./assets/route.jpg";
 import coffee from "./assets/coffee.jpg";
 
 const whatsapp = (message: string) => `https://wa.me/5493472433334?text=${encodeURIComponent(message)}`;
-const bookingScroll = () => document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
+const bookingScroll = () => window.dispatchEvent(new Event("motoviajeros:open-booking"));
 const benefits = [
   { icon: Bike, text: "Cochera para motos" }, { icon: BedDouble, text: "Apartamentos confortables" },
   { icon: ChefHat, text: "Cocina equipada" }, { icon: Utensils, text: "Gastronomía cerca" },
