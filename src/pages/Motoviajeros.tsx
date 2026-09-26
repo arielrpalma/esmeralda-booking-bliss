@@ -307,7 +307,7 @@ export default function Motoviajeros() {
       </footer>
 
       <FloatingBookingBar onHeightChange={onHeightChange} />
-      <a href={whatsapp("Hola, soy motoviajero y quisiera consultar alojamiento y espacio de cochera en Esmeralda Apart.")} target="_blank" rel="noopener noreferrer" aria-label="Consultar por WhatsApp" className="fixed right-4 z-40 flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg" style={{ bottom: `${barHeight + 16}px` }}><Bike size={22} /></a>
+      <a href={whatsapp("Hola, soy motoviajero y quisiera consultar alojamiento y espacio de cochera en Esmeralda Apart.")} target="_blank" rel="noopener noreferrer" aria-label="Consultar por WhatsApp" className="fixed right-4 z-40 flex size-12 items-center justify-center rounded-full bg-[#25D366] shadow-lg" style={{ bottom: `${barHeight + 16}px` }}><img src="/images/whatsapp.png" alt="WhatsApp" className="size-7" /></a>
     </>
   );
 }
