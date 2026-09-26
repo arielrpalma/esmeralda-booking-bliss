@@ -98,7 +98,7 @@ export default function Motoviajeros() {
 
       <main>
         <section className="relative flex min-h-[660px] items-end overflow-hidden bg-section-dark text-section-dark-foreground md:min-h-[min(86vh,900px)]">
-          <img src={hero} alt="Motoviajero adulto junto a una moto BMW de turismo al llegar a su parada" className="absolute inset-0 h-full w-full object-cover object-center md:object-[65%_center]" width="1600" height="1056" fetchPriority="high" />
+          <img src={heroMobile} srcSet={`${heroMobile} 800w, ${heroDesktop} 1600w`} sizes="100vw" alt="Motoviajero adulto junto a una moto BMW de turismo al llegar a su parada" className="absolute inset-0 h-full w-full object-cover object-center md:object-[65%_center]" width="1600" height="1056" fetchPriority="high" decoding="async" />
           <div className="absolute inset-0 bg-[image:var(--hero-overlay)]" />
           <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 pt-40 md:px-10 md:pb-24">
             <p className="mb-5 text-xs font-bold uppercase tracking-[0.28em] text-gold">Esmeralda Apart · Marcos Juárez</p>
