@@ -17,6 +17,7 @@ import HubIndex from "./pages/hub/HubIndex";
 import ClusterPage from "./pages/hub/ClusterPage";
 import HubEntryPage from "./pages/hub/HubEntryPage";
 import { clusters } from "./content/hub";
+import Motoviajeros from "./pages/Motoviajeros";
 import NotFound from "./pages/NotFound";
 
 
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/pago/success" element={<PagoStatus status="success" />} />
           <Route path="/pago/pending" element={<PagoStatus status="pending" />} />
           <Route path="/pago/failure" element={<PagoStatus status="failure" />} />
+          <Route path="/motoviajeros" element={<Motoviajeros />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/alojamiento/trabajo" element={<Trabajo />} />
