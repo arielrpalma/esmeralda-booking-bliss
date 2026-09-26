@@ -447,6 +447,25 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                     )}
                   </div>
                 </div>
+              ) : error ? (
+                /* ===== ERROR ===== */
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-destructive/15 flex items-center justify-center shrink-0">
+                      <X size={14} className="text-destructive" />
+                    </div>
+                    <span className="text-xs sm:text-sm font-body text-muted-foreground">{error}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button onClick={handleSearch}
+                      className={cn("bg-primary text-primary-foreground rounded-lg font-body font-semibold hover:bg-primary/90 transition-all shadow-md", isMobile ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm")}>
+                      Reintentar
+                    </button>
+                    <button onClick={dismissResult} aria-label="Cerrar mensaje de error" className="p-1 rounded-full hover:bg-muted transition-colors shrink-0">
+                      <X size={14} className="text-muted-foreground" />
+                    </button>
+                  </div>
+                </div>
               ) : null}
 
             </div>
