@@ -106,6 +106,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const checkAvailability = async (checkin: string, checkout: string) => {
     setLoading(true);
     setResult(null);
+    setError(null);
     trackCheckAvailability(checkin, checkout, totalGuests);
     try {
       const { data, error } = await supabase.functions.invoke("check-availability", {
@@ -115,6 +116,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
       setResult(data as AvailabilityResult);
     } catch (err) {
       console.error("Availability check failed:", err);
+      setError("No pudimos consultar la disponibilidad. Intentá de nuevo en unos minutos.");
     } finally {
       setLoading(false);
     }
