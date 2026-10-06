@@ -320,36 +320,8 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
             className="bg-section-dark/95 backdrop-blur-xl border-t-2 border-primary/70 shadow-[0_-8px_40px_-4px_hsl(var(--primary)/0.55)] ring-1 ring-primary/30"
           >
             <div className={cn("container mx-auto", isMobile ? "px-2.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))]" : "px-4 py-3")}>
-              <div className={cn("flex items-center gap-2 sm:gap-3 max-w-5xl mx-auto", isMobile && "flex-col gap-1.5")}>
-                <div className={cn("flex items-center gap-2 w-full", !isMobile && "flex-1")}>
-                  {isMobile ? (
-                    <Drawer open={calendarOpen} onOpenChange={setCalendarOpen}>
-                      <DrawerTrigger asChild>{dateTrigger}</DrawerTrigger>
-                      <DrawerContent><div className="p-4 flex justify-center overflow-auto">{calendarContent}</div></DrawerContent>
-                    </Drawer>
-                  ) : (
-                    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-                      <PopoverTrigger asChild>{dateTrigger}</PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={8}>{calendarContent}</PopoverContent>
-                    </Popover>
-                  )}
-                  {isMobile ? (
-                    <Drawer open={guestsOpen} onOpenChange={setGuestsOpen}>
-                      <DrawerTrigger asChild>{guestsTrigger}</DrawerTrigger>
-                      <DrawerContent>{guestsContent}</DrawerContent>
-                    </Drawer>
-                  ) : (
-                    <Popover open={guestsOpen} onOpenChange={setGuestsOpen}>
-                      <PopoverTrigger asChild>{guestsTrigger}</PopoverTrigger>
-                      <PopoverContent className="w-[320px] p-0 pointer-events-auto" align="center" side="top" sideOffset={8}>{guestsContent}</PopoverContent>
-                    </Popover>
-                  )}
-                </div>
-                <button onClick={handleSearch} disabled={!dateRange?.from || !dateRange?.to || loading}
-                  className={cn("bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-body font-semibold tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl shrink-0 disabled:opacity-50 disabled:cursor-not-allowed", isMobile ? "w-full px-3 py-2.5 text-xs" : "px-6 py-3 text-sm")}>
-                  {loading ? <Loader2 size={isMobile ? 16 : 18} className="animate-spin" /> : <Search size={isMobile ? 16 : 18} />}
-                  <span>Consultar</span>
-                </button>
+              <div className="max-w-5xl mx-auto">
+                <MultiapartSearchbar />
               </div>
             </div>
           </motion.div>
