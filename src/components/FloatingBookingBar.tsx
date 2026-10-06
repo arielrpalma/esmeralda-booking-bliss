@@ -81,6 +81,16 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const [result, setResult] = useState<AvailabilityResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [retryCalendarOpen, setRetryCalendarOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
+
+  // Load the Multiapart embed script once
+  useEffect(() => {
+    if (document.querySelector(`script[src="${MULTIAPART_SCRIPT}"]`)) return;
+    const s = document.createElement("script");
+    s.src = MULTIAPART_SCRIPT;
+    s.async = true;
+    document.body.appendChild(s);
+  }, []);
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -487,6 +497,43 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
               ) : null}
 
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Multiapart booking overlay */}
+      <AnimatePresence>
+        {bookingOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[60] bg-section-dark/80 backdrop-blur-sm flex items-end sm:items-center justify-center"
+            onClick={() => setBookingOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 40 }}
+              transition={{ duration: 0.3 }}
+              className="bg-background border border-border rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-3xl max-h-[90vh] overflow-y-auto p-4 sm:p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-display text-lg sm:text-xl font-semibold text-foreground">
+                  Completá tu reserva
+                </h3>
+                <button
+                  onClick={() => setBookingOpen(false)}
+                  aria-label="Cerrar reserva"
+                  className="p-2 rounded-full hover:bg-muted transition-colors"
+                >
+                  <X size={18} className="text-muted-foreground" />
+                </button>
+              </div>
+              <hotel-booking hotel="esmeralda-apart" mode="searchbar" lang="es" currency="USD"></hotel-booking>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
