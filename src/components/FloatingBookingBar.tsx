@@ -68,7 +68,7 @@ const MultiapartSearchbar = () => {
     apply();
   }, []);
   return (
-    <hotel-booking ref={ref} hotel="esmeralda-apart" mode="searchbar" lang="es" currency="USD"
+    <hotel-booking ref={ref} hotel="esmeralda-apart" mode="searchbar" lang="es" currency="ARS"
       style={{ display: "block" }} />
   );
 };
