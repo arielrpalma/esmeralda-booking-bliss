@@ -68,7 +68,7 @@ const MultiapartSearchbar = () => {
     apply();
   }, []);
   return (
-    <hotel-booking ref={ref} hotel="esmeralda-apart" mode="searchbar" lang="es" currency="ARS"
+    <hotel-booking ref={ref} hotel="chalet-alpino" mode="searchbar" lang="es" currency="USD"
       style={{ display: "block" }} />
   );
 };
@@ -540,7 +540,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
                   <X size={18} className="text-muted-foreground" />
                 </button>
               </div>
-              <hotel-booking hotel="esmeralda-apart" mode="searchbar" lang="es" currency="USD"></hotel-booking>
+              <hotel-booking hotel="chalet-alpino" mode="searchbar" lang="es" currency="USD"></hotel-booking>
             </motion.div>
           </motion.div>
         )}
