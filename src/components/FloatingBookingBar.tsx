@@ -20,8 +20,22 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
-const BASE_URL =
-  "https://frame2.hotelpms.io/BookingFrameClient/hotel/4999DCF40A49BFB3D5A6C22E1174000D/e2d8af9e-82cf-4b24-ba19-fc7b08142f0e/book/rooms";
+// Multiapart booking widget (custom element) used in the booking overlay.
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace JSX {
+    interface IntrinsicElements {
+      "hotel-booking": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        hotel?: string;
+        mode?: string;
+        lang?: string;
+        currency?: string;
+      };
+    }
+  }
+}
+
+const MULTIAPART_SCRIPT = "https://app.multiapart.com/embed.js";
 
 interface Suggestion {
   checkin: string;
@@ -139,18 +153,10 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     checkAvailability(format(dateRange.from, "yyyy-MM-dd"), format(dateRange.to, "yyyy-MM-dd"));
   };
 
+  // Opens the Multiapart booking widget in a full-screen overlay
   const openBookingEngine = (checkin: string, checkout: string, nights?: number) => {
-    const params = new URLSearchParams();
-    params.set("currency", "ARS");
-    params.set("language", "es-ES");
-    params.set("from", checkin);
-    params.set("to", checkout);
-    params.set("nAdults", String(adults));
-    if (children > 0) params.set("nChilds", String(children));
-    if (babies > 0) params.set("nBabies", String(babies));
-    params.set("rp", "");
     trackBookingStart(checkin, checkout, totalGuests, nights ?? 0);
-    window.open(`${BASE_URL}?${params.toString()}`, "_blank");
+    setBookingOpen(true);
   };
 
   const handleBookNow = () => {
