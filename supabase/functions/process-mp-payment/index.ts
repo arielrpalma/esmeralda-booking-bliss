@@ -51,10 +51,16 @@ Deno.serve(async (req) => {
     if (supabase) {
       const { data: existing } = await supabase
         .from('pagos')
-        .select('id, status, status_detail, amount, payment_method_id, external_reference')
+        .select('id, status, status_detail, amount, payment_method_id, external_reference, payer_email')
         .eq('external_reference', externalRef)
         .maybeSingle();
       if (existing) {
+        // Only reveal the existing payment to the same payer; otherwise reject the reused reference.
+        if ((existing.payer_email ?? '').toLowerCase() !== d.payer.email.toLowerCase()) {
+          return new Response(JSON.stringify({ error: 'Referencia de pago inválida' }), {
+            status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
         return new Response(JSON.stringify({
           id: existing.id,
           status: existing.status,

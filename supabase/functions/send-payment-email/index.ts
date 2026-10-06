@@ -18,6 +18,15 @@ const formatARS = (n: number) =>
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
 
+  // Internal-only: only callers holding the service role key (other edge functions) may send emails.
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const auth = req.headers.get('Authorization') ?? '';
+  if (!serviceKey || auth !== `Bearer ${serviceKey}`) {
+    return new Response(JSON.stringify({ error: 'No autorizado' }), {
+      status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
   try {
     const password = Deno.env.get('ZOHO_SMTP_PASSWORD');
     if (!password) {
