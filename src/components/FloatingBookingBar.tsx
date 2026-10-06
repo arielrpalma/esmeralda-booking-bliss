@@ -37,6 +37,42 @@ declare global {
 
 const MULTIAPART_SCRIPT = "https://app.multiapart.com/embed.js";
 
+// Brand overrides injected into the widget's open shadow root so it matches the previous dark/emerald bar.
+const MULTIAPART_THEME = `
+*{font-family:'Raleway',system-ui,sans-serif !important}
+.bar{background:transparent !important;border:0 !important;box-shadow:none !important;padding:0 !important;gap:10px !important;align-items:stretch !important}
+.bar label{color:hsl(var(--section-dark-foreground) / .6) !important;background:hsl(var(--section-dark-foreground) / .1);border-radius:8px;padding:6px 10px;font-size:10px !important;font-weight:600;letter-spacing:.08em;text-transform:uppercase;gap:2px;min-width:110px !important}
+.bar input{background:transparent !important;border:0 !important;padding:2px 0 !important;color:hsl(var(--section-dark-foreground)) !important;font-size:14px !important;color-scheme:dark;outline:none}
+.bar .btn,.btn{background:hsl(var(--primary)) !important;color:hsl(var(--primary-foreground)) !important;border-radius:8px !important;text-transform:uppercase;letter-spacing:.08em;font-weight:600;box-shadow:0 10px 15px -3px rgba(0,0,0,.3)}
+.bar .btn:hover{background:hsl(var(--primary) / .9) !important;opacity:1 !important}
+@media (max-width:767px){.bar{gap:6px !important}.bar label{min-width:calc(50% - 3px) !important;flex:1 1 calc(50% - 3px) !important}.bar .btn{width:100%;padding:10px !important;font-size:12px}}
+`;
+
+const MultiapartSearchbar = () => {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    let tries = 0;
+    const apply = () => {
+      const root = ref.current?.shadowRoot;
+      if (root) {
+        if (!root.querySelector("style[data-brand]")) {
+          const st = document.createElement("style");
+          st.setAttribute("data-brand", "");
+          st.textContent = MULTIAPART_THEME;
+          root.appendChild(st);
+        }
+        return;
+      }
+      if (tries++ < 50) setTimeout(apply, 100);
+    };
+    apply();
+  }, []);
+  return (
+    <hotel-booking ref={ref} hotel="esmeralda-apart" mode="searchbar" lang="es" currency="USD"
+      style={{ display: "block" }} />
+  );
+};
+
 interface Suggestion {
   checkin: string;
   checkout: string;
@@ -320,36 +356,8 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
             className="bg-section-dark/95 backdrop-blur-xl border-t-2 border-primary/70 shadow-[0_-8px_40px_-4px_hsl(var(--primary)/0.55)] ring-1 ring-primary/30"
           >
             <div className={cn("container mx-auto", isMobile ? "px-2.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))]" : "px-4 py-3")}>
-              <div className={cn("flex items-center gap-2 sm:gap-3 max-w-5xl mx-auto", isMobile && "flex-col gap-1.5")}>
-                <div className={cn("flex items-center gap-2 w-full", !isMobile && "flex-1")}>
-                  {isMobile ? (
-                    <Drawer open={calendarOpen} onOpenChange={setCalendarOpen}>
-                      <DrawerTrigger asChild>{dateTrigger}</DrawerTrigger>
-                      <DrawerContent><div className="p-4 flex justify-center overflow-auto">{calendarContent}</div></DrawerContent>
-                    </Drawer>
-                  ) : (
-                    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-                      <PopoverTrigger asChild>{dateTrigger}</PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={8}>{calendarContent}</PopoverContent>
-                    </Popover>
-                  )}
-                  {isMobile ? (
-                    <Drawer open={guestsOpen} onOpenChange={setGuestsOpen}>
-                      <DrawerTrigger asChild>{guestsTrigger}</DrawerTrigger>
-                      <DrawerContent>{guestsContent}</DrawerContent>
-                    </Drawer>
-                  ) : (
-                    <Popover open={guestsOpen} onOpenChange={setGuestsOpen}>
-                      <PopoverTrigger asChild>{guestsTrigger}</PopoverTrigger>
-                      <PopoverContent className="w-[320px] p-0 pointer-events-auto" align="center" side="top" sideOffset={8}>{guestsContent}</PopoverContent>
-                    </Popover>
-                  )}
-                </div>
-                <button onClick={handleSearch} disabled={!dateRange?.from || !dateRange?.to || loading}
-                  className={cn("bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-body font-semibold tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl shrink-0 disabled:opacity-50 disabled:cursor-not-allowed", isMobile ? "w-full px-3 py-2.5 text-xs" : "px-6 py-3 text-sm")}>
-                  {loading ? <Loader2 size={isMobile ? 16 : 18} className="animate-spin" /> : <Search size={isMobile ? 16 : 18} />}
-                  <span>Consultar</span>
-                </button>
+              <div className="max-w-5xl mx-auto">
+                <MultiapartSearchbar />
               </div>
             </div>
           </motion.div>
