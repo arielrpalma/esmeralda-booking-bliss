@@ -37,6 +37,42 @@ declare global {
 
 const MULTIAPART_SCRIPT = "https://app.multiapart.com/embed.js";
 
+// Brand overrides injected into the widget's open shadow root so it matches the previous dark/emerald bar.
+const MULTIAPART_THEME = `
+*{font-family:'Raleway',system-ui,sans-serif !important}
+.bar{background:transparent !important;border:0 !important;box-shadow:none !important;padding:0 !important;gap:10px !important;align-items:stretch !important}
+.bar label{color:hsl(var(--section-dark-foreground) / .6) !important;background:hsl(var(--section-dark-foreground) / .1);border-radius:8px;padding:6px 10px;font-size:10px !important;font-weight:600;letter-spacing:.08em;text-transform:uppercase;gap:2px;min-width:110px !important}
+.bar input{background:transparent !important;border:0 !important;padding:2px 0 !important;color:hsl(var(--section-dark-foreground)) !important;font-size:14px !important;color-scheme:dark;outline:none}
+.bar .btn,.btn{background:hsl(var(--primary)) !important;color:hsl(var(--primary-foreground)) !important;border-radius:8px !important;text-transform:uppercase;letter-spacing:.08em;font-weight:600;box-shadow:0 10px 15px -3px rgba(0,0,0,.3)}
+.bar .btn:hover{background:hsl(var(--primary) / .9) !important;opacity:1 !important}
+@media (max-width:767px){.bar{gap:6px !important}.bar label{min-width:calc(50% - 3px) !important;flex:1 1 calc(50% - 3px) !important}.bar .btn{width:100%;padding:10px !important;font-size:12px}}
+`;
+
+const MultiapartSearchbar = () => {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    let tries = 0;
+    const apply = () => {
+      const root = ref.current?.shadowRoot;
+      if (root) {
+        if (!root.querySelector("style[data-brand]")) {
+          const st = document.createElement("style");
+          st.setAttribute("data-brand", "");
+          st.textContent = MULTIAPART_THEME;
+          root.appendChild(st);
+        }
+        return;
+      }
+      if (tries++ < 50) setTimeout(apply, 100);
+    };
+    apply();
+  }, []);
+  return (
+    <hotel-booking ref={ref} hotel="esmeralda-apart" mode="searchbar" lang="es" currency="USD"
+      style={{ display: "block" }} />
+  );
+};
+
 interface Suggestion {
   checkin: string;
   checkout: string;
