@@ -6,8 +6,8 @@ interface WhatsAppButtonProps {
 }
 
 const WhatsAppButton = ({ barHeight = 0 }: WhatsAppButtonProps) => {
-  // Position 16px above the floating bar
-  const bottomPx = barHeight + 16;
+  // Position above the floating bar; fallback keeps it clear before the bar is measured
+  const bottomPx = Math.max(barHeight, 110) + 24;
 
   return (
     <motion.a
@@ -20,7 +20,7 @@ const WhatsAppButton = ({ barHeight = 0 }: WhatsAppButtonProps) => {
       transition={{ duration: 0.3 }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      className="fixed right-6 z-40 w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg hover:shadow-xl"
+      className="fixed right-6 z-[55] w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg hover:shadow-xl"
       aria-label="Contactar por WhatsApp"
     >
       <svg viewBox="0 0 24 24" className="w-7 h-7 text-white fill-current">
