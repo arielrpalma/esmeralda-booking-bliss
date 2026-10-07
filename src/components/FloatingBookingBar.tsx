@@ -357,36 +357,9 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
             className="bg-section-dark/95 backdrop-blur-xl border-t-2 border-primary/70 shadow-[0_-8px_40px_-4px_hsl(var(--primary)/0.55)] ring-1 ring-primary/30"
           >
             <div className={cn("container mx-auto", isMobile ? "px-2.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))]" : "px-4 py-3")}>
-              <div className={cn("flex items-stretch gap-2.5 max-w-5xl mx-auto", isMobile && "flex-col gap-1.5")}>
-                <div className={cn("flex items-stretch gap-2.5 w-full", !isMobile && "flex-1", isMobile && "gap-1.5")}>
-                  {isMobile ? (
-                    <Drawer open={calendarOpen} onOpenChange={setCalendarOpen}>
-                      <DrawerTrigger asChild>{dateTrigger}</DrawerTrigger>
-                      <DrawerContent><div className="p-4 flex justify-center overflow-auto">{calendarContent}</div></DrawerContent>
-                    </Drawer>
-                  ) : (
-                    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-                      <PopoverTrigger asChild>{dateTrigger}</PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={8}>{calendarContent}</PopoverContent>
-                    </Popover>
-                  )}
-                  {isMobile ? (
-                    <Drawer open={guestsOpen} onOpenChange={setGuestsOpen}>
-                      <DrawerTrigger asChild>{guestsTrigger}</DrawerTrigger>
-                      <DrawerContent>{guestsContent}</DrawerContent>
-                    </Drawer>
-                  ) : (
-                    <Popover open={guestsOpen} onOpenChange={setGuestsOpen}>
-                      <PopoverTrigger asChild>{guestsTrigger}</PopoverTrigger>
-                      <PopoverContent className="w-[320px] p-0 pointer-events-auto" align="center" side="top" sideOffset={8}>{guestsContent}</PopoverContent>
-                    </Popover>
-                  )}
-                </div>
-                <button onClick={handleSearch}
-                  className={cn("bg-primary hover:brightness-110 text-primary-foreground rounded-lg font-body font-semibold uppercase flex items-center justify-center gap-3 shrink-0 leading-tight", isMobile ? "w-full px-3 py-2.5 text-xs" : "px-6 py-2 text-xs text-center")}>
-                  <Search size={16} />
-                  <span>Consultar{isMobile ? " " : <br />}disponibilidad</span>
-                </button>
+              {/* Official Multiapart searchbar widget */}
+              <div className="max-w-5xl mx-auto">
+                <MultiapartSearchbar />
               </div>
             </div>
           </motion.div>
