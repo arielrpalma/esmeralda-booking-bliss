@@ -194,9 +194,10 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     }
   };
 
+  // Opens the Multiapart engine directly; asks for dates first if missing.
   const handleSearch = () => {
-    if (!dateRange?.from || !dateRange?.to) return;
-    checkAvailability(format(dateRange.from, "yyyy-MM-dd"), format(dateRange.to, "yyyy-MM-dd"));
+    if (!dateRange?.from || !dateRange?.to) { setCalendarOpenRaw(true); return; }
+    openBookingEngine(format(dateRange.from, "yyyy-MM-dd"), format(dateRange.to, "yyyy-MM-dd"));
   };
 
   // Opens the Multiapart booking widget in a full-screen overlay
@@ -244,10 +245,10 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
       disabled={(date) => { const now = new Date(); const arHour = new Date(now.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' })).getHours(); const t = new Date(); t.setHours(0,0,0,0); if (arHour >= 22) t.setDate(t.getDate() + 1); return date < t; }}
       initialFocus className={cn("p-3 pointer-events-auto")} />
   );
-  const summary = `1 dept. · ${totalGuests} huésp.`;
+  const summary = [`${adults} ${adults===1?"adulto":"adultos"}`, children?`${children} ${children===1?"menor":"menores"}`:"", babies?`${babies} ${babies===1?"bebé":"bebés"}`:""].filter(Boolean).join(" · ");
   const dateLabel = dateRange?.from
     ? dateRange.to
-      ? `${format(dateRange.from, "dd MMM", { locale: es })} → ${format(dateRange.to, "dd MMM", { locale: es })}`
+      ? `${format(dateRange.from, "d MMM", { locale: es })} → ${format(dateRange.to, "d MMM yyyy", { locale: es })} · ${nightsLabel(Math.round((dateRange.to.getTime()-dateRange.from.getTime())/86400000))}`
       : `${format(dateRange.from, "dd MMM", { locale: es })} → ...`
     : "Seleccionar fechas";
 
@@ -319,7 +320,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     <button className={cn("flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-lg text-left min-w-0", isMobile ? "px-2.5 py-1.5" : "px-3 py-2")}>
       <CalendarDays size={isMobile ? 14 : 16} className="text-primary shrink-0" />
       <div className="flex-1 min-w-0">
-        <span className={cn("font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-0.5", isMobile ? "text-[9px]" : "text-[10px] mb-1")}>Llegada — Salida</span>
+        <span className={cn("font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-0.5", isMobile ? "text-[9px]" : "text-[10px] mb-1")}>Llegada · Salida</span>
         <span className={cn("font-body truncate block", isMobile ? "text-xs" : "text-sm", dateRange?.from ? "text-section-dark-foreground" : "text-section-dark-foreground/40")}>{dateLabel}</span>
       </div>
     </button>
@@ -356,8 +357,36 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
             className="bg-section-dark/95 backdrop-blur-xl border-t-2 border-primary/70 shadow-[0_-8px_40px_-4px_hsl(var(--primary)/0.55)] ring-1 ring-primary/30"
           >
             <div className={cn("container mx-auto", isMobile ? "px-2.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))]" : "px-4 py-3")}>
-              <div className="max-w-5xl mx-auto">
-                <MultiapartSearchbar />
+              <div className={cn("flex items-stretch gap-2.5 max-w-5xl mx-auto", isMobile && "flex-col gap-1.5")}>
+                <div className={cn("flex items-stretch gap-2.5 w-full", !isMobile && "flex-1", isMobile && "gap-1.5")}>
+                  {isMobile ? (
+                    <Drawer open={calendarOpen} onOpenChange={setCalendarOpen}>
+                      <DrawerTrigger asChild>{dateTrigger}</DrawerTrigger>
+                      <DrawerContent><div className="p-4 flex justify-center overflow-auto">{calendarContent}</div></DrawerContent>
+                    </Drawer>
+                  ) : (
+                    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                      <PopoverTrigger asChild>{dateTrigger}</PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start" side="top" sideOffset={8}>{calendarContent}</PopoverContent>
+                    </Popover>
+                  )}
+                  {isMobile ? (
+                    <Drawer open={guestsOpen} onOpenChange={setGuestsOpen}>
+                      <DrawerTrigger asChild>{guestsTrigger}</DrawerTrigger>
+                      <DrawerContent>{guestsContent}</DrawerContent>
+                    </Drawer>
+                  ) : (
+                    <Popover open={guestsOpen} onOpenChange={setGuestsOpen}>
+                      <PopoverTrigger asChild>{guestsTrigger}</PopoverTrigger>
+                      <PopoverContent className="w-[320px] p-0 pointer-events-auto" align="center" side="top" sideOffset={8}>{guestsContent}</PopoverContent>
+                    </Popover>
+                  )}
+                </div>
+                <button onClick={handleSearch}
+                  className={cn("bg-primary hover:brightness-110 text-primary-foreground rounded-lg font-body font-semibold uppercase flex items-center justify-center gap-3 shrink-0 leading-tight", isMobile ? "w-full px-3 py-2.5 text-xs" : "px-6 py-2 text-xs text-center")}>
+                  <Search size={16} />
+                  <span>Consultar{isMobile ? " " : <br />}disponibilidad</span>
+                </button>
               </div>
             </div>
           </motion.div>
@@ -509,42 +538,25 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
         )}
       </AnimatePresence>
 
-      {/* Multiapart booking overlay */}
-      <AnimatePresence>
-        {bookingOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[60] bg-section-dark/80 backdrop-blur-sm flex items-end sm:items-center justify-center"
-            onClick={() => setBookingOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 40 }}
-              transition={{ duration: 0.3 }}
-              className="bg-background border border-border rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-3xl max-h-[90vh] overflow-y-auto p-4 sm:p-6"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-display text-lg sm:text-xl font-semibold text-foreground">
-                  Completá tu reserva
-                </h3>
-                <button
-                  onClick={() => setBookingOpen(false)}
-                  aria-label="Cerrar reserva"
-                  className="p-2 rounded-full hover:bg-muted transition-colors"
-                >
-                  <X size={18} className="text-muted-foreground" />
-                </button>
-              </div>
-              <hotel-booking hotel="chalet-alpino" mode="searchbar" lang="es" currency="USD"></hotel-booking>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Multiapart booking engine opened directly in a modal iframe */}
+      {bookingOpen && dateRange?.from && dateRange?.to && (
+        <div className="fixed inset-0 z-[60] bg-section-dark/80 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4"
+          onClick={() => setBookingOpen(false)}>
+          <button onClick={() => setBookingOpen(false)} aria-label="Cerrar reserva"
+            className="absolute top-3 right-3 z-10 w-10 h-10 rounded-lg bg-section-dark text-section-dark-foreground flex items-center justify-center">
+            <X size={20} />
+          </button>
+          <iframe title="Reservas"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-[1100px] h-[90dvh] bg-background rounded-xl border-0"
+            src={`https://app.multiapart.com/sites/esmeralda-apart/reservar?${new URLSearchParams({
+              embedded: "1", lang: "es", currency: "USD", plan: "", open: "1",
+              checkIn: format(dateRange.from, "yyyy-MM-dd"),
+              checkOut: format(dateRange.to, "yyyy-MM-dd"),
+              adults: String(adults), children: String(children),
+            }).toString()}`} />
+        </div>
+      )}
     </motion.div>
   );
 };
