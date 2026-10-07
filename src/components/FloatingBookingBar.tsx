@@ -245,10 +245,10 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
       disabled={(date) => { const now = new Date(); const arHour = new Date(now.toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' })).getHours(); const t = new Date(); t.setHours(0,0,0,0); if (arHour >= 22) t.setDate(t.getDate() + 1); return date < t; }}
       initialFocus className={cn("p-3 pointer-events-auto")} />
   );
-  const summary = `1 dept. · ${totalGuests} huésp.`;
+  const summary = [`${adults} ${adults===1?"adulto":"adultos"}`, children?`${children} ${children===1?"menor":"menores"}`:"", babies?`${babies} ${babies===1?"bebé":"bebés"}`:""].filter(Boolean).join(" · ");
   const dateLabel = dateRange?.from
     ? dateRange.to
-      ? `${format(dateRange.from, "dd MMM", { locale: es })} → ${format(dateRange.to, "dd MMM", { locale: es })}`
+      ? `${format(dateRange.from, "d MMM", { locale: es })} → ${format(dateRange.to, "d MMM yyyy", { locale: es })} · ${nightsLabel(Math.round((dateRange.to.getTime()-dateRange.from.getTime())/86400000))}`
       : `${format(dateRange.from, "dd MMM", { locale: es })} → ...`
     : "Seleccionar fechas";
 
@@ -320,7 +320,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     <button className={cn("flex-1 flex items-center gap-2 bg-section-dark-foreground/10 rounded-lg text-left min-w-0", isMobile ? "px-2.5 py-1.5" : "px-3 py-2")}>
       <CalendarDays size={isMobile ? 14 : 16} className="text-primary shrink-0" />
       <div className="flex-1 min-w-0">
-        <span className={cn("font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-0.5", isMobile ? "text-[9px]" : "text-[10px] mb-1")}>Llegada — Salida</span>
+        <span className={cn("font-body font-semibold tracking-wider uppercase text-section-dark-foreground/60 block leading-none mb-0.5", isMobile ? "text-[9px]" : "text-[10px] mb-1")}>Llegada · Salida</span>
         <span className={cn("font-body truncate block", isMobile ? "text-xs" : "text-sm", dateRange?.from ? "text-section-dark-foreground" : "text-section-dark-foreground/40")}>{dateLabel}</span>
       </div>
     </button>
