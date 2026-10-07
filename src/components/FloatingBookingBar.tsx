@@ -140,15 +140,18 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
       }
     };
 
-    // Measure immediately and after animations settle
+    // Measure now, after animations, and whenever the bar (incl. the Multiapart widget) resizes
     measure();
     const timers = [
       setTimeout(measure, 50),
       setTimeout(measure, 350),
       setTimeout(measure, 600),
+      setTimeout(measure, 1500),
     ];
+    const ro = containerRef.current ? new ResizeObserver(measure) : null;
+    if (ro && containerRef.current) ro.observe(containerRef.current);
 
-    return () => timers.forEach(clearTimeout);
+    return () => { timers.forEach(clearTimeout); ro?.disconnect(); };
   }, [result, loading, onHeightChange]);
 
   const setCalendarOpen = (open: boolean) => {
