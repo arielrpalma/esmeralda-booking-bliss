@@ -1,5 +1,5 @@
-import { Helmet } from "react-helmet-async";
 import { MapPin, Instagram, Facebook } from "lucide-react";
+
 import { Link } from "react-router-dom";
 import { clusters } from "@/content/hub";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
@@ -13,47 +13,11 @@ const guideLinks = [
   { label: "Blog", href: "/blog" },
 ];
 
-// Structured data for brand + phone searches ("telefono esmeralda apart", AI answers).
-const lodgingJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LodgingBusiness",
-  name: "Esmeralda Apart",
-  description:
-    "Departamentos temporarios en el centro de Marcos Juárez, Córdoba: check-in digital 24 horas, cochera, cocina equipada y factura A o B.",
-  url: "https://esmeraldaapart.com.ar/",
-  telephone: "+5493472433334",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "9 de Julio 262",
-    addressLocality: "Marcos Juárez",
-    addressRegion: "Córdoba",
-    addressCountry: "AR",
-  },
-  checkinTime: "14:00",
-  checkoutTime: "10:00",
-  contactPoint: [
-    {
-      "@type": "ContactPoint",
-      contactType: "customer support",
-      telephone: "+5493472433334",
-      availableLanguage: ["Spanish"],
-    },
-  ],
-  sameAs: [
-    "https://www.instagram.com/esmeraldaapart",
-    "http://www.facebook.com/esmeraldaapart",
-    "https://www.tiktok.com/@esmeraldaapart",
-    whatsappLink(),
-  ],
-};
-
 const Footer = () => {
   return (
     <footer className="bg-section-dark py-16">
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(lodgingJsonLd)}</script>
-      </Helmet>
       <div className="container mx-auto px-6">
+
         <div className="flex flex-col md:flex-row items-center justify-between gap-10">
           <div className="text-center md:text-left">
             <div className="flex items-center gap-3 justify-center md:justify-start mb-4">
