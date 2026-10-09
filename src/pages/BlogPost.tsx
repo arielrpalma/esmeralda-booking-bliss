@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import { getPostBySlug, posts, type Block } from "@/content/posts";
+import { whatsappFromArticle } from "@/lib/whatsapp";
+
 
 const renderBlock = (block: Block, i: number) => {
   switch (block.type) {

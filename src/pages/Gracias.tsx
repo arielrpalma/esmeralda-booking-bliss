@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 
 import { trackBookingComplete } from "@/lib/analytics";
+import { whatsappLink } from "@/lib/whatsapp";
+
 
 const Gracias = () => {
   const navigate = useNavigate();

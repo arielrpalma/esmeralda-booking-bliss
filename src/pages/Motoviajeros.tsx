@@ -4,6 +4,8 @@ import { ArrowRight, BedDouble, Bike, ChefHat, ChevronDown, Coffee, Compass, Hea
 import { Button } from "@/components/ui/button";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import { faqs, itineraries, restaurants } from "@/content/motoviajeros";
+import { whatsappLink } from "@/lib/whatsapp";
+
 // Optimized images: WebP with responsive widths for fast mobile loading
 import heroMobile from "@/assets/motoviajeros/hero-bmw.jpg?format=webp&w=800&quality=72";
 import heroDesktop from "@/assets/motoviajeros/hero-bmw.jpg?format=webp&w=1600&quality=75";

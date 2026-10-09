@@ -6,6 +6,8 @@ import { toPng } from "html-to-image";
 import { PaymentReceipt } from "@/components/PaymentReceipt";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { whatsappLink } from "@/lib/whatsapp";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";

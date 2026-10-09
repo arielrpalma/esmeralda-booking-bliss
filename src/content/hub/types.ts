@@ -1,5 +1,7 @@
 // Topic-cluster content model. Every entry belongs to a cluster (pillar page)
 // and links back to the booking flow, to sibling entries and to the blog.
+import { whatsappLink } from "@/lib/whatsapp";
+
 
 export type ClusterKey =
   | "alojamiento"
