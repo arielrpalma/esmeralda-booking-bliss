@@ -33,6 +33,7 @@ const staticEntries: SitemapEntry[] = [
   { path: "/alojamiento/torneo", changefreq: "monthly", priority: "0.9" },
   { path: "/alojamiento/ruta-9", changefreq: "monthly", priority: "0.9" },
   { path: "/alojamiento/familia", changefreq: "monthly", priority: "0.9" },
+  { path: "/motoviajeros", changefreq: "weekly", priority: "0.9" },
 ];
 
 // Topic-cluster pillar pages

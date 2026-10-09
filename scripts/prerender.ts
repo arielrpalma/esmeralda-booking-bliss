@@ -9,6 +9,7 @@ import { resolve, join } from "path";
 import { clusters, hubEntries } from "../src/content/hub";
 import { personas } from "../src/content/personas";
 import { posts } from "../src/content/posts";
+import { faqs as motoFaqs } from "../src/content/motoviajeros";
 
 const SITE = "https://esmeraldaapart.com.ar";
 const DIST = resolve("dist");
@@ -94,6 +95,21 @@ for (const p of Object.values(personas)) {
     content: shell(p.title, p.subtitle, `<ul>${link("/", BRAND)}${link("/guias", "Guía de Marcos Juárez")}</ul>`),
   });
 }
+
+// --- Motoviajeros landing ---------------------------------------------------
+pages.push({
+  path: "/motoviajeros",
+  title: "Motoviajeros | Alojamiento con cochera para motos en Marcos Juárez",
+  description:
+    "Esmeralda Apart en Marcos Juárez: alojamiento confortable para motoviajeros, cochera para motos, cocina equipada y gastronomía cercana. Una parada ideal para descansar y seguir ruta.",
+  keywords:
+    "alojamiento para motoviajeros, cochera para motos Marcos Juárez, mototurismo Córdoba, alojamiento Ruta 9 motos",
+  content: shell(
+    "Motoviajeros · Tu parada en Marcos Juárez",
+    "Después de un día de ruta, encontrá un lugar donde vos y tu moto puedan descansar: cochera para motos a coordinar, apartamentos confortables, cocina equipada y gastronomía cerca.",
+    `${motoFaqs.map((f) => `<h3>${esc(f.question)}</h3><p>${esc(f.answer)}</p>`).join("")}<ul>${link("/", BRAND)}${link("/alojamiento/ruta-9", "Alojamiento sobre la Au Ruta 9")}</ul>`,
+  ),
+});
 
 // --- Cluster pillar pages ---------------------------------------------------
 for (const c of clusters) {
