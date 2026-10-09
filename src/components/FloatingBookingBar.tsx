@@ -362,8 +362,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const showResults = !!(result || loading || error);
 
   return (
-    <motion.div ref={containerRef} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-      transition={{ duration: 0.6, delay: 1 }} className={cn("fixed bottom-0 left-0 right-0", multiapartModalOpen ? "z-[70]" : "z-50")}>
+    <div ref={containerRef} className={cn("fixed bottom-0 left-0 right-0", multiapartModalOpen ? "z-[70]" : "z-50")}>
 
       {/* Main bar (always rendered, but hidden behind results when active) */}
       <AnimatePresence>
@@ -549,7 +548,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
             }).toString()}`} />
         </div>
       )}
-    </motion.div>
+    </div>
   );
 };
 
