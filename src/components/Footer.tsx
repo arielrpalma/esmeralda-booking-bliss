@@ -5,6 +5,7 @@ import { clusters } from "@/content/hub";
 const guideLinks = [
   { label: "Todas las guías", href: "/guias" },
   ...clusters.map((c) => ({ label: c.name, href: `/${c.slug}` })),
+  { label: "Motoviajeros", href: "/motoviajeros" },
   { label: "Blog", href: "/blog" },
 ];
 
