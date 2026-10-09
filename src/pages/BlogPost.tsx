@@ -145,7 +145,7 @@ const BlogPost = () => {
                   Reservá ahora <ArrowRight size={16} />
                 </Link>
                 <a
-                  href="https://wa.me/5493472433334"
+                  href={whatsappFromArticle(post.title)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-section-dark-foreground/10 px-5 py-3 rounded-lg font-body text-sm hover:bg-section-dark-foreground/20 transition"

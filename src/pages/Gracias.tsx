@@ -99,7 +99,7 @@ const Gracias = () => {
                 <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
               </svg>
             </a>
-            <a href="https://wa.me/5493472433334" target="_blank" rel="noopener noreferrer" className="text-section-dark-foreground/50 hover:text-primary transition-colors">
+            <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="text-section-dark-foreground/50 hover:text-primary transition-colors">
               <Phone size={24} strokeWidth={1.5} />
             </a>
           </div>
