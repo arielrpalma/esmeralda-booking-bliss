@@ -100,7 +100,7 @@ const Blog = () => {
 
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
-      <WhatsAppButton barHeight={barHeight} message={whatsappFromBlog()} />
+      <WhatsAppButton barHeight={barHeight} link={whatsappFromBlog()} />
     </div>
   );
 };

@@ -238,7 +238,7 @@ const HubEntryPage = ({ clusterSlug }: { clusterSlug?: string }) => {
 
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
-      <WhatsAppButton barHeight={barHeight} message={whatsappFromGuide(entry.h1)} />
+      <WhatsAppButton barHeight={barHeight} link={whatsappFromGuide(entry.h1)} />
     </div>
   );
 };

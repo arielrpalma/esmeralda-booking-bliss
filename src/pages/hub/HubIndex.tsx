@@ -109,7 +109,7 @@ const HubIndex = () => {
 
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
-      <WhatsAppButton barHeight={barHeight} message={whatsappFromGuide("Guía de Marcos Juárez")} />
+      <WhatsAppButton barHeight={barHeight} link={whatsappFromGuide("Guía de Marcos Juárez")} />
     </div>
   );
 };

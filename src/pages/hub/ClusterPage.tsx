@@ -133,7 +133,7 @@ const ClusterPage = ({ clusterSlug }: { clusterSlug?: string }) => {
 
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
-      <WhatsAppButton barHeight={barHeight} message={whatsappFromGuide(cluster.name)} />
+      <WhatsAppButton barHeight={barHeight} link={whatsappFromGuide(cluster.name)} />
     </div>
   );
 };
