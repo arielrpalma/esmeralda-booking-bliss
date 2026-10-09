@@ -5,15 +5,18 @@ import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 
 interface WhatsAppButtonProps {
   barHeight?: number;
+  /** Pre-filled enquiry text for this page; defaults to the generic message. */
+  message?: string;
 }
 
-const WhatsAppButton = ({ barHeight = 0 }: WhatsAppButtonProps) => {
+const WhatsAppButton = ({ barHeight = 0, message }: WhatsAppButtonProps) => {
   // Position above the floating bar; fallback keeps it clear before the bar is measured
   const bottomPx = Math.max(barHeight, 110) + 24;
 
   return (
     <motion.a
-      href={whatsappLink()}
+      href={whatsappLink(message)}
+
       target="_blank"
       rel="noopener noreferrer"
       onClick={() => trackWhatsAppClick("floating_button")}

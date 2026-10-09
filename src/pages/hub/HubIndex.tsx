@@ -101,7 +101,7 @@ const HubIndex = () => {
             })}
           </div>
 
-          <HubCta />
+          <HubCta title="Guía de Marcos Juárez" />
         </div>
       </main>
 

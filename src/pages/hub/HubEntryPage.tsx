@@ -186,7 +186,7 @@ const HubEntryPage = ({ clusterSlug }: { clusterSlug?: string }) => {
 
             <HubFaqs faqs={entry.faqs} />
 
-            <HubCta />
+            <HubCta title={entry.h1} />
           </article>
 
           {related.length > 0 && (

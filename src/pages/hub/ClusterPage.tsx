@@ -102,7 +102,7 @@ const ClusterPage = ({ clusterSlug }: { clusterSlug?: string }) => {
             ))}
           </ul>
 
-          <HubCta />
+          <HubCta title={cluster.name} />
 
           <section className="mt-16">
             <h2 className="text-xl font-display font-semibold text-foreground mb-4">Otras guías de Marcos Juárez</h2>
