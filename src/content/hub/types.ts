@@ -93,4 +93,4 @@ export interface ClusterConfig {
 }
 
 export const SITE = "https://esmeraldaapart.com.ar";
-export const WA = "https://wa.me/5493472433334";
+export const WA = whatsappLink();
