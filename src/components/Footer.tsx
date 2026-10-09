@@ -43,7 +43,7 @@ const lodgingJsonLd = {
     "https://www.instagram.com/esmeraldaapart",
     "http://www.facebook.com/esmeraldaapart",
     "https://www.tiktok.com/@esmeraldaapart",
-    "https://wa.me/5493472433334",
+    whatsappLink(),
   ],
 };
 
