@@ -5,6 +5,8 @@ import { ArrowLeft, Car, Footprints, MapPin } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { whatsappFromGuide } from "@/lib/whatsapp";
+
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import HubBreadcrumbs from "@/components/hub/HubBreadcrumbs";
 import HubBlocks from "@/components/hub/HubBlocks";
@@ -236,7 +238,7 @@ const HubEntryPage = ({ clusterSlug }: { clusterSlug?: string }) => {
 
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
-      <WhatsAppButton barHeight={barHeight} />
+      <WhatsAppButton barHeight={barHeight} message={whatsappFromGuide(entry.h1)} />
     </div>
   );
 };

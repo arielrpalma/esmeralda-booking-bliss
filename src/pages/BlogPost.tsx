@@ -180,7 +180,7 @@ const BlogPost = () => {
 
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
-      <WhatsAppButton barHeight={barHeight} />
+      <WhatsAppButton barHeight={barHeight} message={whatsappFromArticle(post.title)} />
     </div>
   );
 };

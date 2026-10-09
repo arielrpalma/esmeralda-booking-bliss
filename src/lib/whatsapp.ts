@@ -15,5 +15,9 @@ export const whatsappLink = (message: string = GENERIC_MESSAGE) =>
 export const whatsappFromGuide = (title: string) =>
   whatsappLink(`Hola, entré desde la guía "${title}" de Esmeralda Apart y quiero consultar disponibilidad.`);
 
+export const whatsappFromBlog = () =>
+  whatsappLink("Hola, entré desde el blog de Esmeralda Apart y quiero consultar disponibilidad.");
+
 export const whatsappFromArticle = (title: string) =>
   whatsappLink(`Hola, estaba leyendo "${title}" en el blog de Esmeralda Apart y quiero consultar disponibilidad.`);
+
