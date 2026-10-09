@@ -1,6 +1,10 @@
-import { MapPin, Phone, Instagram, Facebook } from "lucide-react";
+import { Helmet } from "react-helmet-async";
+import { MapPin, Instagram, Facebook } from "lucide-react";
 import { Link } from "react-router-dom";
 import { clusters } from "@/content/hub";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
+import { whatsappLink, WHATSAPP_DISPLAY } from "@/lib/whatsapp";
+import { trackWhatsAppClick } from "@/lib/analytics";
 
 const guideLinks = [
   { label: "Todas las guías", href: "/guias" },
@@ -9,9 +13,46 @@ const guideLinks = [
   { label: "Blog", href: "/blog" },
 ];
 
+// Structured data for brand + phone searches ("telefono esmeralda apart", AI answers).
+const lodgingJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  name: "Esmeralda Apart",
+  description:
+    "Departamentos temporarios en el centro de Marcos Juárez, Córdoba: check-in digital 24 horas, cochera, cocina equipada y factura A o B.",
+  url: "https://esmeraldaapart.com.ar/",
+  telephone: "+5493472433334",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "9 de Julio 262",
+    addressLocality: "Marcos Juárez",
+    addressRegion: "Córdoba",
+    addressCountry: "AR",
+  },
+  checkinTime: "14:00",
+  checkoutTime: "10:00",
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      telephone: "+5493472433334",
+      availableLanguage: ["Spanish"],
+    },
+  ],
+  sameAs: [
+    "https://www.instagram.com/esmeraldaapart",
+    "http://www.facebook.com/esmeraldaapart",
+    "https://www.tiktok.com/@esmeraldaapart",
+    "https://wa.me/5493472433334",
+  ],
+};
+
 const Footer = () => {
   return (
     <footer className="bg-section-dark py-16">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(lodgingJsonLd)}</script>
+      </Helmet>
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-10">
           <div className="text-center md:text-left">
@@ -23,11 +64,31 @@ const Footer = () => {
             </p>
           </div>
 
-          <div className="flex flex-col items-center gap-3 text-sm text-section-dark-foreground/70 font-body">
+          <div className="flex flex-col items-center md:items-start gap-4 text-sm text-section-dark-foreground/70 font-body">
             <div className="flex items-center gap-2">
               <MapPin size={16} className="text-primary" />
               <span>9 de Julio 262, Marcos Juárez, Córdoba</span>
             </div>
+
+            {/* WhatsApp is the fastest channel: show it as a labeled, clickable contact */}
+            <a
+              href={whatsappLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackWhatsAppClick("footer")}
+              className="inline-flex items-center gap-3 rounded-full border border-[#25D366]/40 bg-[#25D366]/10 px-5 py-3 transition-colors duration-300 hover:bg-[#25D366]/20"
+            >
+              <WhatsAppIcon className="w-6 h-6 text-[#25D366]" />
+              <span className="flex flex-col leading-tight text-left">
+                <span className="text-[11px] uppercase tracking-[0.22em] text-[#25D366]">
+                  Escribinos por WhatsApp
+                </span>
+                <span className="font-display text-base text-section-dark-foreground">
+                  {WHATSAPP_DISPLAY}
+                </span>
+              </span>
+            </a>
+
             <div className="flex items-center gap-5">
               <a
                 href="https://www.instagram.com/esmeraldaapart"
@@ -54,14 +115,6 @@ const Footer = () => {
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
                 </svg>
-              </a>
-              <a
-                href="https://wa.me/5493472433334"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-section-dark-foreground/50 hover:text-primary transition-colors duration-300"
-              >
-                <Phone size={22} strokeWidth={1.5} />
               </a>
             </div>
           </div>

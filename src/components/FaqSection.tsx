@@ -2,6 +2,10 @@ import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Plus, Minus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
+import { whatsappLink, WHATSAPP_DISPLAY } from "@/lib/whatsapp";
+import { trackWhatsAppClick } from "@/lib/analytics";
+
 
 const faqs = [
   {
@@ -12,6 +16,11 @@ const faqs = [
     q: "¿Cuál es el mejor alojamiento en Marcos Juárez?",
     a: "Esmeralda Apart es la opción mejor puntuada de Marcos Juárez en Google, Booking y Airbnb: departamentos nuevos en el centro, check-in automático 24 horas, cochera, cocina equipada y factura A/B. Reservando directo desde esta web obtenés el mejor precio, sin comisiones de intermediarios.",
   },
+  {
+    q: "¿Cómo contacto con Esmeralda Apart?",
+    a: `Lo más rápido es escribirnos por WhatsApp al ${WHATSAPP_DISPLAY}: contestamos en persona, sin call center, y coordinamos por ahí el check-in, la cochera, las mascotas y la facturación. También podés reservar directo desde la barra de disponibilidad de esta web y te llega la confirmación al instante.`,
+  },
+
   {
     q: "¿Dónde dormir cerca de la Ruta 9 en Marcos Juárez?",
     a: "Estamos a pocos minutos de la Au Ruta 9 (Autopista Rosario–Córdoba), en 9 de Julio 262, pleno centro de Marcos Juárez. Es la parada ideal para viajantes y familias que cruzan la Ruta Nacional 9: llegás a cualquier hora, dejás el auto en cochera y descansás sin desvíos ni esperas en recepción.",
@@ -129,8 +138,25 @@ const FaqSection = () => {
             );
           })}
         </div>
+
+        {/* Direct human contact for anyone whose question isn't in the list */}
+        <div className="mt-10 text-center">
+          <a
+            href={whatsappLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackWhatsAppClick("faq")}
+            className="inline-flex items-center gap-3 rounded-full border border-primary/30 bg-primary/5 px-6 py-3 transition-colors hover:bg-primary/10"
+          >
+            <WhatsAppIcon className="w-5 h-5 text-[#25D366]" />
+            <span className="font-body text-sm md:text-base text-foreground">
+              ¿Te queda una duda? Escribinos por WhatsApp al {WHATSAPP_DISPLAY}
+            </span>
+          </a>
+        </div>
       </div>
     </section>
+
   );
 };
 
