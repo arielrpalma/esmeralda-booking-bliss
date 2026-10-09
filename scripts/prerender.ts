@@ -10,6 +10,8 @@ import { clusters, hubEntries } from "../src/content/hub";
 import { personas } from "../src/content/personas";
 import { posts } from "../src/content/posts";
 import { faqs as motoFaqs } from "../src/content/motoviajeros";
+import { whatsappLink, WHATSAPP_DISPLAY } from "../src/lib/whatsapp";
+
 
 const SITE = "https://esmeraldaapart.com.ar";
 const DIST = resolve("dist");
@@ -55,7 +57,7 @@ pages.push({
   content: shell(
     "Esmeralda Apart · Departamentos por día en Marcos Juárez",
     "Apart con check-in digital 24 horas, cochera, WiFi de fibra, cocina equipada y factura A o B, a minutos del acceso a la Au Ruta 9.",
-    `<ul>${clusters.map((c) => link(`/${c.slug}`, c.name)).join("")}${link("/guias", "Guía de Marcos Juárez")}${link("/blog", "Blog")}</ul>`,
+    `<ul>${clusters.map((c) => link(`/${c.slug}`, c.name)).join("")}${link("/guias", "Guía de Marcos Juárez")}${link("/blog", "Blog")}</ul><p>Contacto directo por WhatsApp: <a href="${esc(whatsappLink())}">${WHATSAPP_DISPLAY}</a> (atención en persona, sin call center). Dirección: 9 de Julio 262, Marcos Juárez, Córdoba.</p>`,
   ),
 });
 
