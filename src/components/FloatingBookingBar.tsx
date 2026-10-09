@@ -45,13 +45,18 @@ const MULTIAPART_THEME = `
 .bar input{background:transparent !important;border:0 !important;padding:2px 0 !important;color:hsl(var(--section-dark-foreground)) !important;font-size:14px !important;color-scheme:dark;outline:none}
 .bar .btn,.btn{background:hsl(var(--primary)) !important;color:hsl(var(--primary-foreground)) !important;border-radius:8px !important;text-transform:uppercase;letter-spacing:.08em;font-weight:600;box-shadow:0 10px 15px -3px rgba(0,0,0,.3)}
 .bar .btn:hover{background:hsl(var(--primary) / .9) !important;opacity:1 !important}
-@media (max-width:767px){.bar{gap:6px !important}.bar label{min-width:calc(50% - 3px) !important;flex:1 1 calc(50% - 3px) !important}.bar .btn{width:100%;padding:10px !important;font-size:12px}}
+.modal{position:fixed !important;inset:0 !important;width:100vw !important;height:100dvh !important;padding:16px !important;overflow:hidden !important}
+.modal iframe{display:block !important;width:100% !important;max-width:1120px !important;height:calc(100dvh - 32px) !important;max-height:calc(100dvh - 32px) !important;overflow:auto !important}
+.close{position:fixed !important;top:max(10px,env(safe-area-inset-top)) !important;right:max(14px,env(safe-area-inset-right)) !important}
+@media (max-width:767px){.bar{gap:6px !important}.bar label{min-width:calc(50% - 3px) !important;flex:1 1 calc(50% - 3px) !important}.bar .btn{width:100%;padding:10px !important;font-size:12px}.modal{padding:0 !important}.modal iframe{max-width:none !important;height:100dvh !important;max-height:100dvh !important;border-radius:0 !important}}
 `;
 
-const MultiapartSearchbar = () => {
+const MultiapartSearchbar = ({ onModalChange }: { onModalChange: (open: boolean) => void }) => {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
     let tries = 0;
+    let observer: MutationObserver | null = null;
+    let timer: ReturnType<typeof setTimeout> | null = null;
     const apply = () => {
       const root = ref.current?.shadowRoot;
       if (root) {
@@ -61,12 +66,21 @@ const MultiapartSearchbar = () => {
           st.textContent = MULTIAPART_THEME;
           root.appendChild(st);
         }
+        const updateModalState = () => onModalChange(Boolean(root.querySelector(".modal")));
+        updateModalState();
+        observer = new MutationObserver(updateModalState);
+        observer.observe(root, { childList: true, subtree: true });
         return;
       }
-      if (tries++ < 50) setTimeout(apply, 100);
+      if (tries++ < 50) timer = setTimeout(apply, 100);
     };
     apply();
-  }, []);
+    return () => {
+      if (timer) clearTimeout(timer);
+      observer?.disconnect();
+      onModalChange(false);
+    };
+  }, [onModalChange]);
   return (
     <hotel-booking ref={ref} hotel="esmeralda-apart" mode="searchbar" lang="es" currency="USD"
       style={{ display: "block" }} />
@@ -118,6 +132,8 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const [error, setError] = useState<string | null>(null);
   const [retryCalendarOpen, setRetryCalendarOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [multiapartModalOpen, setMultiapartModalOpen] = useState(false);
+  const handleMultiapartModalChange = useCallback((open: boolean) => setMultiapartModalOpen(open), []);
 
   // Load the Multiapart embed script once
   useEffect(() => {
@@ -346,8 +362,8 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const showResults = !!(result || loading || error);
 
   return (
-    <motion.div ref={containerRef} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 1 }} className="fixed bottom-0 left-0 right-0 z-50">
+    <motion.div ref={containerRef} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+      transition={{ duration: 0.6, delay: 1 }} className={cn("fixed bottom-0 left-0 right-0", multiapartModalOpen ? "z-[70]" : "z-50")}>
 
       {/* Main bar (always rendered, but hidden behind results when active) */}
       <AnimatePresence>
@@ -362,7 +378,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
             <div className={cn("container mx-auto", isMobile ? "px-2.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))]" : "px-4 py-3")}>
               {/* Official Multiapart searchbar widget */}
               <div className="max-w-5xl mx-auto">
-                <MultiapartSearchbar />
+                <MultiapartSearchbar onModalChange={handleMultiapartModalChange} />
               </div>
             </div>
           </motion.div>
