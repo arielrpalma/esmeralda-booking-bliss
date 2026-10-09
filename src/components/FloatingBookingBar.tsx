@@ -362,11 +362,11 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const showResults = !!(result || loading || error);
 
   return (
-    <div ref={containerRef} className={cn("fixed bottom-0 left-0 right-0", multiapartModalOpen ? "z-[70]" : "z-50")}>
+    <div ref={containerRef} className={multiapartModalOpen ? "static" : "fixed bottom-0 left-0 right-0 z-50"}>
 
       {/* Main bar (always rendered, but hidden behind results when active) */}
       {!showResults && (
-          <div className="bg-section-dark/95 backdrop-blur-xl border-t-2 border-primary/70 shadow-[0_-8px_40px_-4px_hsl(var(--primary)/0.55)] ring-1 ring-primary/30">
+          <div className={cn("bg-section-dark/95 border-t-2 border-primary/70 shadow-[0_-8px_40px_-4px_hsl(var(--primary)/0.55)] ring-1 ring-primary/30", !multiapartModalOpen && "backdrop-blur-xl")}>
             <div className={cn("container mx-auto", isMobile ? "px-2.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))]" : "px-4 py-3")}>
               {/* Official Multiapart searchbar widget */}
               <div className="max-w-5xl mx-auto">
