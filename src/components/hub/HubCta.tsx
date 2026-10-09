@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { WA } from "@/content/hub";
+import { whatsappFromGuide } from "@/lib/whatsapp";
 
 /** Conversion block reused across every hub page. */
-const HubCta = ({ text }: { text?: string }) => (
+const HubCta = ({ text, title }: { text?: string; title?: string }) => (
   <div className="mt-12 p-6 md:p-8 rounded-2xl bg-section-dark text-section-dark-foreground flex flex-col md:flex-row items-start md:items-center gap-4 justify-between">
     <div>
       <p className="font-display text-xl mb-1">Reservá directo y pagá menos</p>
@@ -16,7 +17,7 @@ const HubCta = ({ text }: { text?: string }) => (
         Ver disponibilidad <ArrowRight size={16} />
       </Link>
       <a
-        href={WA}
+        href={title ? whatsappFromGuide(title) : WA}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 bg-section-dark-foreground/10 px-5 py-3 rounded-lg font-body text-sm hover:bg-section-dark-foreground/20 transition"

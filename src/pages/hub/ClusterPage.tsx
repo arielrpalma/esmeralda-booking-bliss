@@ -5,6 +5,8 @@ import { ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { whatsappFromGuide } from "@/lib/whatsapp";
+
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import HubBreadcrumbs from "@/components/hub/HubBreadcrumbs";
 import HubCta from "@/components/hub/HubCta";
@@ -102,7 +104,7 @@ const ClusterPage = ({ clusterSlug }: { clusterSlug?: string }) => {
             ))}
           </ul>
 
-          <HubCta />
+          <HubCta title={cluster.name} />
 
           <section className="mt-16">
             <h2 className="text-xl font-display font-semibold text-foreground mb-4">Otras guías de Marcos Juárez</h2>
@@ -131,7 +133,7 @@ const ClusterPage = ({ clusterSlug }: { clusterSlug?: string }) => {
 
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
-      <WhatsAppButton barHeight={barHeight} />
+      <WhatsAppButton barHeight={barHeight} link={whatsappFromGuide(cluster.name)} />
     </div>
   );
 };

@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import { getPostBySlug, posts, type Block } from "@/content/posts";
+import { whatsappFromArticle } from "@/lib/whatsapp";
+
 
 const renderBlock = (block: Block, i: number) => {
   switch (block.type) {
@@ -145,7 +147,7 @@ const BlogPost = () => {
                   Reservá ahora <ArrowRight size={16} />
                 </Link>
                 <a
-                  href="https://wa.me/5493472433334"
+                  href={whatsappFromArticle(post.title)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-section-dark-foreground/10 px-5 py-3 rounded-lg font-body text-sm hover:bg-section-dark-foreground/20 transition"
@@ -178,7 +180,7 @@ const BlogPost = () => {
 
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
-      <WhatsAppButton barHeight={barHeight} />
+      <WhatsAppButton barHeight={barHeight} link={whatsappFromArticle(post.title)} />
     </div>
   );
 };

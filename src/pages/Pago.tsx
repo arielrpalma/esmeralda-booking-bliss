@@ -6,6 +6,8 @@ import { toPng } from "html-to-image";
 import { PaymentReceipt } from "@/components/PaymentReceipt";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { whatsappLink } from "@/lib/whatsapp";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -310,7 +312,7 @@ const Pago = () => {
     const text = `Hola! Adjunto comprobante de pago Esmeralda Apart.\nOperación: #${result?.id}\nImporte: $${formatARSNumber(
       Number(result?.transaction_amount ?? importeNum),
     )}\nEstado: aprobado`;
-    window.open(`https://wa.me/5493472433334?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+    window.open(whatsappLink(text), "_blank", "noopener");
   };
 
   const approved = result?.status === "approved";

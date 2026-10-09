@@ -1,5 +1,7 @@
 // Topic-cluster content model. Every entry belongs to a cluster (pillar page)
 // and links back to the booking flow, to sibling entries and to the blog.
+import { whatsappLink } from "@/lib/whatsapp";
+
 
 export type ClusterKey =
   | "alojamiento"
@@ -93,4 +95,4 @@ export interface ClusterConfig {
 }
 
 export const SITE = "https://esmeraldaapart.com.ar";
-export const WA = "https://wa.me/5493472433334";
+export const WA = whatsappLink();

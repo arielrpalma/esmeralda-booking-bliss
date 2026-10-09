@@ -106,11 +106,18 @@ var check_availability_default = defineTool({
 
 // src/lib/mcp/tools/get-property-info.ts
 import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@3.0.4";
+
+// src/lib/whatsapp.ts
+var WHATSAPP_PHONE = "5493472433334";
+var GENERIC_MESSAGE = "Hola, quiero consultar disponibilidad en Esmeralda Apart.";
+var whatsappLink = (message = GENERIC_MESSAGE) => `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+
+// src/lib/mcp/tools/get-property-info.ts
 var info = {
   name: "Esmeralda Apart",
   city: "Marcos Ju\xE1rez, C\xF3rdoba, Argentina",
   website: "https://esmeraldaapart.com.ar",
-  whatsapp: "https://wa.me/5493472433334",
+  whatsapp: whatsappLink(),
   maxGuests: 4,
   guestRules: "Up to 4 guests occupying a bed (adults + children). Babies under 1 year do not count.",
   checkIn: "Automatic 24h self check-in; usual entry from 14:00. Access instructions sent via WhatsApp.",

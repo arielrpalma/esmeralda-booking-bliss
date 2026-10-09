@@ -4,6 +4,8 @@ import { ArrowRight, BedDouble, Bike, ChefHat, ChevronDown, Coffee, Compass, Hea
 import { Button } from "@/components/ui/button";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import { faqs, itineraries, restaurants } from "@/content/motoviajeros";
+import { whatsappLink } from "@/lib/whatsapp";
+
 // Optimized images: WebP with responsive widths for fast mobile loading
 import heroMobile from "@/assets/motoviajeros/hero-bmw.jpg?format=webp&w=800&quality=72";
 import heroDesktop from "@/assets/motoviajeros/hero-bmw.jpg?format=webp&w=1600&quality=75";
@@ -11,7 +13,7 @@ import route from "@/assets/motoviajeros/route.jpg?format=webp&w=900&quality=72"
 import coffee from "@/assets/motoviajeros/coffee.jpg?format=webp&w=900&quality=72";
 import gastronomyFriends from "@/assets/motoviajeros/gastronomy-friends.jpg?format=webp&w=900&quality=72";
 
-const whatsapp = (message: string) => `https://wa.me/5493472433334?text=${encodeURIComponent(message)}`;
+const whatsapp = (message: string) => whatsappLink(message);
 const bookingScroll = () => window.dispatchEvent(new Event("motoviajeros:open-booking"));
 
 const benefits = [

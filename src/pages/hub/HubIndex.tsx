@@ -4,6 +4,8 @@ import { useCallback, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { whatsappFromGuide } from "@/lib/whatsapp";
+
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import HubBreadcrumbs from "@/components/hub/HubBreadcrumbs";
 import HubCta from "@/components/hub/HubCta";
@@ -101,13 +103,13 @@ const HubIndex = () => {
             })}
           </div>
 
-          <HubCta />
+          <HubCta title="Guía de Marcos Juárez" />
         </div>
       </main>
 
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
-      <WhatsAppButton barHeight={barHeight} />
+      <WhatsAppButton barHeight={barHeight} link={whatsappFromGuide("Guía de Marcos Juárez")} />
     </div>
   );
 };

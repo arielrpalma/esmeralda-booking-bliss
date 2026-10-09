@@ -4,6 +4,8 @@ import { ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { whatsappFromBlog } from "@/lib/whatsapp";
+
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import { useState, useCallback } from "react";
 import { posts } from "@/content/posts";
@@ -98,7 +100,7 @@ const Blog = () => {
 
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
-      <WhatsAppButton barHeight={barHeight} />
+      <WhatsAppButton barHeight={barHeight} link={whatsappFromBlog()} />
     </div>
   );
 };

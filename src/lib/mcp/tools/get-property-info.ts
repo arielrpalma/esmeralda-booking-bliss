@@ -1,11 +1,13 @@
 import { defineTool } from "@lovable.dev/mcp-js";
+import { whatsappLink } from "@/lib/whatsapp";
 
 // Only verified facts already published on the website.
 const info = {
   name: "Esmeralda Apart",
   city: "Marcos Juárez, Córdoba, Argentina",
   website: "https://esmeraldaapart.com.ar",
-  whatsapp: "https://wa.me/5493472433334",
+  whatsapp: whatsappLink(),
+
   maxGuests: 4,
   guestRules: "Up to 4 guests occupying a bed (adults + children). Babies under 1 year do not count.",
   checkIn: "Automatic 24h self check-in; usual entry from 14:00. Access instructions sent via WhatsApp.",

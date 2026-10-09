@@ -48,7 +48,7 @@ export interface PersonaConfig {
   keywords: string;
 }
 
-const WA_PHONE = "5493472433334";
+// Number and link builder live in src/lib/whatsapp (single source of truth).
 
 export const personas: Record<PersonaKey, PersonaConfig> = {
   trabajo: {
@@ -203,5 +203,5 @@ export const personaList: PersonaConfig[] = [
   personas.familia,
 ];
 
-export const whatsappLink = (message: string) =>
-  `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(message)}`;
+export { whatsappLink } from "@/lib/whatsapp";
+
