@@ -3,8 +3,8 @@ import { ChevronDown, KeyRound, Clock, MapPin, MessageCircle } from "lucide-reac
 
 const HeroSection = () => {
   const scrollToBooking = () => {
-    // Brings the FloatingBookingBar into focus by scrolling to top.
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Scrolls to the embedded booking engine section.
+    document.getElementById("reservar")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -66,7 +66,7 @@ const HeroSection = () => {
                 className="group inline-flex items-center gap-2 text-white/95 hover:text-white font-body text-sm tracking-wide [text-shadow:0_1px_10px_rgba(0,0,0,0.5)] transition-all"
               >
                 <span className="animate-bounce">↓</span>
-                Consultá disponibilidad en la barra inferior
+                Consultá disponibilidad más abajo
               </button>
             </div>
           </motion.div>

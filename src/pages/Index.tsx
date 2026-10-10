@@ -57,10 +57,10 @@ const Index = () => {
         <GallerySection />
         <Route9Section />
         <FaqSection />
+        <FloatingBookingBar onHeightChange={handleHeightChange} />
         <InternalLinksSection />
       </main>
       <Footer />
-      <FloatingBookingBar onHeightChange={handleHeightChange} />
       <WhatsAppButton barHeight={barHeight} />
     </div>
   );
