@@ -1,36 +1,56 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-// Multiapart embedded booking engine (replaces the old floating bottom bar).
-const ENGINE_URL =
-  "https://app.multiapart.com/embed/engine?hotel=esmeralda-apart&lang=es&currency=ARS";
+// Multiapart official booking searchbar (custom element with its own popup).
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace JSX {
+    interface IntrinsicElements {
+      "hotel-booking": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+        hotel?: string;
+        mode?: string;
+        lang?: string;
+        currency?: string;
+        "primary-color"?: string;
+      };
+    }
+  }
+}
+
+const MULTIAPART_SCRIPT = "https://app.multiapart.com/embed.js";
 
 const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: number) => void }) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Load the Multiapart script only once per page
   useEffect(() => {
-    // No fixed bar occupies the bottom of the screen anymore.
-    onHeightChange?.(0);
+    if (!document.querySelector(`script[src="${MULTIAPART_SCRIPT}"]`)) {
+      const s = document.createElement("script");
+      s.src = MULTIAPART_SCRIPT;
+      s.async = true;
+      document.body.appendChild(s);
+    }
+  }, []);
+
+  // Report real bar height so the WhatsApp button stays above it
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const report = () => onHeightChange?.(el.offsetHeight);
+    report();
+    const ro = new ResizeObserver(report);
+    ro.observe(el);
+    return () => ro.disconnect();
   }, [onHeightChange]);
 
   return (
-    <section id="reservar" className="py-16 md:py-24 bg-background scroll-mt-20">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-10">
-          <p className="text-sm font-body tracking-[0.3em] uppercase text-primary mb-4">Reservá directo</p>
-          <h2 className="text-3xl md:text-5xl font-display font-semibold text-foreground mb-6">
-            Consultar disponibilidad
-          </h2>
-          <div className="w-16 h-[2px] bg-primary mx-auto" />
-        </div>
-        <div className="max-w-6xl mx-auto">
-          <iframe
-            id="multiapart-booking"
-            src={ENGINE_URL}
-            style={{ width: "100%", minHeight: 900, border: 0 }}
-            loading="lazy"
-            title="Reservas"
-          />
-        </div>
+    <div
+      ref={ref}
+      className="fixed bottom-0 left-0 right-0 z-50 bg-section-dark/95 backdrop-blur-xl border-t border-section-dark-foreground/10 px-3 py-3"
+    >
+      <div className="container mx-auto">
+        <hotel-booking hotel="esmeralda-apart" mode="searchbar" lang="es" currency="ARS" primary-color="#008a7a" />
       </div>
-    </section>
+    </div>
   );
 };
 

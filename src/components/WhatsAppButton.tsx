@@ -10,8 +10,8 @@ interface WhatsAppButtonProps {
 }
 
 const WhatsAppButton = ({ barHeight = 0, link }: WhatsAppButtonProps) => {
-  // No floating bar anymore: sit at the bottom corner unless a bar height is reported
-  const bottomPx = barHeight + 24;
+  // Position above the floating bar; fallback keeps it clear before the bar is measured
+  const bottomPx = Math.max(barHeight, 110) + 24;
 
   return (
     <motion.a
