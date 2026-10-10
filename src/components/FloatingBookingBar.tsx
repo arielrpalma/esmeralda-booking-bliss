@@ -45,7 +45,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   return (
     <div
       ref={ref}
-      className="fixed bottom-0 left-0 right-0 z-50 bg-section-dark/95 backdrop-blur-xl border-t border-section-dark-foreground/10 px-3 py-3"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-section-dark border-t border-section-dark-foreground/10 px-3 py-3"
     >
       <div className="container mx-auto">
         <hotel-booking hotel="esmeralda-apart" mode="searchbar" lang="es" currency="ARS" primary-color="#008a7a" />
