@@ -31,6 +31,29 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
     }
   }, []);
 
+  // Route booking CTAs to the vendor's date picker, including while it loads.
+  useEffect(() => {
+    let active = true;
+    const openBooking = async () => {
+      await customElements.whenDefined("hotel-booking");
+      // Wait for the originating click to finish so the vendor's outside-click
+      // handler does not immediately close the calendar we just opened.
+      window.setTimeout(() => {
+        if (!active) return;
+        const field = ref.current
+          ?.querySelector("hotel-booking")
+          ?.shadowRoot?.querySelector<HTMLElement>("#fd");
+        field?.focus();
+        field?.click();
+      }, 0);
+    };
+    window.addEventListener("motoviajeros:open-booking", openBooking);
+    return () => {
+      active = false;
+      window.removeEventListener("motoviajeros:open-booking", openBooking);
+    };
+  }, []);
+
   // Report real bar height so the WhatsApp button stays above it
   useEffect(() => {
     const el = ref.current;
