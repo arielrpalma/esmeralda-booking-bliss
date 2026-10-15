@@ -63,7 +63,7 @@ const Footer = () => {
                 <Instagram size={22} strokeWidth={1.5} />
               </a>
               <a
-                href="http://www.facebook.com/esmeraldaapart"
+                href="https://www.facebook.com/esmeraldaapart"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-section-dark-foreground/50 hover:text-primary transition-colors duration-300"
