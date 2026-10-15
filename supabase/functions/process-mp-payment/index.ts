@@ -51,25 +51,14 @@ Deno.serve(async (req) => {
     if (supabase) {
       const { data: existing } = await supabase
         .from('pagos')
-        .select('id, status, status_detail, amount, payment_method_id, external_reference, payer_email')
+        .select('id')
         .eq('external_reference', externalRef)
         .maybeSingle();
       if (existing) {
-        // Only reveal the existing payment to the same payer; otherwise reject the reused reference.
-        if ((existing.payer_email ?? '').toLowerCase() !== d.payer.email.toLowerCase()) {
-          return new Response(JSON.stringify({ error: 'Referencia de pago inválida' }), {
-            status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          });
-        }
-        return new Response(JSON.stringify({
-          id: existing.id,
-          status: existing.status,
-          status_detail: existing.status_detail,
-          transaction_amount: existing.amount,
-          payment_method_id: existing.payment_method_id,
-          external_reference: existing.external_reference,
-          deduped: true,
-        }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        // Never disclose stored payment data; a reused reference is simply rejected.
+        return new Response(JSON.stringify({ error: 'Este pago ya fue procesado' }), {
+          status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
       }
     }
 

@@ -69,8 +69,14 @@ Deno.serve(async (req) => {
       return new Response('ignored', { status: 200, headers: corsHeaders });
     }
 
-    // Optional signature validation — skip silently if no secret yet
-    if (webhookSecret) {
+    // Signature validation is mandatory: reject every call when the secret is missing.
+    if (!webhookSecret) {
+      console.error('MP_WEBHOOK_SECRET not configured; rejecting webhook');
+      return new Response(JSON.stringify({ error: 'Server not configured' }), {
+        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    {
       const ok = await verifyMpSignature(req, rawBody, webhookSecret, dataId);
       if (!ok) {
         console.warn('Invalid MP webhook signature for id', dataId);
