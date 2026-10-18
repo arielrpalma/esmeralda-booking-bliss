@@ -37,9 +37,13 @@ const WhatsAppButton = ({ barHeight = 0 }: WhatsAppButtonProps) => {
       }
     };
 
-    const observer = new MutationObserver(positionChat);
-    observer.observe(document.body, { childList: true });
     positionChat();
+    // Only watch body until the vendor widget is found, then stop observing.
+    const observer = new MutationObserver(() => {
+      positionChat();
+      if (chatHost) observer.disconnect();
+    });
+    if (!chatHost) observer.observe(document.body, { childList: true });
 
     // Keep one script and one vendor widget across client-side navigation.
     if (!document.querySelector(`script[src="${CHAT_SCRIPT}"]`)) {
