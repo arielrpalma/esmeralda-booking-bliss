@@ -22,7 +22,6 @@
     <link rel="preload" as="image" href="/images/hero.jpg" imagesrcset="/images/hero-mobile.jpg 800w, /images/hero.jpg 1800w" imagesizes="(max-width: 768px) 100vw, 1800px" fetchpriority="high" />
     <link rel="preconnect" href="https://app.multiapart.com" crossorigin />
     <link rel="preconnect" href="https://multiapart.com" crossorigin />
-    <link rel="preload" as="script" href="https://app.multiapart.com/embed.js" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Raleway:wght@300;400;500;600;700&display=swap" />
@@ -200,5 +199,8 @@
     <div id="root"></div>
 
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Vendor widgets start downloading in parallel with the app; components skip re-injecting them. -->
+    <script async src="https://app.multiapart.com/embed.js"></script>
+    <script async src="https://multiapart.com/embed-chat.js" data-hotel="esmeralda-apart"></script>
   </body>
 </html>
