@@ -2,3 +2,4 @@
 - Reuse a local copy of the existing booking footer with the public availability endpoint and existing HotelPMS parameters, because both sites must provide the same reservation flow without changing the original.
 - Load the primary site's hosted Multiapart chat once through the shared floating-contact component and adapt only its position to the booking bar, because navigation must not duplicate the vendor widget or obscure reservations.
 - Handle the Motoviajeros booking event in the shared booking bar by activating the vendor's date field after widget readiness and the originating click, because CTAs must use the same reservation flow without duplicate popups.
+- Load secondary routes with React.lazy and start Multiapart vendor scripts from index.html, because the home page and booking bar must stay fast on mobile.
