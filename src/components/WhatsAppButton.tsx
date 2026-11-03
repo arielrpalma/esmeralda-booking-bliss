@@ -1,66 +1,28 @@
-import { useEffect } from "react";
-
-const CHAT_SCRIPT = "https://multiapart.com/embed-chat.js";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
+import { whatsappLink } from "@/lib/whatsapp";
 
 interface WhatsAppButtonProps {
   barHeight?: number;
-  /** Retained for existing callers; the hosted chat manages its own messages. */
+  /** Page-specific pre-filled link; defaults to the generic enquiry. */
   link?: string;
 }
 
-const WhatsAppButton = ({ barHeight = 0 }: WhatsAppButtonProps) => {
+// Direct WhatsApp contact (the number is served by the business bot), placed above the booking bar.
+const WhatsAppButton = ({ barHeight = 0, link }: WhatsAppButtonProps) => {
   const bottomPx = Math.max(barHeight, 110) + 24;
 
-  useEffect(() => {
-    let chatHost: HTMLElement | undefined;
-
-    // The vendor owns the chat UI; only adapt its placement to our booking bar.
-    const positionChat = () => {
-      for (const element of Array.from(document.body.children)) {
-        const root = element.shadowRoot;
-        if (!root?.querySelector('.panel[aria-label="Chat"]') || !root.querySelector('button[aria-label="Abrir chat"]')) continue;
-        if (!(element instanceof HTMLElement)) continue;
-        chatHost = element;
-        chatHost.hidden = false;
-        let style = root.querySelector<HTMLStyleElement>("style[data-esmeralda-chat]");
-        if (!style) {
-          style = document.createElement("style");
-          style.dataset.esmeraldaChat = "";
-          root.appendChild(style);
-        }
-        style.textContent = `
-          .btn { bottom: ${bottomPx}px; }
-          @media (min-width: 641px) {
-            .panel { bottom: ${bottomPx + 76}px; height: min(620px, calc(100dvh - ${bottomPx + 96}px)); }
-          }
-        `;
-      }
-    };
-
-    positionChat();
-    // Only watch body until the vendor widget is found, then stop observing.
-    const observer = new MutationObserver(() => {
-      positionChat();
-      if (chatHost) observer.disconnect();
-    });
-    if (!chatHost) observer.observe(document.body, { childList: true });
-
-    // Keep one script and one vendor widget across client-side navigation.
-    if (!document.querySelector(`script[src="${CHAT_SCRIPT}"]`)) {
-      const script = document.createElement("script");
-      script.src = CHAT_SCRIPT;
-      script.dataset.hotel = "esmeralda-apart";
-      script.async = true;
-      document.body.appendChild(script);
-    }
-
-    return () => {
-      observer.disconnect();
-      if (chatHost) chatHost.hidden = true;
-    };
-  }, [bottomPx]);
-
-  return null;
+  return (
+    <a
+      href={link ?? whatsappLink()}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Escribinos por WhatsApp"
+      className="fixed right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[hsl(142_70%_40%)] text-primary-foreground shadow-lg transition-transform hover:scale-105"
+      style={{ bottom: bottomPx }}
+    >
+      <WhatsAppIcon className="h-7 w-7" />
+    </a>
+  );
 };
 
 export default WhatsAppButton;
