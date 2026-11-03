@@ -1,5 +1,5 @@
 - Keep the Motoviajeros frontend under `motoviajeros-site/` as a separate deployable project, because its subdomain must not change Esmeralda Apart's current routes or primary-domain behavior.
 - Reuse a local copy of the existing booking footer with the public availability endpoint and existing HotelPMS parameters, because both sites must provide the same reservation flow without changing the original.
-- Load the primary site's hosted Multiapart chat once through the shared floating-contact component and adapt only its position to the booking bar, because navigation must not duplicate the vendor widget or obscure reservations.
+- The floating contact is a direct WhatsApp link built by the shared WhatsApp helper and positioned above the booking bar, because enquiries must capture customer contact data.
 - Handle the Motoviajeros booking event in the shared booking bar by activating the vendor's date field after widget readiness and the originating click, because CTAs must use the same reservation flow without duplicate popups.
 - Load secondary routes with React.lazy and start Multiapart vendor scripts from index.html, because the home page and booking bar must stay fast on mobile.
