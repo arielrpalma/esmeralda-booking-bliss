@@ -116,13 +116,16 @@ const Pago = () => {
   // Sync guard: setState is async, so a fast second click can race past `processing`.
   const submittingRef = useRef(false);
 
+  // Administrative fee: 6% added on top of the guest-entered amount
+  const withAdminFee = (n: number) => Math.round(n * 1.06 * 100) / 100;
   const importeNum = parseARS(importe);
   const isValid = importeNum >= 100;
 
   // Debounce so the Brick is not remounted on every keystroke
   useEffect(() => {
     const t = setTimeout(() => {
-      setDebouncedAmount(isValid ? importeNum : 0);
+      // Charge the entered amount plus the administrative fee
+      setDebouncedAmount(isValid ? withAdminFee(importeNum) : 0);
     }, 500);
     return () => clearTimeout(t);
   }, [importeNum, isValid]);
@@ -431,6 +434,13 @@ const Pago = () => {
                   </div>
                   {!isValid && importe && (
                     <p className="text-xs text-destructive">Importe mínimo $100</p>
+                  )}
+                  {isValid && (
+                    <div className="rounded-md bg-muted/50 p-3 text-sm font-body space-y-1">
+                      <div className="flex justify-between"><span>Importe de la reserva</span><span>${formatARSNumber(importeNum)}</span></div>
+                      <div className="flex justify-between text-muted-foreground"><span>Cargos administrativos (6%)</span><span>${formatARSNumber(withAdminFee(importeNum) - importeNum)}</span></div>
+                      <div className="flex justify-between font-semibold border-t border-border pt-1"><span>Total a pagar</span><span>${formatARSNumber(withAdminFee(importeNum))}</span></div>
+                    </div>
                   )}
                 </div>
 
