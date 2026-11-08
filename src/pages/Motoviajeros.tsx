@@ -24,7 +24,7 @@ const benefits = [
   { icon: MapPin, text: "Ubicación estratégica" },
 ];
 
-const realGallery = ["gallery1.jpg", "gallery5.jpg", "gallery4.jpg", "gallery3.jpg"];
+const realGallery = ["gallery1.webp", "gallery5.webp", "gallery4.webp", "gallery3.webp"];
 
 function MotoInquiry() {
   const [travel, setTravel] = useState("una moto");
