@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { whatsappLink } from "@/lib/whatsapp";
-import WhatsAppIcon from "@/components/WhatsAppIcon";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 
 // If the vendor widget is not ready after this delay, show a WhatsApp fallback.
 export const BOOKING_FALLBACK_MS = 6000;
