@@ -167,7 +167,7 @@ export default function Motoviajeros() {
             </div>
             <Button className="mt-8" asChild><a href="/#galeria">CONOCER LOS APARTAMENTOS <ArrowRight /></a></Button>
           </div>
-          <img src="/images/gallery1.jpg" width="600" height="800" loading="lazy" decoding="async" alt="Fotografía real de un departamento de Esmeralda Apart" className="aspect-[4/3] w-full object-cover md:aspect-square" />
+          <img src="/images/gallery1.webp" width="600" height="800" loading="lazy" decoding="async" alt="Fotografía real de un departamento de Esmeralda Apart" className="aspect-[4/3] w-full object-cover md:aspect-square" />
         </section>
 
         <section className="bg-secondary py-20">
