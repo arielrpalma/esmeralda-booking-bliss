@@ -3,3 +3,6 @@
 - The floating contact is a direct WhatsApp link built by the shared WhatsApp helper and positioned above the booking bar, because enquiries must capture customer contact data.
 - Handle the Motoviajeros booking event in the shared booking bar by activating the vendor's date field after widget readiness and the originating click, because CTAs must use the same reservation flow without duplicate popups.
 - Load secondary routes with React.lazy and start Multiapart vendor scripts from index.html, because the home page and booking bar must stay fast on mobile.
+- Routes use the lightweight cluster slug list and guide content loads lazily, because guide texts must stay out of the home bundle.
+- Analytics tags (GTM, Meta Pixel) are injected after page load/idle with their queues defined inline, because they must not compete with the booking bar and photos.
+- Site photos are served as WebP from public/images, keeping JPG only for social/schema previews, because mobile downloads must stay small.
