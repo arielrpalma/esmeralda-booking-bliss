@@ -5,7 +5,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import { clusters } from "./content/hub";
+import { clusterSlugs } from "./content/hub/slugs";
+import RouteErrorBoundary from "./components/RouteErrorBoundary";
 
 // Secondary pages are code-split so the home page ships a small initial bundle.
 const Gracias = lazy(() => import("./pages/Gracias"));
@@ -31,6 +32,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <RouteErrorBoundary>
         <Suspense fallback={<div className="min-h-screen bg-background" />}>
           <Routes>
             <Route path="/" element={<Index />} />
@@ -48,14 +50,14 @@ const App = () => (
             <Route path="/alojamiento/familia" element={<Familia />} />
             {/* Topic clusters: pillar page + entries */}
             <Route path="/guias" element={<HubIndex />} />
-            {clusters.map((c) => (
-              <Route key={c.slug} path={`/${c.slug}`} element={<ClusterPage clusterSlug={c.slug} />} />
+            {clusterSlugs.map((slug) => (
+              <Route key={slug} path={`/${slug}`} element={<ClusterPage clusterSlug={slug} />} />
             ))}
-            {clusters.map((c) => (
+            {clusterSlugs.map((slug) => (
               <Route
-                key={`${c.slug}-entry`}
-                path={`/${c.slug}/:slug`}
-                element={<HubEntryPage clusterSlug={c.slug} />}
+                key={`${slug}-entry`}
+                path={`/${slug}/:slug`}
+                element={<HubEntryPage clusterSlug={slug} />}
               />
             ))}
 
@@ -63,6 +65,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
+        </RouteErrorBoundary>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

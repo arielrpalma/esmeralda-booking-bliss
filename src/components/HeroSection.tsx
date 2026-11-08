@@ -10,8 +10,8 @@ const HeroSection = () => {
   return (
     <section id="hero" className="relative min-h-screen overflow-hidden">
       <img
-        src="/images/hero.jpg"
-        srcSet="/images/hero-mobile.jpg 800w, /images/hero.jpg 1800w"
+        src="/images/hero.webp"
+        srcSet="/images/hero-mobile.webp 800w, /images/hero.webp 1800w"
         sizes="(max-width: 768px) 100vw, 1800px"
         alt=""
         aria-hidden="true"
@@ -79,7 +79,7 @@ const HeroSection = () => {
             className="shrink-0 hidden md:block"
           >
             <img
-              src="/images/cuadro.png"
+              src="/images/cuadro.webp"
               alt="Mejor Puntuado - Booking, Airbnb, Agoda, Google Hotel"
               className="w-48 lg:w-60 drop-shadow-2xl"
             />

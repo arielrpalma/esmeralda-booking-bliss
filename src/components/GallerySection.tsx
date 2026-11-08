@@ -13,14 +13,14 @@ type GalleryItem = {
 };
 
 const heroItem: GalleryItem = {
-  src: "/images/gallery1.jpg",
+  src: "/images/gallery1.webp",
   alt: "Living principal de un departamento de Esmeralda Apart en Marcos Juárez",
   eyebrow: "Interior",
   caption: "Living Principal",
 };
 
 const tallItem: GalleryItem = {
-  src: "/images/gallery5.jpg",
+  src: "/images/gallery5.webp",
   alt: "Dormitorio principal con cama king del apart hotel en Marcos Juárez",
   eyebrow: "Suite",
   caption: "Dormitorio Master",
@@ -28,13 +28,13 @@ const tallItem: GalleryItem = {
 
 const squareItems: GalleryItem[] = [
   {
-    src: "/images/gallery4.jpg",
+    src: "/images/gallery4.webp",
     alt: "Ambiente social moderno del departamento temporario en Marcos Juárez",
     eyebrow: "Espacio",
     caption: "Ambiente Social",
   },
   {
-    src: "/images/gallery3.jpg",
+    src: "/images/gallery3.webp",
     alt: "Cocina totalmente equipada del departamento por día en Marcos Juárez",
     eyebrow: "Gourmet",
     caption: "Cocina Equipada",
@@ -43,13 +43,13 @@ const squareItems: GalleryItem[] = [
 
 const secondaryItems: { small: GalleryItem; wide: GalleryItem } = {
   small: {
-    src: "/images/gallery6.jpg",
+    src: "/images/gallery6.webp",
     alt: "Baño en suite completo con amenities del apart en Marcos Juárez",
     eyebrow: "Wellness",
     caption: "Baño en Suite",
   },
   wide: {
-    src: "/images/gallery2.jpg",
+    src: "/images/gallery2.webp",
     alt: "Detalles de diseño y terminaciones de Esmeralda Apart, Marcos Juárez",
     eyebrow: "Arquitectura",
     caption: "Detalles & Diseño",

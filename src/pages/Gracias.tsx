@@ -42,7 +42,7 @@ const Gracias = () => {
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/hero.jpg')" }}
+        style={{ backgroundImage: "url('/images/hero-mobile.webp')" }}
       />
       <div
         className="absolute inset-0"

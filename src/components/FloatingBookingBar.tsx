@@ -1,4 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { whatsappLink } from "@/lib/whatsapp";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
+
+// If the vendor widget is not ready after this delay, show a WhatsApp fallback.
+export const BOOKING_FALLBACK_MS = 6000;
 
 // Multiapart official booking searchbar (custom element with its own popup).
 declare global {
@@ -23,6 +28,7 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
   const [ready, setReady] = useState(
     () => typeof customElements !== "undefined" && !!customElements.get("hotel-booking"),
   );
+  const [slow, setSlow] = useState(false);
 
   // Load the Multiapart script only once per page (index.html normally preloads it).
   useEffect(() => {
@@ -32,7 +38,10 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
       s.async = true;
       document.body.appendChild(s);
     }
-    if (!ready) customElements.whenDefined("hotel-booking").then(() => setReady(true));
+    if (ready) return;
+    customElements.whenDefined("hotel-booking").then(() => setReady(true));
+    const t = window.setTimeout(() => setSlow(true), BOOKING_FALLBACK_MS);
+    return () => window.clearTimeout(t);
   }, [ready]);
 
   // Route booking CTAs to the vendor's date picker, including while it loads.
@@ -81,7 +90,18 @@ const FloatingBookingBar = ({ onHeightChange }: { onHeightChange?: (height: numb
       className="fixed bottom-0 left-0 right-0 z-50 bg-section-dark border-t border-section-dark-foreground/10 px-3 py-3"
     >
       <div className="container mx-auto">
-        {!ready && (
+        {!ready && slow && (
+          <a
+            href={whatsappLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-11 items-center justify-center gap-2 rounded-md bg-primary font-body text-sm font-semibold text-primary-foreground"
+          >
+            <WhatsAppIcon className="h-5 w-5" />
+            Consultá disponibilidad por WhatsApp
+          </a>
+        )}
+        {!ready && !slow && (
           // Placeholder while the vendor widget loads, so the bar never looks empty.
           <div aria-hidden="true" className="flex items-center gap-3 animate-pulse">
             <div className="h-11 flex-1 rounded-md bg-section-dark-foreground/10" />
