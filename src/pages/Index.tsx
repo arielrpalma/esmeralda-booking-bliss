@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, lazy, Suspense } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -11,10 +11,12 @@ import AmenitiesSection from "@/components/AmenitiesSection";
 import GallerySection from "@/components/GallerySection";
 import Route9Section from "@/components/Route9Section";
 import FaqSection from "@/components/FaqSection";
-import InternalLinksSection from "@/components/InternalLinksSection";
 import FloatingBookingBar from "@/components/FloatingBookingBar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+
+// Guide links pull in all guide texts; load them separately from the first screen.
+const InternalLinksSection = lazy(() => import("@/components/InternalLinksSection"));
 
 const Index = () => {
   const [barHeight, setBarHeight] = useState(0);
@@ -57,7 +59,9 @@ const Index = () => {
         <GallerySection />
         <Route9Section />
         <FaqSection />
-        <InternalLinksSection />
+        <Suspense fallback={<div className="min-h-[600px]" />}>
+          <InternalLinksSection />
+        </Suspense>
       </main>
       <Footer />
       <FloatingBookingBar onHeightChange={handleHeightChange} />
