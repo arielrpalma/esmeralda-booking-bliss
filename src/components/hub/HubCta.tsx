@@ -7,7 +7,9 @@ import { whatsappFromGuide } from "@/lib/whatsapp";
 const HubCta = ({ text, title }: { text?: string; title?: string }) => (
   <div className="mt-12 p-6 md:p-8 rounded-2xl bg-section-dark text-section-dark-foreground flex flex-col md:flex-row items-start md:items-center gap-4 justify-between">
     <div>
-      <p className="font-display text-xl mb-1">Reservá directo y pagá menos</p>
+      <p className="font-display text-xl mb-1">
+        ¿Buscás <Link to="/" className="underline decoration-primary underline-offset-4">hotel o alojamiento en Marcos Juárez</Link>? Reservá directo y pagá menos
+      </p>
       <p className="font-body text-sm text-section-dark-foreground/80">
         {text ?? "Mejor precio garantizado sin comisiones de Booking ni Airbnb. Check-in digital 24 h y cochera."}
       </p>

@@ -49,7 +49,7 @@ const FeaturesSection = () => {
             Lo que nos distingue
           </p>
           <h2 className="text-4xl md:text-5xl font-display font-semibold text-section-dark-foreground mb-6">
-            Espacios funcionales y elegantes
+            Alojamiento en Marcos Juárez: espacios funcionales y elegantes
           </h2>
           <div className="w-16 h-[2px] bg-primary mx-auto" />
         </motion.div>

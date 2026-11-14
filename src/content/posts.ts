@@ -42,6 +42,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 9,
     body: [
       { type: "p", text: "Marcos Juárez es una de las ciudades más dinámicas del sudeste de Córdoba. Su ubicación estratégica sobre la Ruta Nacional 9, su perfil agroindustrial y la cercanía a Rosario y Córdoba capital la convierten en un destino frecuente para viajantes, empresas y turistas. Si estás buscando dónde alojarte en Marcos Juárez, esta guía completa te va a ayudar a elegir la mejor opción según tu presupuesto, días de estadía y motivo del viaje." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "hotel en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "¿Por qué elegir un alojamiento en Marcos Juárez?" },
       { type: "p", text: "Marcos Juárez concentra empresas agropecuarias, metalúrgicas y de servicios que reciben visitas profesionales todo el año. A esto se suma un movimiento turístico creciente por eventos deportivos, casamientos y reuniones familiares. Por eso la oferta de alojamiento en Marcos Juárez Córdoba se diversificó: hoteles tradicionales, hostales económicos y, sobre todo, departamentos por día totalmente equipados que ofrecen más espacio y privacidad que una habitación de hotel." },
       { type: "h2", text: "Zonas recomendadas para alojarse" },
@@ -85,6 +86,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 8,
     body: [
       { type: "p", text: "Elegir entre las mejores opciones de alojamiento en Marcos Juárez no siempre es simple. La ciudad ofrece desde hoteles clásicos hasta departamentos modernos por día, pasando por apart hoteles y hostales. En esta nota analizamos cada formato para que reserves con seguridad." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "alojamiento en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "Hoteles tradicionales" },
       { type: "p", text: "Son la opción más clásica para hospedaje en Marcos Juárez. Suelen incluir desayuno y recepción 24 hs, pero las habitaciones son más chicas y no tienen cocina. Si tu plan es solamente dormir y desayunar, funcionan bien." },
       { type: "h2", text: "Apart hotel Marcos Juárez" },
@@ -128,6 +130,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 7,
     body: [
       { type: "p", text: "¿Te conviene un departamento por día o un hotel en Marcos Juárez? Depende del tipo de viaje, los días que te quedes y con quién viajes. Te lo desglosamos para que decidas con datos." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "apart hotel en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "Precio: ¿quién gana?" },
       { type: "p", text: "En estadías de una sola noche y para un viajero solo, el hotel económico puede ser un poco más barato. A partir de dos noches o si viajás en pareja, los departamentos por día Marcos Juárez son claramente más rentables: el costo por persona baja y no pagás extras de desayuno o cochera." },
       { type: "h2", text: "Comodidad y espacio" },
@@ -160,6 +163,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 7,
     body: [
       { type: "p", text: "Si trabajás visitando clientes en el sudeste de Córdoba, sabés que el alojamiento es parte del trabajo. Un buen alquiler temporario para empresas en Marcos Juárez te permite descansar bien, presentar gastos sin vueltas y conectarte sin caídas de internet." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "departamentos por día en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "Qué buscar en un alojamiento corporativo" },
       { type: "ul", items: [
         "Factura A o B emitida en el día.",
@@ -190,6 +194,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 6,
     body: [
       { type: "p", text: "Encontrar un alquiler temporario económico en Marcos Juárez es posible, pero hay que saber dónde mirar y cómo reservar. Estos consejos te ayudan a bajar el precio sin terminar en un lugar incómodo o poco seguro." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "hotel en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "1. Reservá directo, sin intermediarios" },
       { type: "p", text: "Booking, Airbnb y similares cobran entre 10% y 20% de comisión. Reservando directo en la web del propietario, ese descuento queda para vos. Pedí siempre el precio sin intermediarios antes de confirmar." },
       { type: "h2", text: "2. Elegí estadías de dos o más noches" },
@@ -217,6 +222,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 7,
     body: [
       { type: "p", text: "Marcos Juárez no es solo un punto de paso sobre la Ruta 9: tiene gastronomía interesante, espacios verdes, deportes y un movimiento cultural creciente. Si te quedás un par de noches, hay mucho para hacer." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "alojamiento en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "Paseos al aire libre" },
       { type: "ul", items: [
         "Caminatas y bici por el corredor verde y plazas céntricas.",
@@ -246,6 +252,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 6,
     body: [
       { type: "p", text: "Buscar dónde dormir barato en Marcos Juárez no significa terminar en un lugar sucio o lejano. Hay muchas formas de bajar el costo de tu estadía sin perder comodidad." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "apart hotel en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "Diferenciá ‘barato’ de ‘malo’" },
       { type: "p", text: "Lo barato debe seguir cumpliendo lo básico: cama cómoda, baño privado limpio, WiFi funcional y trato cordial. Si algo de eso falla, no es barato: es caro porque te arruina el viaje." },
       { type: "h2", text: "Formas de bajar el precio" },
@@ -275,6 +282,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 7,
     body: [
       { type: "p", text: "Cuando alquilás un departamento amoblado en Marcos Juárez tenés que poder llegar con la valija y sentirte como en casa al instante. Te contamos qué equipamiento es imprescindible y qué hace la diferencia." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "departamentos por día en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "Equipamiento esencial" },
       { type: "ul", items: [
         "Cama con colchón en buen estado, ropa de cama y toallas limpias.",
@@ -310,6 +318,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 8,
     body: [
       { type: "p", text: "Marcos Juárez es una ciudad cordobesa con identidad propia, a mitad de camino entre Rosario y Córdoba capital. Esta guía resume todo lo que un viajero necesita para organizar bien su visita." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "hotel en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "Cómo llegar a Marcos Juárez" },
       { type: "p", text: "Por la Ruta Nacional 9, está a unos 200 km de Rosario y a 240 km de Córdoba capital. Tiene servicios diarios de micros de larga distancia y conexiones cercanas con el ferrocarril. El aeropuerto más usado es Rosario, a poco más de dos horas en auto." },
       { type: "h2", text: "Cuándo viajar" },
@@ -340,6 +349,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 6,
     body: [
       { type: "p", text: "Cuando viajás en auto a Marcos Juárez, contar con un alojamiento con cochera deja de ser un lujo y se vuelve esencial. Estacionar en la calle implica riesgos, multas y caminatas innecesarias con valijas." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "alojamiento en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "Por qué una cochera privada cambia tu estadía" },
       { type: "ul", items: [
         "Seguridad para tu vehículo y para lo que llevás dentro.",
@@ -368,6 +378,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 7,
     body: [
       { type: "p", text: "Cuando buscás hotel en Marcos Juárez, tarde o temprano aparece otra categoría: el apart hotel. Es la opción que más creció en la ciudad porque combina la practicidad de un hotel con la independencia de un departamento propio. En esta guía te explicamos qué incluye, cuánto conviene y para qué tipo de viaje es la mejor alternativa de hospedaje en Marcos Juárez." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "apart hotel en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "¿Qué es un apart hotel?" },
       { type: "p", text: "Un apart hotel es un alojamiento formado por departamentos completos —living, dormitorio, baño y cocina equipada— que se alquilan por día, igual que una habitación de hotel, pero con servicios propios de una vivienda. En Marcos Juárez esta modalidad es la preferida por viajantes que se quedan varias noches y por familias que necesitan espacio real." },
       { type: "h2", text: "Apart hotel vs hotel tradicional en Marcos Juárez" },
@@ -410,6 +421,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 6,
     body: [
       { type: "p", text: "Llegar a las 2 de la mañana a una ciudad y encontrar la recepción cerrada es una de las peores experiencias de viaje. El check-in automático 24 horas resuelve exactamente ese problema: entrás a tu departamento a cualquier hora, sin llaves y sin esperar a nadie." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "departamentos por día en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "¿Cómo funciona el check-in automático?" },
       { type: "ol", items: [
         "Reservás directo y confirmás la estadía.",
@@ -443,6 +455,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 7,
     body: [
       { type: "p", text: "La Au Ruta 9 es la columna vertebral del corredor Rosario–Córdoba. Miles de autos, camionetas de trabajo y familias la recorren cada día, y en algún punto del viaje aparece la misma pregunta: dónde dormir cerca de la Ruta 9 sin desviarse demasiado ni arriesgarse a paradas inseguras." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "hotel en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "Por qué Marcos Juárez es la parada más conveniente" },
       { type: "p", text: "Marcos Juárez está sobre el corredor, a mitad de camino entre Rosario y Córdoba capital, y su centro queda a pocos minutos del acceso a la autopista. Eso permite salir de la ruta, dormir bien y retomar el viaje temprano sin perder tiempo en desvíos largos." },
       { type: "h2", text: "Qué debe tener una buena parada nocturna" },
@@ -472,6 +485,7 @@ export const posts: BlogPost[] = [
     readingMinutes: 7,
     body: [
       { type: "p", text: "Para un viajante, el alojamiento no es un detalle: es la base de operaciones. Dormir bien, cargar el celular, planchar una camisa, imprimir un remito o cocinar algo rápido a las 22 hs define cómo rinde el día siguiente. Si tu zona incluye Marcos Juárez y el sudeste de Córdoba, esta guía te ayuda a elegir mejor." },
+      { type: "plink", before: "Esmeralda Apart es un ", anchor: "alojamiento en Marcos Juárez", to: "/", after: " con check-in 24 h, cochera y reserva directa sin comisiones." },
       { type: "h2", text: "Lo que un viajante necesita de verdad" },
       { type: "ul", items: [
         "Factura A o B emitida en el momento para rendir gastos.",
