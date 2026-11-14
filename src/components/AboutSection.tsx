@@ -19,7 +19,7 @@ const AboutSection = () => {
             Marcos Juárez, Córdoba
           </p>
           <h2 className="text-4xl md:text-5xl font-display font-semibold text-foreground mb-6">
-            Departamentos
+            Departamentos y apart hotel en Marcos Juárez
           </h2>
           <div className="w-16 h-[2px] bg-primary mx-auto" />
         </motion.div>
