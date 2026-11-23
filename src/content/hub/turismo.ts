@@ -4,10 +4,10 @@ export const turismo: HubEntry[] = [
   {
     cluster: "turismo",
     slug: "que-hacer-en-marcos-juarez",
-    title: "Qué hacer en Marcos Juárez: guía de actividades",
+    title: "Qué hacer en Marcos Juárez (Córdoba): plan de 1 día y finde",
     h1: "Qué hacer en Marcos Juárez",
     description:
-      "Qué hacer en Marcos Juárez, Córdoba: plazas, gastronomía, deporte, compras y planes para un fin de semana o una escala en la Ruta 9.",
+      "Qué hacer en Marcos Juárez: plan de un día, ideas para familias, trabajo o escala en Ruta 9, pueblos cercanos y dónde dormir en el centro para recorrer todo caminando.",
     keywords: "qué hacer en Marcos Juárez, turismo Marcos Juárez, Marcos Juárez Córdoba qué visitar",
     image: "/images/experience.jpg",
     updatedAt: "2026-07-01",
@@ -36,7 +36,15 @@ export const turismo: HubEntry[] = [
       },
       { type: "h2", text: "Dónde dormir para moverte caminando" },
       { type: "p", text: "Alojarse en el centro cambia por completo la experiencia: no dependés del auto para comer, comprar o salir a caminar. Esmeralda Apart está a pocas cuadras de la plaza y de la zona gastronómica." },
-      { type: "quote", text: "Consultá disponibilidad en la barra inferior y reservá tu departamento en el centro de Marcos Juárez." },
+      { type: "h2", text: "Escapadas cerca de Marcos Juárez" },
+      { type: "p", text: "Si te quedás más de un día, Leones (25 km), Cruz Alta (35 km), Corral de Bustos (45 km) y Bell Ville (55 km) están a menos de una hora en auto." },
+      { type: "h2", text: "Reservá tu estadía en el centro" },
+      { type: "ul", items: [
+        "Departamentos para hasta 4 personas, a pocas cuadras de la plaza.",
+        "Check-in autónomo las 24 horas, ideal si llegás tarde por la Ruta 9.",
+        "Cocina equipada para desayunar o cenar a tu ritmo.",
+      ]},
+      { type: "quote", text: "Elegí tus fechas en la barra inferior: ves la disponibilidad al instante y reservás directo, sin comisiones." },
     ],
     faqs: [
       { q: "¿Qué se puede hacer en Marcos Juárez en un día?", a: "Recorrer la plaza principal y el casco histórico, tomar café de especialidad, almorzar en una parrilla local, hacer compras en la zona comercial y cerrar con una cena en el centro." },
