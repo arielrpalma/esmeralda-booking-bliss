@@ -97,7 +97,7 @@ const loadMpSdk = () => {
   return sdkPromise;
 };
 
-const Pago = () => {
+const Pago = ({ hasAdminFee = true }: { hasAdminFee?: boolean }) => {
   const [importe, setImporte] = useState("");
   const [debouncedAmount, setDebouncedAmount] = useState(0);
   const [mountingBrick, setMountingBrick] = useState(false);
@@ -117,7 +117,9 @@ const Pago = () => {
   const submittingRef = useRef(false);
 
   // Administrative fee: 6% added on top of the guest-entered amount
-  const withAdminFee = (n: number) => Math.round(n * 1.06 * 100) / 100;
+  const withAdminFee = (n: number) =>
+    hasAdminFee ? Math.round(n * 1.06 * 100) / 100 : Math.round(n * 100) / 100;
+  const pagePath = hasAdminFee ? "/posnet" : "/posnet2";
   const importeNum = parseARS(importe);
   const isValid = importeNum >= 100;
 
@@ -328,8 +330,8 @@ const Pago = () => {
         <title>Pago seguro | Esmeralda Apart</title>
         <meta name="description" content="Realizá tu pago de forma segura con tarjeta para tu reserva en Esmeralda Apart." />
         <meta name="robots" content="noindex" />
-        <link rel="canonical" href="https://esmeraldaapart.com.ar/posnet" />
-        <meta property="og:url" content="https://esmeraldaapart.com.ar/posnet" />
+        <link rel="canonical" href={`https://esmeraldaapart.com.ar${pagePath}`} />
+        <meta property="og:url" content={`https://esmeraldaapart.com.ar${pagePath}`} />
       </Helmet>
       <Navbar />
       <main className="flex-1 py-16 sm:py-24 md:py-32">
@@ -410,6 +412,14 @@ const Pago = () => {
                     <p className="font-body text-muted-foreground text-sm">
                       {errorMsg ?? friendlyError(result.status_detail)}
                     </p>
+                    {/* Technical rejection details for the operator */}
+                    {(result.id !== "-" || result.status_detail) && (
+                      <p className="font-mono text-xs text-muted-foreground">
+                        {result.id !== "-" && <>ID: {result.id}</>}
+                        {result.id !== "-" && result.status_detail && " | "}
+                        {result.status_detail && <>Código: {result.status_detail}</>}
+                      </p>
+                    )}
                     <Button onClick={reset} variant="outline" className="font-body">
                       Reintentar
                     </Button>
@@ -438,7 +448,9 @@ const Pago = () => {
                   {isValid && (
                     <div className="rounded-md bg-muted/50 p-3 text-sm font-body space-y-1">
                       <div className="flex justify-between"><span>Importe de la reserva</span><span>${formatARSNumber(importeNum)}</span></div>
-                      <div className="flex justify-between text-muted-foreground"><span>Cargos administrativos (6%)</span><span>${formatARSNumber(withAdminFee(importeNum) - importeNum)}</span></div>
+                      {hasAdminFee && (
+                        <div className="flex justify-between text-muted-foreground"><span>Cargos administrativos (6%)</span><span>${formatARSNumber(withAdminFee(importeNum) - importeNum)}</span></div>
+                      )}
                       <div className="flex justify-between font-semibold border-t border-border pt-1"><span>Total a pagar</span><span>${formatARSNumber(withAdminFee(importeNum))}</span></div>
                     </div>
                   )}

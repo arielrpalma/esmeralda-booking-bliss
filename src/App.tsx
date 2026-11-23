@@ -38,6 +38,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/gracias" element={<Gracias />} />
             <Route path="/posnet" element={<Pago />} />
+            <Route path="/posnet2" element={<Pago hasAdminFee={false} />} />
             <Route path="/pago/success" element={<PagoStatus status="success" />} />
             <Route path="/pago/pending" element={<PagoStatus status="pending" />} />
             <Route path="/pago/failure" element={<PagoStatus status="failure" />} />
